@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                         setState(() {
                           randomNumbersList = newNumbersSet.toList();
-                        }); //연습
+                        }); //연습 1212
                       },
                       child: Text('생성하기')))
             ],
