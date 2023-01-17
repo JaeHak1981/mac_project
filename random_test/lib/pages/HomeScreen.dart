@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<int> randomNumbersList = [123, 456, 789];
+  List<int> randomNumbers = [123, 456, 789];
 
   @override
   Widget build(BuildContext context) {
@@ -19,68 +19,100 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: primaryColor,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "랜덤숫자생성하기",
-                    style: TextStyle(color: Colors.white, fontSize: 30),
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.settings,
-                        color: redColor,
-                      ))
-                ],
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: randomNumbersList
-                      .asMap()
-                      .entries
-                      .map((e) => Padding(
-                            padding:
-                                EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
-                            child: Row(
-                              children: e.value
-                                  .toString()
-                                  .split("")
-                                  .map((e) => Image.asset(
-                                        'asset/img/$e.png',
-                                        width: 70,
-                                        height: 50,
-                                      ))
-                                  .toList(),
-                            ),
-                          ))
-                      .toList(),
-                ),
-              ),
-              SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: redColor),
-                      onPressed: () {
-                        final rand = Random();
-                        final Set<int> newNumbersSet = {};
-                        while (newNumbersSet.length != 3) {
-                          final numbers = rand.nextInt(1000);
-                          newNumbersSet.add(numbers);
-                        }
-                        setState(() {
-                          randomNumbersList = newNumbersSet.toList();
-                        }); //연습 1212
-                      },
-                      child: Text('생성하기')))
+              _Header(),
+              _Body(randomNumbers: randomNumbers),
+              _Footer(onPressed: onNumbeergenerate)
             ],
           ),
         ),
       ),
     );
+  }
+
+  void onNumbeergenerate() {
+    final rand = Random();
+    final Set<int> newNumbersSet = {};
+    while (newNumbersSet.length != 3) {
+      final numbers = rand.nextInt(1000);
+      newNumbersSet.add(numbers);
+    }
+    setState(() {
+      randomNumbers = newNumbersSet.toList();
+    });
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text(
+          '랜덤숫자생성하기',
+          style: TextStyle(fontSize: 40, color: Colors.white),
+        ),
+        IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.search,
+              color: redColor,
+            ))
+      ],
+    );
+  }
+}
+
+class _Body extends StatelessWidget {
+  final List<int> randomNumbers;
+
+  const _Body({required this.randomNumbers, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: randomNumbers
+          .asMap()
+          .entries
+          .map((e) => Padding(
+                padding: EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
+                child: Row(
+                  children: e.value
+                      .toString()
+                      .split('')
+                      .map((e) => Image.asset(
+                            'asset/img/$e.png',
+                            width: 70,
+                            height: 50,
+                          ))
+                      .toList(),
+                ),
+              ))
+          .toList(),
+    ));
+  }
+}
+
+class _Footer extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const _Footer({required this.onPressed, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(primary: redColor),
+          onPressed: onPressed,
+          child: const Text('생성하기'),
+        ));
   }
 }
