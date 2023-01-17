@@ -27,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
           duration: Duration(seconds: 1), curve: Curves.linear);
     });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose

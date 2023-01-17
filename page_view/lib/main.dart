@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:page_view/page/HomeScreen.dart';
 
-void main()=>runApp(MyApp());
+void main()=>runApp(PageApp());
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class PageApp extends StatelessWidget {
+  const PageApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp( //test
+    return MaterialApp(
       home: HomeScreen(),
     );
   }
