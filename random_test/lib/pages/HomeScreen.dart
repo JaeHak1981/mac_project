@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<int> randomNumbers = [123, 456, 789];
+  List<int> randomNumbersList = [123, 456, 789];
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +19,12 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: primaryColor,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
               _Header(),
-              _Body(randomNumbers: randomNumbers),
-              _Footer(onPressed: onNumbeergenerate)
+              _Body(randomNumbersList: randomNumbersList),
+              _Footer(onPressed: onNumbersGenerate)
             ],
           ),
         ),
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void onNumbeergenerate() {
+  void onNumbersGenerate() {
     final rand = Random();
     final Set<int> newNumbersSet = {};
     while (newNumbersSet.length != 3) {
@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
       newNumbersSet.add(numbers);
     }
     setState(() {
-      randomNumbers = newNumbersSet.toList();
+      randomNumbersList = newNumbersSet.toList();
     });
   }
 }
@@ -53,14 +53,14 @@ class _Header extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
-          '랜덤숫자생성하기',
-          style: TextStyle(fontSize: 40, color: Colors.white),
+        Text(
+          "랜덤숫자생성하기",
+          style: TextStyle(color: Colors.white, fontSize: 40),
         ),
         IconButton(
             onPressed: () {},
-            icon: const Icon(
-              Icons.search,
+            icon: Icon(
+              Icons.settings,
               color: redColor,
             ))
       ],
@@ -69,16 +69,16 @@ class _Header extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  final List<int> randomNumbers;
+  final List<int> randomNumbersList;
 
-  const _Body({required this.randomNumbers, Key? key}) : super(key: key);
+  const _Body({required this.randomNumbersList, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: randomNumbers
+      children: randomNumbersList
           .asMap()
           .entries
           .map((e) => Padding(
@@ -108,11 +108,12 @@ class _Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(primary: redColor),
-          onPressed: onPressed,
-          child: const Text('생성하기'),
-        ));
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: redColor),
+        onPressed: onPressed,
+        child: Text('생성하기'),
+      ),
+    );
   }
 }
