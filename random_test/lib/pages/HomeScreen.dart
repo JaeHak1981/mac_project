@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:random_test/constant/color.dart';
+import 'package:random_test/pages/Settings_Screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -58,7 +59,17 @@ class _Header extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontSize: 40),
         ),
         IconButton(
-            onPressed: () {},
+            onPressed: () {
+              /* push는 list에서 add() 역할을 한다. list 끝에 추가한다.
+                [HomeScreen(), SettingsScreen()
+                 : HomeScreen에 추가로 SettingsScreen이 추가로 들어간다]
+                Route는 일종의 Screen과 같은 동의어로 생각하면 된다.
+                일단은 push하는 방법을 외운다. 추후 다른 방법도 배울거다*/
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
+                return Settings_Screen();
+              }));
+            },
             icon: Icon(
               Icons.settings,
               color: redColor,
