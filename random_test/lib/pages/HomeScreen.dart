@@ -22,10 +22,10 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: primaryColor,
       body: SafeArea(
         child: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 16),
+          padding:  const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              Header(),
+              const Header(),
               Body(randomNumbers: randomNumbers),
               Footor(onPressed: onNumbersGenerate,)
             ],
