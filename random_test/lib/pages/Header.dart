@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:random_test/constant/color.dart';
 import 'package:random_test/pages/Settings_Screen.dart';
-
-import '../constant/color.dart';
 
 class Header extends StatelessWidget {
   const Header({Key? key}) : super(key: key);
@@ -13,20 +12,20 @@ class Header extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "숫자생성하기",
+          '숫자생성하기',
           style: TextStyle(color: Colors.white, fontSize: 40),
         ),
         IconButton(
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (BuildContext context) {
-                return SettingsScreen();
-              }));
+                    return SettingsScreen();
+                  }));
             },
             icon: Icon(
               Icons.settings,
               color: redColor,
-            )),
+            ))
       ],
     );
   }

@@ -15,18 +15,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<int> randomNumbers = [123, 456, 789];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding:  EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
               Header(),
-              Body(randomNumbers: randomNumbers,),
-              Footor(onPressed: onNumbersGenerate ,)
+              Body(randomNumbers: randomNumbers),
+              Footor(onPressed: onNumbersGenerate,)
             ],
           ),
         ),
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   void onNumbersGenerate() {
     final rand = Random();
-    final Set<int> newNumbers = {}  ;
+    final Set<int> newNumbers = {};
     while(newNumbers.length != 3){
       final numbers = rand.nextInt(1000);
       newNumbers.add(numbers);
