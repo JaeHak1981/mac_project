@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:random_test/constant/color.dart';
 
-class Settings_Screen extends StatefulWidget {
-  const Settings_Screen({Key? key}) : super(key: key);
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
 
-  @override
-  State<Settings_Screen> createState() => _Settings_ScreenState();
-}
-
-class _Settings_ScreenState extends State<Settings_Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text("Settings Screen"),
+      body: Container(
+        child: Text('Settings Screen', style: TextStyle(color: redColor, fontSize: 80),),
       ),
     );
   }
 }
-
