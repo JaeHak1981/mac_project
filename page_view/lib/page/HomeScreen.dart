@@ -21,13 +21,12 @@ class _HomeScreenState extends State<HomeScreen> {
       int currentPage = controller.page!.toInt();
       int nextPage = currentPage + 1;
       if (nextPage > 4) {
-        nextPage = 1;
+        nextPage = 0;
       }
-      controller.animateToPage(nextPage,
-          duration: Duration(seconds: 1), curve: Curves.linear);
+      controller.animateToPage(
+          nextPage, duration: Duration(seconds: 1), curve: Curves.linear);
     });
   }
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -44,10 +43,11 @@ class _HomeScreenState extends State<HomeScreen> {
       body: PageView(
         controller: controller,
         children: [1, 2, 3, 4, 5]
-            .map((e) => Image.asset(
-                  'asset/img/image_$e.jpeg',
-                  fit: BoxFit.cover,
-                ))
+            .map((e) =>
+            Image.asset(
+              'asset/img/image_$e.jpeg',
+              fit: BoxFit.cover,
+            ))
             .toList(),
       ),
     );

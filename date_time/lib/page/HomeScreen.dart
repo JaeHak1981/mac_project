@@ -11,8 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  DateTime selectedDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.pink[100],
       body: SafeArea(
         child: Container(
-          alignment: Alignment.center,
+          width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              TapPart(
-                onPressed: onHartPressed,
-                selectedDate: selectedDate,
-              ),
+              TapPart(selectedDate: selectedDate, onPressed: onHartPressed,),
               BottomPart(),
             ],
           ),
@@ -34,29 +30,28 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
   void onHartPressed() {
-    DateTime now = DateTime.now();
     showCupertinoDialog(
         barrierDismissible: true,
         context: context,
-        builder: (BuildContext context) {
+        builder: (context) {
           return Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 300,
-                color: Colors.white,
-                child: CupertinoDatePicker(
-                  initialDateTime: selectedDate,
-                  maximumDate: DateTime(now.year, now.month, now.day),
-                  mode: CupertinoDatePickerMode.date,
-                  onDateTimeChanged: (DateTime date) {
-                    setState(() {
-                      selectedDate = date;
-                    });
-                  },
-                ),
-              ));
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              color: Colors.white,
+              height: 300,
+              child: CupertinoDatePicker(
+                initialDateTime: selectedDate,
+                maximumDate: DateTime.now(),
+                mode: CupertinoDatePickerMode.date,
+                onDateTimeChanged: (DateTime date) {
+                  setState(() {
+                    selectedDate = date;
+                  });
+                },
+              ),
+            ),
+          );
         });
   }
 }

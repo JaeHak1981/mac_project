@@ -2,10 +2,10 @@ import 'package:date_time/page/HomeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(DateApp());
+void main() => runApp(MyApp());
 
-class DateApp extends StatelessWidget {
-  const DateApp({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
