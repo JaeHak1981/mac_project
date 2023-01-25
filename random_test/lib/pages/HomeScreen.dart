@@ -13,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int maxNumber = 1000;
-  List<int> randomNumbers = [123, 456, 789];
+  List<int> randomNumber = [123, 456, 789];
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +21,17 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: primaryColor,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
               _Header(
-                onPressed: onSettinsPop,
+                onPressed: onSettingsPop,
               ),
-              _Body(randomNumbers: randomNumbers),
+              _Body(
+                randomNumber: randomNumber,
+              ),
               _Footor(
-                onPressed: onNumbersGenerate,
+                onPressed: onNumberGenerate,
               )
             ],
           ),
@@ -38,29 +40,28 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void onSettinsPop() async {
-    final int? result = await Navigator.of(context)
+  Future<void> onSettingsPop() async {
+    final result = await Navigator.of(context)
         .push<int>(MaterialPageRoute(builder: (BuildContext context) {
-      return Settings_Screen();
+      return SettingsScreen();
     }));
     if (result != null) {
       setState(() {
-        maxNumber = result;
+        maxNumber = result!;
       });
     }
-    ;
   }
 
-  void onNumbersGenerate() {
+  void onNumberGenerate() {
     final rand = Random();
     final Set<int> newNumbers = {};
     while (newNumbers.length != 3) {
       final numbers = rand.nextInt(maxNumber);
       newNumbers.add(numbers);
+      setState(() {
+        randomNumber = newNumbers.toList();
+      });
     }
-    setState(() {
-      randomNumbers = newNumbers.toList();
-    });
   }
 }
 
@@ -74,32 +75,32 @@ class _Header extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
-          '숫자 생성하기',
+        Text(
+          '숫자생성하기',
           style: TextStyle(color: Colors.white, fontSize: 40),
         ),
         IconButton(
             onPressed: onPressed,
-            icon: const Icon(
+            icon: Icon(
               Icons.settings,
               color: redColor,
-            )),
+            ))
       ],
     );
   }
 }
 
 class _Body extends StatelessWidget {
-  final List<int> randomNumbers;
+  final List<int> randomNumber;
 
-  const _Body({required this.randomNumbers, Key? key}) : super(key: key);
+  const _Body({required this.randomNumber, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: randomNumbers
+        children: randomNumber
             .asMap()
             .entries
             .map((e) => Padding(
@@ -110,8 +111,8 @@ class _Body extends StatelessWidget {
                         .split('')
                         .map((e) => Image.asset(
                               'asset/img/$e.png',
-                              width: 70,
-                              height: 50,
+                              width: 50,
+                              height: 70,
                             ))
                         .toList(),
                   ),
