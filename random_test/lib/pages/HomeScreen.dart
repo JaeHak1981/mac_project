@@ -45,23 +45,23 @@ class _HomeScreenState extends State<HomeScreen> {
         .push<int>(MaterialPageRoute(builder: (BuildContext context) {
       return SettingsScreen();
     }));
-    if (result != null) {
+    if(result != null){
       setState(() {
-        maxNumber = result!;
+        maxNumber = result;
       });
     }
   }
 
   void onNumberGenerate() {
     final rand = Random();
-    final Set<int> newNumbers = {};
-    while (newNumbers.length != 3) {
+    final Set<int> newNumber = {};
+    while (newNumber.length != 3) {
       final numbers = rand.nextInt(maxNumber);
-      newNumbers.add(numbers);
-      setState(() {
-        randomNumber = newNumbers.toList();
-      });
+      newNumber.add(numbers);
     }
+    setState(() {
+      randomNumber = newNumber.toList();
+    });
   }
 }
 
@@ -76,7 +76,7 @@ class _Header extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          '숫자생성하기',
+          '생성하기',
           style: TextStyle(color: Colors.white, fontSize: 40),
         ),
         IconButton(
@@ -111,8 +111,8 @@ class _Body extends StatelessWidget {
                         .split('')
                         .map((e) => Image.asset(
                               'asset/img/$e.png',
-                              width: 50,
-                              height: 70,
+                              width: 70,
+                              height: 50,
                             ))
                         .toList(),
                   ),
