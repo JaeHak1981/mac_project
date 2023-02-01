@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:random_test/component/number_row.dart';
 import 'package:random_test/constant/color.dart';
 import 'package:random_test/pages/Settings_Screen.dart';
 
@@ -13,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int maxNumber = 1000;
-  List<int> randomNumber = [123, 456, 789];
+  List<int> randomNumbers = [123, 456, 789];
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +22,12 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: primaryColor,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              _Header(
-                onPressed: onSettingsPop,
-              ),
-              _Body(
-                randomNumber: randomNumber,
-              ),
-              _Footor(
-                onPressed: onNumberGenerate,
-              )
+              _Header(onPressed: onSettingPop),
+              _Body(randomNumbers: randomNumbers),
+              _Footer(onPressed: onRandomNumber)
             ],
           ),
         ),
@@ -40,27 +35,25 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> onSettingsPop() async {
+  void onSettingPop() async {
     final result = await Navigator.of(context)
         .push<int>(MaterialPageRoute(builder: (BuildContext context) {
-      return SettingsScreen();
+      return Settings_Screen(maxNumber: maxNumber,);
     }));
-    if(result != null){
-      setState(() {
-        maxNumber = result;
-      });
+    if (result != null) {
+      maxNumber = result.toInt();
     }
   }
 
-  void onNumberGenerate() {
-    final rand = Random();
-    final Set<int> newNumber = {};
-    while (newNumber.length != 3) {
-      final numbers = rand.nextInt(maxNumber);
-      newNumber.add(numbers);
+  void onRandomNumber() {
+    final random = Random();
+    final Set<int> numbersSet = {};
+    while (numbersSet.length != 3) {
+      final int numbers = random.nextInt(maxNumber);
+      numbersSet.add(numbers);
     }
     setState(() {
-      randomNumber = newNumber.toList();
+      randomNumbers = numbersSet.toList();
     });
   }
 }
@@ -76,8 +69,8 @@ class _Header extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          '생성하기',
-          style: TextStyle(color: Colors.white, fontSize: 40),
+          '숫자생성하기',
+          style: TextStyle(color: Colors.white, fontSize: 50),
         ),
         IconButton(
             onPressed: onPressed,
@@ -91,30 +84,21 @@ class _Header extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  final List<int> randomNumber;
+  final List<int> randomNumbers;
 
-  const _Body({required this.randomNumber, Key? key}) : super(key: key);
+  const _Body({required this.randomNumbers, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: randomNumber
+        children: randomNumbers
             .asMap()
             .entries
             .map((e) => Padding(
                   padding: EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
-                  child: Row(
-                    children: e.value
-                        .toString()
-                        .split('')
-                        .map((e) => Image.asset(
-                              'asset/img/$e.png',
-                              width: 70,
-                              height: 50,
-                            ))
-                        .toList(),
+                  child: NumberRow(number: e.value,
                   ),
                 ))
             .toList(),
@@ -123,10 +107,10 @@ class _Body extends StatelessWidget {
   }
 }
 
-class _Footor extends StatelessWidget {
+class _Footer extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const _Footor({required this.onPressed, Key? key}) : super(key: key);
+  const _Footer({required this.onPressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
