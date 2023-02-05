@@ -16,15 +16,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.pink[100],
-      body: SafeArea(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            children: [
-              _TapPart(selectedDate: selectedDate, onPressed: onHartPressed ,),
-              _BottomPart(),
-            ],
-          ),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            _TapPart(
+              selectedDate: selectedDate, onPressed:  onHartPressed,
+            ),
+            _BottomPart(),
+          ],
         ),
       ),
     );
@@ -37,8 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
           return Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: 300,
               color: Colors.white,
+              height: 300,
               child: CupertinoDatePicker(
                 initialDateTime: selectedDate,
                 maximumDate: DateTime.now(),
@@ -58,9 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
 class _TapPart extends StatelessWidget {
   final DateTime selectedDate;
   final VoidCallback onPressed;
-
-  _TapPart({required this.onPressed, required this.selectedDate, Key? key})
-      : super(key: key);
+  _TapPart({required this.selectedDate,required this.onPressed,  Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +67,7 @@ class _TapPart extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     TextTheme textTheme = theme.textTheme;
     return Expanded(
+        child: SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -83,7 +82,7 @@ class _TapPart extends StatelessWidget {
                 style: textTheme.bodyText1,
               ),
               Text(
-                '${selectedDate.year}, ${selectedDate.month}, ${selectedDate.day}',
+                '${selectedDate.year},${selectedDate.month},${selectedDate.day}',
                 style: textTheme.bodyText2,
               ),
             ],
@@ -98,10 +97,10 @@ class _TapPart extends StatelessWidget {
           Text(
             'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays + 1}',
             style: textTheme.headline2,
-          )
+          ),
         ],
       ),
-    );
+    ));
   }
 }
 

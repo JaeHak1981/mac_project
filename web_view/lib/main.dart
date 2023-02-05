@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:web_view/page/HomeScreen.dart';
 
-void main()=> runApp(MyApp());
+void main(){
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -14,3 +16,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+//     'https://bubbly-cause-fb4.notion.site/Class-c3284153a2074e9fa8423c193cba40bf'
