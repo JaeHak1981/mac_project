@@ -4,6 +4,7 @@ import 'package:random_test/constant/color.dart';
 
 class SettingScreen extends StatefulWidget {
   final int maxNumberInt;
+
   const SettingScreen({required this.maxNumberInt, Key? key}) : super(key: key);
 
   @override
@@ -11,12 +12,13 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  double numbersDouble = 1000;
+  double maxNumberDouble = 1000;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    numbersDouble = widget.maxNumberInt.toDouble();
+    maxNumberDouble = widget.maxNumberInt.toDouble();
   }
 
   @override
@@ -28,11 +30,12 @@ class _SettingScreenState extends State<SettingScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              _Header(numbersDouble: numbersDouble),
+              _Header(
+                maxNumberDouble: maxNumberDouble,
+              ),
               _Body(
-                numbersDouble: numbersDouble,
-                onSliderChange: onSliderChange,
-                onPressed: onNavigatorPop,
+                maxNumberDouble: maxNumberDouble,
+                onSliderPressed: onSliderPressed,
               )
             ],
           ),
@@ -41,40 +44,32 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  void onNavigatorPop() {
-    Navigator.of(context).pop(numbersDouble.toInt());
-  }
-
-  void onSliderChange(double val) {
+  void onSliderPressed(val) {
     setState(() {
-      numbersDouble = val;
+      maxNumberDouble = val;
     });
   }
 }
 
 class _Header extends StatelessWidget {
-  final double numbersDouble;
+  final double maxNumberDouble;
 
-  const _Header({required this.numbersDouble, Key? key}) : super(key: key);
+  const _Header({required this.maxNumberDouble, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: NumberRow(numberInt: numbersDouble.toInt()),
+      child: NumberRow(maxNumberDouble: maxNumberDouble.toInt()),
     );
   }
 }
 
 class _Body extends StatelessWidget {
-  final double numbersDouble;
-  final ValueChanged<double>? onSliderChange;
-  final VoidCallback onPressed;
+  final double maxNumberDouble;
+  final ValueChanged<double>? onSliderPressed;
 
   const _Body(
-      {required this.onPressed,
-      required this.numbersDouble,
-      required this.onSliderChange,
-      Key? key})
+      {required this.maxNumberDouble, required this.onSliderPressed, Key? key})
       : super(key: key);
 
   @override
@@ -82,16 +77,26 @@ class _Body extends StatelessWidget {
     return Column(
       children: [
         Slider(
-            value: numbersDouble,
+            activeColor: Colors.yellow,
+            inactiveColor: Colors.green,
+            value: maxNumberDouble,
             min: 1000,
             max: 100000,
-            onChanged: onSliderChange),
+            onChanged: onSliderPressed),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            style: ElevatedButton.styleFrom(primary: redColor),
-            onPressed: onPressed,
-            child: Text('Save'),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: redColor,
+                foregroundColor: Colors.yellow,
+                padding: const EdgeInsets.all(12)),
+            onPressed: () {
+              Navigator.of(context).pop(maxNumberDouble.toInt());
+            },
+            child: const Text(
+              'SAVE',
+              style: TextStyle(fontSize: 30),
+            ),
           ),
         )
       ],
