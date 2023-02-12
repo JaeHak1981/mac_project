@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int maxNumberInt = 1000;
-  List<int> randomNumberList = [123, 456, 789];
+  List<int> randomNumber = [123, 456, 789];
 
   @override
   Widget build(BuildContext context) {
@@ -26,38 +26,42 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               _Header(maxNumberInt: maxNumberInt, onPressed: onSettingPressed,),
-              _Body(randomNumberList: randomNumberList,),
-              _Footer(maxNumberInt: maxNumberInt, onPressed: onNumberGenerate,)
+              _Body(randomNumber: randomNumber,),
+              _Footer(maxNumberInt: maxNumberInt, onNumberGeneratePressed: onNumberGeneratePressed,)
             ],
           ),
         ),
       ),
     );
   }
-  void onNumberGenerate() {
-    final rand = Random();
-    final Set<int> numbers = {};
-    while (numbers.length != 3) {
-      numbers.add(rand.nextInt(maxNumberInt));
-    }
-    setState(() {
-      randomNumberList = numbers.toList();
-    });
-  }
-  void onSettingPressed() async{
-    final result = await Navigator.of(context).push<int>(MaterialPageRoute(
-        builder: (BuildContext context) =>
-            SettingScreen(maxNumberInt: maxNumberInt,)));
-    if(result != null){
+  void onSettingPressed() async {
+    final result =
+    await Navigator.of(context).push<int>(MaterialPageRoute(
+        builder: (BuildContext context) => SettingScreen(
+          maxNumberInt: maxNumberInt,
+        )));
+    if (result != null) {
       setState(() {
         maxNumberInt = result;
       });
     }
   }
+  void onNumberGeneratePressed() {
+    final rand = Random();
+    final Set<int> numberSet = {};
+    while (numberSet.length != 3) {
+      numberSet.add(rand.nextInt(maxNumberInt));
+    }
+    setState(() {
+      randomNumber = numberSet.toList();
+    });
+  }
 }
+
 class _Header extends StatelessWidget {
   final int maxNumberInt;
   final VoidCallback onPressed;
+
   const _Header({required this.maxNumberInt,required this.onPressed,  Key? key}) : super(key: key);
 
   @override
@@ -66,12 +70,12 @@ class _Header extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text(
-          'RandomNumber',
-          style: TextStyle(color: Colors.white, fontSize: 35),
+          "Random Numbers",
+          style: TextStyle(color: Colors.white, fontSize: 30),
         ),
         IconButton(
             onPressed: onPressed,
-            icon: Icon(
+            icon: const Icon(
               Icons.settings,
               color: redColor,
               size: 40,
@@ -82,30 +86,32 @@ class _Header extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  final List<int> randomNumberList;
-  const _Body({required this.randomNumberList, Key? key}) : super(key: key);
+  final List<int> randomNumber;
+  const _Body({required this.randomNumber, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: randomNumberList
-              .asMap()
-              .entries
-              .map((e) => Padding(
-            padding: EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
-            child: NumberRow(maxNumberDouble: e.value),
-          ))
-              .toList(),
-        ));
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: randomNumber
+            .asMap()
+            .entries
+            .map((e) => Padding(
+          padding:
+          EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
+          child: NumberRow(numbersInt: e.value),
+        ))
+            .toList(),
+      ),
+    );
   }
 }
 
 class _Footer extends StatelessWidget {
   final int maxNumberInt;
-  final VoidCallback onPressed;
-  const _Footer({required this.maxNumberInt,required this.onPressed,  Key? key}) : super(key: key);
+  final VoidCallback onNumberGeneratePressed;
+  const _Footer({required this.maxNumberInt, required this.onNumberGeneratePressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -114,13 +120,12 @@ class _Footer extends StatelessWidget {
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
               backgroundColor: redColor,
-              padding: const EdgeInsets.all(20)),
-          onPressed: onPressed,
+              padding: const EdgeInsets.all(15)),
+          onPressed: onNumberGeneratePressed,
           child: const Text(
             'Number Generate',
-            style: TextStyle(color: Colors.white, fontSize: 30),
+            style: TextStyle(fontSize: 30),
           )),
     );
   }
 }
-

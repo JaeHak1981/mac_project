@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 
 class NumberRow extends StatelessWidget {
-  final int maxNumberDouble;
-  const NumberRow({required this.maxNumberDouble,Key? key}) : super(key: key);
+  final int numbersInt;
+  const NumberRow({required this.numbersInt,Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: maxNumberDouble
+      children: numbersInt
+          .toInt()
           .toString()
           .split('')
           .map((e) => Image.asset(

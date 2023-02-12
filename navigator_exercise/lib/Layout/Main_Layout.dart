@@ -14,7 +14,7 @@ class MainLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(title, style: TextStyle(fontSize: 30),),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

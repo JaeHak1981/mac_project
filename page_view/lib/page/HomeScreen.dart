@@ -16,8 +16,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // TODO: implement initState
-
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    super.initState();
+    timer = Timer.periodic(Duration(seconds: 4), (timer) {
       int currentPage = controller.page!.toInt();
       int nextPage = currentPage + 1;
       if (nextPage > 4) {
@@ -29,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   @override
   void dispose() {
-
     // TODO: implement dispose
     controller.dispose();
     if(timer != null){

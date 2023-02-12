@@ -10,16 +10,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int? numbers;
+
   @override
   Widget build(BuildContext context) {
-    return MainLayout(title: "Home Screen", children: [
-      ElevatedButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => RouteOneScreen()));
-        },
-        child: Text('PUSH'),
-      )
-    ]);
+    return MainLayout(
+      title: 'Home Screen',
+      children: [
+        Text(
+          'arguments : ${numbers.toString()}',
+          style: TextStyle(fontSize: 40),
+        ),
+        ElevatedButton(
+            onPressed: () async {
+              final result = await Navigator.of(context).push<int>(
+                  MaterialPageRoute(builder: (context) => RouteOne(numbers : 456)));
+              if (result != null) {
+                setState(() {
+                  numbers = result;
+                });
+              }
+            },
+            child: Text(
+              'PUSH',
+              style: TextStyle(fontSize: 40),
+            ))
+      ],
+    );
   }
 }

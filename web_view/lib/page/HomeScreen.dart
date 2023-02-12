@@ -15,23 +15,14 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.yellow,
-        foregroundColor: Colors.red,
-        title: Align(
-          alignment: Alignment.center,
-            child: Text(
-          'WebView',
-          style: TextStyle(color: Colors.black),
-        )),
+        centerTitle: true,
+        title: const Text('Web View'),
         actions: [
           IconButton(
               onPressed: () {
                 controller.loadRequest(homeUrl);
               },
-              icon: Icon(
-                Icons.home,
-                size: 40,
-              ))
+              icon: Icon(Icons.home))
         ],
       ),
       body: WebViewWidget(

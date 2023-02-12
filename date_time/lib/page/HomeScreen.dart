@@ -11,29 +11,27 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   DateTime selectedDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  DateTime now = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.pink[100],
       body: SafeArea(
-        child: SizedBox(
+        child: Container(
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
               _TapPart(
-                selectedDate: selectedDate,
-                now: now, onPressed: onHartPressed,
+                selectedDate: selectedDate, onPressed: onDateTimePressed,
               ),
-              const _BottomPart()
+              _BottomPart(),
             ],
           ),
         ),
       ),
     );
   }
-  void onHartPressed() {
+  void onDateTimePressed() {
     showCupertinoDialog(
         barrierDismissible: true,
         context: context,
@@ -59,16 +57,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class _TapPart extends StatelessWidget {
   final DateTime selectedDate;
-  final DateTime now;
   final VoidCallback onPressed;
 
-  const _TapPart({required this.onPressed,required this.now, required this.selectedDate, Key? key})
-      : super(key: key);
+  const _TapPart({required this.selectedDate,required this.onPressed,  Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     TextTheme textTheme = theme.textTheme;
+    DateTime now = DateTime.now();
+
 
     return Expanded(
         child: Column(
@@ -85,14 +83,14 @@ class _TapPart extends StatelessWidget {
               style: textTheme.bodyText1,
             ),
             Text(
-              '${selectedDate.year},${selectedDate.month}, ${selectedDate.day}',
+              '${selectedDate.year},${selectedDate.month},${selectedDate.day}',
               style: textTheme.bodyText2,
             ),
           ],
         ),
         IconButton(
             onPressed: onPressed,
-            icon: const Icon(
+            icon: Icon(
               Icons.favorite,
               color: Colors.red,
               size: 40,
