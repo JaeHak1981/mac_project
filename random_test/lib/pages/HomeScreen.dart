@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int maxNumberInt = 1000;
-  List<int> randomNumber = [123, 456, 789];
+  List<int> randomNumberList = [123, 456, 789];
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              _Header(maxNumberInt: maxNumberInt, onNavigatorPressed: onNavigatorPressed,),
-              _Body(randomNumber: randomNumber),
-              _Footer(maxNumberInt: maxNumberInt, onNumberGenerate: onNumberGenerate,),
+              _Header(maxNumberInt: maxNumberInt, onPressed: onSettingPressed,),
+              _Body(randomNumberList: randomNumberList,),
+              _Footer(maxNumberInt: maxNumberInt, onPressed: onNumberGenerate,)
             ],
           ),
         ),
@@ -35,20 +35,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   void onNumberGenerate() {
-    final random = Random();
-    final Set<int> numberSet = {};
-    while (numberSet.length != 3) {
-      numberSet.add(random.nextInt(maxNumberInt));
+    final rand = Random();
+    final Set<int> numbers = {};
+    while (numbers.length != 3) {
+      numbers.add(rand.nextInt(maxNumberInt));
     }
     setState(() {
-      randomNumber = numberSet.toList();
+      randomNumberList = numbers.toList();
     });
   }
-  void onNavigatorPressed() async {
-    final result = await Navigator.of(context).push<int>(
-        MaterialPageRoute(
-            builder: (BuildContext context) =>
-                SettingScreen(maxNumberInt: maxNumberInt,)));
+  void onSettingPressed() async{
+    final result = await Navigator.of(context).push<int>(MaterialPageRoute(
+        builder: (BuildContext context) =>
+            SettingScreen(maxNumberInt: maxNumberInt,)));
     if(result != null){
       setState(() {
         maxNumberInt = result;
@@ -58,8 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 class _Header extends StatelessWidget {
   final int maxNumberInt;
-  final VoidCallback onNavigatorPressed;
-  const _Header({required this.maxNumberInt, required this.onNavigatorPressed, Key? key}) : super(key: key);
+  final VoidCallback onPressed;
+  const _Header({required this.maxNumberInt,required this.onPressed,  Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,12 +66,12 @@ class _Header extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text(
-          'RandomNumbers',
-          style: TextStyle(color: Colors.white, fontSize: 30),
+          'RandomNumber',
+          style: TextStyle(color: Colors.white, fontSize: 35),
         ),
         IconButton(
-            onPressed: onNavigatorPressed,
-            icon: const Icon(
+            onPressed: onPressed,
+            icon: Icon(
               Icons.settings,
               color: redColor,
               size: 40,
@@ -83,32 +82,30 @@ class _Header extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  final List<int> randomNumber;
-  const _Body({required this.randomNumber, Key? key}) : super(key: key);
+  final List<int> randomNumberList;
+  const _Body({required this.randomNumberList, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: randomNumber
-            .asMap()
-            .entries
-            .map((e) => Padding(
-          padding:
-          EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
-          child: NumberRow(maxNumberDouble: e.value),
-        ))
-            .toList(),
-      ),
-    );
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: randomNumberList
+              .asMap()
+              .entries
+              .map((e) => Padding(
+            padding: EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
+            child: NumberRow(maxNumberDouble: e.value),
+          ))
+              .toList(),
+        ));
   }
 }
 
 class _Footer extends StatelessWidget {
   final int maxNumberInt;
-  final VoidCallback onNumberGenerate;
-  const _Footer({required this.maxNumberInt,required this.onNumberGenerate,  Key? key}) : super(key: key);
+  final VoidCallback onPressed;
+  const _Footer({required this.maxNumberInt,required this.onPressed,  Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -116,11 +113,11 @@ class _Footer extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              padding: const EdgeInsets.all(12)),
-          onPressed: onNumberGenerate,
+              backgroundColor: redColor,
+              padding: const EdgeInsets.all(20)),
+          onPressed: onPressed,
           child: const Text(
-            'Numbers Generate',
+            'Number Generate',
             style: TextStyle(color: Colors.white, fontSize: 30),
           )),
     );

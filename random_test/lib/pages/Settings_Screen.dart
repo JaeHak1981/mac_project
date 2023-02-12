@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:random_test/component/number_row.dart';
 import 'package:random_test/constant/color.dart';
@@ -26,25 +27,27 @@ class _SettingScreenState extends State<SettingScreen> {
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              _Header(
-                maxNumberDouble: maxNumberDouble,
-              ),
-              _Body(
-                maxNumberDouble: maxNumberDouble,
-                onSliderPressed: onSliderPressed,
-              )
-            ],
-          ),
+        child: Column(
+          children: [
+            _Header(
+              maxNumberDouble: maxNumberDouble,
+            ),
+            _Body(
+              maxNumberDouble: maxNumberDouble,
+              onSliderPressed: onSliderPressed,
+              onNavigatorPressed: onNavigatorPressed,
+            )
+          ],
         ),
       ),
     );
   }
 
-  void onSliderPressed(val) {
+  void onNavigatorPressed() {
+    Navigator.of(context).pop(maxNumberDouble.toInt());
+  }
+
+  void onSliderPressed(double val) {
     setState(() {
       maxNumberDouble = val;
     });
@@ -67,9 +70,13 @@ class _Header extends StatelessWidget {
 class _Body extends StatelessWidget {
   final double maxNumberDouble;
   final ValueChanged<double>? onSliderPressed;
+  final VoidCallback onNavigatorPressed;
 
   const _Body(
-      {required this.maxNumberDouble, required this.onSliderPressed, Key? key})
+      {required this.maxNumberDouble,
+      required this.onSliderPressed,
+      required this.onNavigatorPressed,
+      Key? key})
       : super(key: key);
 
   @override
@@ -77,22 +84,17 @@ class _Body extends StatelessWidget {
     return Column(
       children: [
         Slider(
-            activeColor: Colors.yellow,
-            inactiveColor: Colors.green,
             value: maxNumberDouble,
+            activeColor: Colors.pink,
+            inactiveColor: Colors.yellow,
             min: 1000,
             max: 100000,
             onChanged: onSliderPressed),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: redColor,
-                foregroundColor: Colors.yellow,
-                padding: const EdgeInsets.all(12)),
-            onPressed: () {
-              Navigator.of(context).pop(maxNumberDouble.toInt());
-            },
+            style: ElevatedButton.styleFrom(backgroundColor: redColor),
+            onPressed: onNavigatorPressed,
             child: const Text(
               'SAVE',
               style: TextStyle(fontSize: 30),
