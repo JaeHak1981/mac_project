@@ -3,6 +3,7 @@ import 'package:navigator_exercise/Layout/Main_Layout.dart';
 import 'package:navigator_exercise/Screen/Route_One_Screen.dart';
 
 class HomeScreen extends StatefulWidget {
+
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -10,26 +11,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int? numbers;
+  int? number;
 
   @override
   Widget build(BuildContext context) {
     return MainLayout(
       title: 'Home Screen',
       children: [
-        Text(
-          'arguments : ${numbers.toString()}',
-          style: TextStyle(fontSize: 40),
-        ),
+        Text('arguments : ${number.toString()}', style: TextStyle(fontSize: 40),textAlign: TextAlign.center,),
         ElevatedButton(
-            onPressed: () async {
-              final result = await Navigator.of(context).push<int>(
-                  MaterialPageRoute(builder: (context) => RouteOne(numbers : 456)));
-              if (result != null) {
-                setState(() {
-                  numbers = result;
-                });
-              }
+            onPressed: () async{
+             final result = await Navigator.of(context).push<int>(MaterialPageRoute(builder:(context)=>RouteOne(numbers:456) ));
+             if(result != null){
+               setState(() {
+                 number = result;
+               });
+             }
             },
             child: Text(
               'PUSH',
