@@ -1,40 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:navigator_exercise/Layout/Main_Layout.dart';
+import 'package:navigator_exercise/Screen/HomeScreen.dart';
+import 'package:navigator_exercise/Screen/Route_Three_Screen.dart';
 import 'package:navigator_exercise/Screen/Route_Two_Screen.dart';
 
 class RouteOne extends StatelessWidget {
-  final int? numbers;
+  final int? number;
 
-  const RouteOne({ this.numbers, Key? key}) : super(key: key);
+  RouteOne({this.number, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MainLayout(title: 'Route One', children: [
-      Text(
-        'arguments : ${numbers.toString()}',
-        style: TextStyle(fontSize: 40),
-        textAlign: TextAlign.center,
-      ),
+      ArgumentText(argument: number.toString()),
       ElevatedButton(
           onPressed: () {
-            Navigator.of(context).pop(123);
+            Navigator.of(context).pop();
           },
-          child: Text(
-            'POP',
-            style: TextStyle(fontSize: 40),
+          child: PushAndPopText(
+            title: 'POP',
           )),
-      ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+      OutlinedButton(
           onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => RouteTwo(),
-                settings: RouteSettings(arguments: 789)));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => RouteTwo(),
+                settings: RouteSettings(arguments: 456)));
           },
-          child: Text(
-            'PUSH',
-            style: TextStyle(fontSize: 40),
-            textAlign: TextAlign.center,
-          ))
+          child: PushAndPopText(title: 'PUSH')),
+
     ]);
   }
 }
