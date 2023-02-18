@@ -13,6 +13,7 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   double maxNumberDouble = 1000;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -24,53 +25,66 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: SafeArea(
           child: Column(
             children: [
-              _Header(maxNumberDouble: maxNumberDouble),
-              _Body(maxNumberDouble: maxNumberDouble, onSliderPressed: onSliderPressed,),
+              _Header(
+                maxNumberDouble: maxNumberDouble,
+              ),
+              _Body(
+                maxNumberDouble: maxNumberDouble,
+                onPressed: onSliderPressed,
+              )
             ],
           ),
         ),
       ),
     );
   }
+
   void onSliderPressed(double val) {
     setState(() {
       maxNumberDouble = val;
     });
   }
 }
+
 class _Header extends StatelessWidget {
   final double maxNumberDouble;
+
   const _Header({required this.maxNumberDouble, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: NumberRow(numbersInt: maxNumberDouble.toInt()),
+      child: NumberRow(
+        numbersDouble: maxNumberDouble.toInt(),
+      ),
     );
   }
 }
 
 class _Body extends StatelessWidget {
   final double maxNumberDouble;
-  final ValueChanged<double>? onSliderPressed;
-  const _Body({required this.maxNumberDouble, required this.onSliderPressed, Key? key}) : super(key: key);
+  final ValueChanged<double>? onPressed;
+
+  const _Body(
+      {required this.maxNumberDouble, required this.onPressed, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Slider(
-            activeColor: Colors.yellow,
-            inactiveColor: Colors.red,
             value: maxNumberDouble,
             min: 1000,
             max: 100000,
-            onChanged: onSliderPressed),
+            activeColor: Colors.yellow,
+            inactiveColor: Colors.blue,
+            onChanged: onPressed),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
@@ -78,7 +92,7 @@ class _Body extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop(maxNumberDouble.toInt());
               },
-              child: Text(
+              child: const Text(
                 'SAVE',
                 style: TextStyle(fontSize: 30),
               )),
