@@ -25,20 +25,15 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SafeArea(
-          child: Column(
-            children: [
-              _Header(
-                maxNumberDouble: maxNumberDouble,
-              ),
-              _Body(
-                maxNumberDouble: maxNumberDouble,
-                onPressed: onSliderPressed,
-              )
-            ],
-          ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            _Header(maxNumberDouble: maxNumberDouble),
+            _Body(
+              maxNumberDouble: maxNumberDouble,
+              onChanged: onSliderPressed,
+            ),
+          ],
         ),
       ),
     );
@@ -59,19 +54,17 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: NumberRow(
-        numbersDouble: maxNumberDouble.toInt(),
-      ),
+      child: NumberRow(numbersInt: maxNumberDouble.toInt()),
     );
   }
 }
 
 class _Body extends StatelessWidget {
   final double maxNumberDouble;
-  final ValueChanged<double>? onPressed;
+  final ValueChanged<double>? onChanged;
 
   const _Body(
-      {required this.maxNumberDouble, required this.onPressed, Key? key})
+      {required this.maxNumberDouble, required this.onChanged, Key? key})
       : super(key: key);
 
   @override
@@ -79,12 +72,12 @@ class _Body extends StatelessWidget {
     return Column(
       children: [
         Slider(
+            activeColor: Colors.yellow,
+            inactiveColor: Colors.green,
             value: maxNumberDouble,
             min: 1000,
             max: 100000,
-            activeColor: Colors.yellow,
-            inactiveColor: Colors.blue,
-            onChanged: onPressed),
+            onChanged: onChanged),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
@@ -94,7 +87,7 @@ class _Body extends StatelessWidget {
               },
               child: const Text(
                 'SAVE',
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(color: Colors.white, fontSize: 35),
               )),
         )
       ],
