@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:random_test/component/number_row.dart';
 import 'package:random_test/constant/color.dart';
@@ -12,13 +15,13 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  double maxNumberDouble = 1000;
+  double numberDouble = 1000;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    maxNumberDouble = widget.maxNumberInt.toDouble();
+    numberDouble = widget.maxNumberInt.toDouble();
   }
 
   @override
@@ -28,11 +31,13 @@ class _SettingScreenState extends State<SettingScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            _Header(maxNumberDouble: maxNumberDouble),
             _Body(
-              maxNumberDouble: maxNumberDouble,
-              onChanged: onSliderPressed,
+              numberDouble: numberDouble,
             ),
+            _Footer(
+              numberDouble: numberDouble,
+              onSliderPressed: onSliderPressed,
+            )
           ],
         ),
       ),
@@ -41,31 +46,33 @@ class _SettingScreenState extends State<SettingScreen> {
 
   void onSliderPressed(double val) {
     setState(() {
-      maxNumberDouble = val;
+      numberDouble = val;
     });
   }
 }
 
-class _Header extends StatelessWidget {
-  final double maxNumberDouble;
+class _Body extends StatelessWidget {
+  final double numberDouble;
 
-  const _Header({required this.maxNumberDouble, Key? key}) : super(key: key);
+  const _Body({required this.numberDouble, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: NumberRow(numbersInt: maxNumberDouble.toInt()),
+      child: NumberRow(numberInt: numberDouble.toInt()),
     );
   }
 }
 
-class _Body extends StatelessWidget {
-  final double maxNumberDouble;
-  final ValueChanged<double>? onChanged;
+class _Footer extends StatelessWidget {
+  final double numberDouble;
+  final ValueChanged<double>? onSliderPressed;
 
-  const _Body(
-      {required this.maxNumberDouble, required this.onChanged, Key? key})
-      : super(key: key);
+  const _Footer({
+    required this.numberDouble,
+    required this.onSliderPressed,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -73,17 +80,17 @@ class _Body extends StatelessWidget {
       children: [
         Slider(
             activeColor: Colors.yellow,
-            inactiveColor: Colors.green,
-            value: maxNumberDouble,
+            inactiveColor: Colors.white,
+            value: numberDouble,
             min: 1000,
             max: 100000,
-            onChanged: onChanged),
+            onChanged: onSliderPressed),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: redColor),
               onPressed: () {
-                Navigator.of(context).pop(maxNumberDouble.toInt());
+                Navigator.of(context).pop(numberDouble.toInt());
               },
               child: const Text(
                 'SAVE',

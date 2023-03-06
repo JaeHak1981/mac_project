@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 
 class NumberRow extends StatelessWidget {
-  final int numbersInt;
-  const NumberRow({required this.numbersInt,Key? key}) : super(key: key);
+  final int numberInt;
+  const NumberRow({required this.numberInt,Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: numbersInt
+      children: numberInt
           .toString()
           .split('')
           .map((e) => Image.asset(
@@ -16,7 +16,6 @@ class NumberRow extends StatelessWidget {
         height: 70,
       ))
           .toList(),
-    )
-    ;
+    );
   }
 }
