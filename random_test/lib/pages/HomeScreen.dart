@@ -13,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<int> randomList = [123, 456, 789];
+  List<int> numberList = [123, 456, 789];
   int maxNumberInt = 1000;
 
   @override
@@ -23,53 +23,57 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              _Header(
-                maxNumberInt: maxNumberInt,
-                onPressed: onSettingPressed,
-              ),
-              _Body(
-                randomList: randomList,
-              ),
-              _Footer(maxNumberInt: maxNumberInt, onPressed:onGeneratePressed,)
-            ],
+          child: SizedBox(
+            child: Column(
+              children: [
+                _Header(
+                  maxNumberInt: maxNumberInt,
+                  onSliderPressed: onSliderPressed,
+                ),
+                _Body(numberList: numberList),
+                _Footer(
+                  maxNumberInt: maxNumberInt,
+                  onPressed: onGeneratorPressed,
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-  void onGeneratePressed() {
+
+  void onGeneratorPressed() {
     final rand = Random();
     final Set<int> numberSet = {};
     while (numberSet.length != 3) {
       numberSet.add(rand.nextInt(maxNumberInt));
     }
     setState(() {
-      randomList = numberSet.toList();
+      numberList = numberSet.toList();
     });
   }
 
-  void onSettingPressed() async {
+  void onSliderPressed() async {
     final result = await Navigator.of(context)
-        .push<int>(MaterialPageRoute(builder: (context) {
+        .push<int>(MaterialPageRoute(builder: (BuildContext context) {
       return SettingScreen(
         maxNumberInt: maxNumberInt,
       );
     }));
     if (result != null) {
-      maxNumberInt = result.toInt();
+      maxNumberInt = result;
     }
   }
 }
 
 class _Header extends StatelessWidget {
   final int maxNumberInt;
-  final VoidCallback onPressed;
+  final VoidCallback onSliderPressed;
 
   const _Header({
     required this.maxNumberInt,
-    required this.onPressed,
+    required this.onSliderPressed,
     Key? key,
   }) : super(key: key);
 
@@ -83,36 +87,34 @@ class _Header extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontSize: 35),
         ),
         IconButton(
-          onPressed: onPressed,
-          icon: const Icon(
-            Icons.settings,
-            color: redColor,
-            size: 40,
-          ),
-        ),
+            onPressed: onSliderPressed,
+            icon: const Icon(
+              Icons.settings,
+              size: 40,
+              color: Colors.red,
+            ))
       ],
     );
   }
 }
 
 class _Body extends StatelessWidget {
-  final List<int> randomList;
+  final List<int> numberList;
 
-  const _Body({required this.randomList, Key? key}) : super(key: key);
+  const _Body({required this.numberList, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: randomList
+        children: numberList
             .asMap()
             .entries
-            .map((e) =>
-            Padding(
-              padding: EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
-              child: NumberRow(numberInt: e.value),
-            ))
+            .map((e) => Padding(
+                  padding: EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
+                  child: NumberRow(numberInt: e.value),
+                ))
             .toList(),
       ),
     );
@@ -137,8 +139,8 @@ class _Footer extends StatelessWidget {
           style: ElevatedButton.styleFrom(backgroundColor: redColor),
           onPressed: onPressed,
           child: const Text(
-            'Number Generation',
-            style: TextStyle(color: Colors.white, fontSize: 30),
+            '생성하기',
+            style: TextStyle(color: Colors.white, fontSize: 35),
           )),
     );
   }

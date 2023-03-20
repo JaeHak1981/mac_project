@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   XFile? video;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +20,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget renderVideo() {
-    return CustomVideoPlayer(video: video!,);
+    return Center(
+      child: CustomVideoPlay(
+        video: video!,
+      ),
+    );
   }
 
   Widget renderEmpty() {
@@ -29,46 +34,44 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _Logo(onTap: onLogoTap,),
-          SizedBox(
-            height: 30,
+          _Logo(
+            onTap: onLogoTap,
           ),
+          SizedBox(height: 30),
           _AppName(),
         ],
       ),
     );
   }
-  void onLogoTap()async{
+
+  void onLogoTap() async {
     final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
-    if(video !=null){
-      setState(() {
-        this.video = video;
-      });
-    };
+    setState(() {
+      this.video = video;
+    });
   }
 
   BoxDecoration getBoxDecoration() {
-    return const BoxDecoration(
+    return BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
           Color(0xFF2A3A7C),
-          Color(0xFF000118),
+          Color(0xFFF000118),
         ]));
   }
 }
 
 class _Logo extends StatelessWidget {
   final VoidCallback onTap;
-  const _Logo({required this.onTap,Key? key}) : super(key: key);
+
+  const _Logo({required this.onTap, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Image.asset('asset/image/logo.png'),
-    );
+        onTap: onTap, child: Image.asset('asset/image/logo.png'));
   }
 }
 
@@ -77,20 +80,16 @@ class _AppName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = const TextStyle(
+    final textStyle = TextStyle(
         color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          'VIDEO',
-          style: textStyle,
-        ),
+        Text('VIDEO', style: textStyle),
         Text(
           'PLAYER',
           style: textStyle.copyWith(fontWeight: FontWeight.w700),
-        )
+        ),
       ],
     );
   }

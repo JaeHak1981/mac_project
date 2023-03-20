@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 selectedDate: selectedDate,
                 onPressed: onHartPressed,
               ),
-              const _Bottom()
+              _BottomPart(),
             ],
           ),
         ),
@@ -35,8 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onHartPressed() {
     showCupertinoDialog(
-        context: context,
         barrierDismissible: true,
+        context: context,
         builder: (BuildContext context) {
           return Align(
             alignment: Alignment.bottomCenter,
@@ -44,9 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.white,
               height: 300,
               child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.date,
                 initialDateTime: selectedDate,
                 maximumDate: DateTime.now(),
+                mode: CupertinoDatePickerMode.date,
                 onDateTimeChanged: (DateTime date) {
                   setState(() {
                     selectedDate = date;
@@ -60,53 +60,59 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _TapPart extends StatelessWidget {
-  final VoidCallback onPressed;
-
   final DateTime selectedDate;
 
-  const _TapPart({
-    required this.onPressed,
-    required this.selectedDate,
-    Key? key,
-  }) : super(key: key);
+  final VoidCallback onPressed;
+
+  const _TapPart(
+      {required this.selectedDate, required this.onPressed, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
     ThemeData theme = Theme.of(context);
     TextTheme textTheme = theme.textTheme;
+    DateTime now = DateTime.now();
+
+
     return Expanded(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('U&I', style: textTheme.headlineLarge),
+        Text(
+          'U&I',
+          style: textTheme.headlineLarge,
+        ),
         Column(
           children: [
-            Text('우리 처음 만난 날', style: textTheme.bodySmall),
+            Text(
+              '우리 처음 만난 날',
+              style: textTheme.headlineMedium,
+            ),
             Text(
               '${selectedDate.year},${selectedDate.month},${selectedDate.day}',
-              style: textTheme.bodyLarge,
+              style: textTheme.headlineSmall,
             ),
           ],
         ),
         IconButton(
             onPressed: onPressed,
-            icon: const Icon(
+            color: Colors.red,
+            icon: Icon(
               Icons.favorite,
-              color: Colors.red,
-              size: 40,
+              size: 50,
             )),
         Text(
           'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays + 1}',
-          style: textTheme.bodyMedium,
+          style: textTheme.bodyLarge,
         ),
       ],
     ));
   }
 }
 
-class _Bottom extends StatelessWidget {
-  const _Bottom({Key? key}) : super(key: key);
+class _BottomPart extends StatelessWidget {
+  const _BottomPart({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
