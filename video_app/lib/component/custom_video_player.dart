@@ -16,6 +16,7 @@ class CustomVideoPlayer extends StatefulWidget {
 
 class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   VideoPlayerController? videoController;
+  Duration currentPosition = Duration();
 
   @override
   void initState() {
@@ -26,6 +27,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
 
   void initialController() async {
     videoController = VideoPlayerController.file(File(widget.video.path));
+
     await videoController!.initialize();
     setState(() {});
   }
@@ -46,20 +48,43 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
             onForwardPressed: onForwardPressed,
             isPlaying: videoController!.value.isPlaying,
           ),
+          _NewVideo(
+            onPressed: onNewVideoPressed,
+          ),
           Positioned(
+            bottom: 0,
             right: 0,
-            child: IconButton(
-                color: Colors.white,
-                iconSize: 30,
-                onPressed: () {},
-                icon: Icon(
-                  Icons.photo_camera_back,
-                )),
-          )
+            left: 0,
+            child: Row(
+              children: [
+                Text(
+                  '${currentPosition.inMinutes}:${(currentPosition.inSeconds % 60).toString().padLeft(2, '0')}',
+                  style: TextStyle(color: Colors.white),
+                ),
+                Expanded(
+                  child: Slider(
+                      min: 0,
+                      max: videoController!.value.duration.inSeconds.toDouble(),
+                      value: currentPosition.inSeconds.toDouble(),
+                      onChanged: (double val) {
+                        setState(() {
+                          currentPosition = Duration(seconds: val.toInt());
+                        });
+                      }),
+                ),
+                Text(
+                  '${videoController!.value.duration.inMinutes}:${(videoController!.value.duration.inSeconds % 60).toString().padLeft(2, '0')}',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
+
+  void onNewVideoPressed() {}
 
   void onReversePressed() {
     final currentPosition = videoController!.value.position;
@@ -74,7 +99,8 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     final maxPosition = videoController!.value.duration;
     final currentPosition = videoController!.value.position;
     Duration position = maxPosition;
-    if ((maxPosition - Duration(seconds: 3)).inSeconds > currentPosition.inSeconds) {
+    if ((maxPosition - Duration(seconds: 3)).inSeconds >
+        currentPosition.inSeconds) {
       position = currentPosition + Duration(seconds: 3);
     }
     videoController!.seekTo(position);
@@ -133,6 +159,26 @@ class _Controls extends StatelessWidget {
       iconSize: 30,
       onPressed: onPressed,
       icon: Icon(iconData),
+    );
+  }
+}
+
+class _NewVideo extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const _NewVideo({required this.onPressed, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      right: 0,
+      child: IconButton(
+          color: Colors.white,
+          iconSize: 30,
+          onPressed: onPressed,
+          icon: Icon(
+            Icons.photo_camera_back,
+          )),
     );
   }
 }
