@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     // TODO: implement dispose
     controller.dispose();
-    if(timer != null){
+    if(timer == null){
       timer!.cancel();
     }
     super.dispose();

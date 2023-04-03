@@ -11,19 +11,23 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     WebViewController controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(
-          'https://bubbly-cause-fb4.notion.site/Class-c3284153a2074e9fa8423c193cba40bf'));
+      ..loadRequest(homeUrl);
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: (){
-            if(controller != null){
-              controller.loadRequest(homeUrl);
-            }
-          }, icon: Icon(Icons.home))
+          IconButton(
+            onPressed: () {
+              if (controller != null) {
+                controller.loadRequest(homeUrl);
+              }
+            },
+            icon: const Icon(Icons.home),
+          )
         ],
       ),
-      body: WebViewWidget(controller: controller),
+      body: WebViewWidget(
+        controller: controller,
+      ),
     );
   }
 }

@@ -5,56 +5,104 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
-class CustomVideoPlay extends StatefulWidget {
+class CustomVideoPlayer extends StatefulWidget {
   final XFile video;
 
-  const CustomVideoPlay({required this.video, Key? key}) : super(key: key);
+  const CustomVideoPlayer({required this.video, Key? key}) : super(key: key);
 
   @override
-  State<CustomVideoPlay> createState() => _CustomVideoPlayState();
+  State<CustomVideoPlayer> createState() => _CustomVideoPlayerState();
 }
 
-class _CustomVideoPlayState extends State<CustomVideoPlay> {
-  VideoPlayerController? videoPlayerController;
+class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
+  VideoPlayerController? videoController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    initialControllor();
+    initialController();
   }
 
-  initialControllor() async {
-    videoPlayerController = VideoPlayerController.file(File(widget.video.path));
-    await videoPlayerController!.initialize();
+  void initialController() async {
+    videoController = VideoPlayerController.file(File(widget.video.path));
+    await videoController!.initialize();
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    if (videoPlayerController == null) {
+    if (videoController == null) {
       return CircularProgressIndicator();
     }
     return AspectRatio(
-        aspectRatio: videoPlayerController!.value.aspectRatio,
-        child: Stack(children: [
-          VideoPlayer(videoPlayerController!),
-          _Controls(),
+      aspectRatio: videoController!.value.aspectRatio,
+      child: Stack(
+        children: [
+          VideoPlayer(videoController!),
+          _Controls(
+            onReversePressed: onReversePressed,
+            onPlayPressed: onPlayPressed,
+            onForwardPressed: onForwardPressed,
+            isPlaying: videoController!.value.isPlaying,
+          ),
           Positioned(
             right: 0,
             child: IconButton(
-              onPressed: () {},
-              color: Colors.white,
-              iconSize: 30,
-              icon: Icon(Icons.photo_camera_back),
-            ),
-          ),
-        ]));
+                color: Colors.white,
+                iconSize: 30,
+                onPressed: () {},
+                icon: Icon(
+                  Icons.photo_camera_back,
+                )),
+          )
+        ],
+      ),
+    );
+  }
+
+  void onReversePressed() {
+    final currentPosition = videoController!.value.position;
+    Duration position = videoController!.value.duration;
+    if (currentPosition.inSeconds > 3) {
+      position = currentPosition - Duration(seconds: 3);
+    }
+    videoController!.seekTo(position);
+  }
+
+  void onForwardPressed() {
+    final maxPosition = videoController!.value.duration;
+    final currentPosition = videoController!.value.position;
+    Duration position = maxPosition;
+    if ((maxPosition - Duration(seconds: 3)).inSeconds > currentPosition.inSeconds) {
+      position = currentPosition + Duration(seconds: 3);
+    }
+    videoController!.seekTo(position);
+  }
+
+  void onPlayPressed() {
+    if (videoController!.value.isPlaying) {
+      videoController!.pause();
+    } else {
+      videoController!.play();
+    }
+    setState(() {});
   }
 }
 
 class _Controls extends StatelessWidget {
-  const _Controls({Key? key}) : super(key: key);
+  final VoidCallback onReversePressed;
+  final VoidCallback onPlayPressed;
+  final VoidCallback onForwardPressed;
+  final bool isPlaying;
+
+  const _Controls(
+      {required this.onReversePressed,
+      required this.onPlayPressed,
+      required this.onForwardPressed,
+      required this.isPlaying,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +112,13 @@ class _Controls extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          renderIconButton(onPressed: () {}, iconData: Icons.rotate_left),
-          renderIconButton(onPressed: () {}, iconData: Icons.rotate_left),
-          renderIconButton(onPressed: () {}, iconData: Icons.rotate_right),
+          renderIconButton(
+              onPressed: onReversePressed, iconData: Icons.rotate_left),
+          renderIconButton(
+              onPressed: onPlayPressed,
+              iconData: isPlaying ? Icons.pause : Icons.play_arrow),
+          renderIconButton(
+              onPressed: onForwardPressed, iconData: Icons.rotate_right),
         ],
       ),
     );
@@ -77,9 +129,9 @@ class _Controls extends StatelessWidget {
     required IconData iconData,
   }) {
     return IconButton(
-      onPressed: onPressed,
       color: Colors.white,
       iconSize: 30,
+      onPressed: onPressed,
       icon: Icon(iconData),
     );
   }

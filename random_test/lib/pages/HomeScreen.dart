@@ -23,18 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
+          child: Container(
             child: Column(
               children: [
-                _Header(
-                  maxNumberInt: maxNumberInt,
-                  onSliderPressed: onSliderPressed,
-                ),
-                _Body(numberList: numberList),
-                _Footer(
-                  maxNumberInt: maxNumberInt,
-                  onPressed: onGeneratorPressed,
-                ),
+                _Header(onSettingPressed: onSettingPressed,),
+                _Body(numberList: numberList,),
+                _Footer(onGeneratorPressed: onGeneratorPressed,),
               ],
             ),
           ),
@@ -42,7 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
   void onGeneratorPressed() {
     final rand = Random();
     final Set<int> numberSet = {};
@@ -53,8 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
       numberList = numberSet.toList();
     });
   }
-
-  void onSliderPressed() async {
+  void onSettingPressed() async {
     final result = await Navigator.of(context)
         .push<int>(MaterialPageRoute(builder: (BuildContext context) {
       return SettingScreen(
@@ -68,39 +60,31 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _Header extends StatelessWidget {
-  final int maxNumberInt;
-  final VoidCallback onSliderPressed;
-
-  const _Header({
-    required this.maxNumberInt,
-    required this.onSliderPressed,
-    Key? key,
-  }) : super(key: key);
+  final VoidCallback onSettingPressed;
+  const _Header({required this.onSettingPressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
-          'Random Numbers',
+        Text(
+          'RandemNumbers',
           style: TextStyle(color: Colors.white, fontSize: 35),
         ),
         IconButton(
-            onPressed: onSliderPressed,
-            icon: const Icon(
+            color: redColor,
+            iconSize: 40,
+            onPressed: onSettingPressed,
+            icon: Icon(
               Icons.settings,
-              size: 40,
-              color: Colors.red,
-            ))
+            )),
       ],
     );
   }
 }
-
 class _Body extends StatelessWidget {
   final List<int> numberList;
-
   const _Body({required this.numberList, Key? key}) : super(key: key);
 
   @override
@@ -112,36 +96,28 @@ class _Body extends StatelessWidget {
             .asMap()
             .entries
             .map((e) => Padding(
-                  padding: EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
-                  child: NumberRow(numberInt: e.value),
-                ))
+          padding:
+          EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
+          child: NumberRow(numbers: e.value),
+        ))
             .toList(),
       ),
     );
   }
 }
-
 class _Footer extends StatelessWidget {
-  final int maxNumberInt;
-  final VoidCallback onPressed;
-
-  const _Footer({
-    required this.maxNumberInt,
-    required this.onPressed,
-    Key? key,
-  }) : super(key: key);
+  final VoidCallback onGeneratorPressed;
+  const _Footer({required this.onGeneratorPressed,Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: redColor),
-          onPressed: onPressed,
-          child: const Text(
-            '생성하기',
-            style: TextStyle(color: Colors.white, fontSize: 35),
-          )),
+          style:
+          ElevatedButton.styleFrom(backgroundColor: redColor),
+          onPressed: onGeneratorPressed,
+          child: Text('생성하기', style: TextStyle(fontSize: 35))),
     );
   }
 }

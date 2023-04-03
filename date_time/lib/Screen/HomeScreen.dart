@@ -32,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
   void onHartPressed() {
     showCupertinoDialog(
         barrierDismissible: true,
@@ -61,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class _TapPart extends StatelessWidget {
   final DateTime selectedDate;
-
   final VoidCallback onPressed;
 
   const _TapPart(
@@ -70,42 +68,35 @@ class _TapPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    TextTheme textTheme = theme.textTheme;
     DateTime now = DateTime.now();
 
+    ThemeData theme = Theme.of(context);
+    TextTheme textTheme = theme.textTheme;
 
     return Expanded(
         child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Text(
-          'U&I',
-          style: textTheme.headlineLarge,
-        ),
+        Text('U&I', style: textTheme.headlineLarge),
         Column(
           children: [
-            Text(
-              '우리 처음 만난 날',
-              style: textTheme.headlineMedium,
-            ),
+            Text('우리 처음 만난 날', style: textTheme.headlineMedium),
             Text(
               '${selectedDate.year},${selectedDate.month},${selectedDate.day}',
-              style: textTheme.headlineSmall,
+              style: textTheme.headlineMedium,
             ),
           ],
         ),
         IconButton(
-            onPressed: onPressed,
             color: Colors.red,
-            icon: Icon(
+            iconSize: 60,
+            onPressed: onPressed,
+            icon: const Icon(
               Icons.favorite,
-              size: 50,
             )),
         Text(
-          'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays + 1}',
-          style: textTheme.bodyLarge,
-        ),
+            'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays + 1}',
+            style: textTheme.headlineSmall),
       ],
     ));
   }
