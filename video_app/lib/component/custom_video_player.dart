@@ -27,6 +27,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   void initialController() async {
     videoController = VideoPlayerController.file(File(widget.video.path));
     await videoController!.initialize();
+    setState(() {});
   }
 
   @override
@@ -64,7 +65,8 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     final maxPosition = videoController!.value.duration;
     final currentPosition = videoController!.value.position;
     Duration position = maxPosition;
-    if ((maxPosition-Duration(seconds: 3)).inSeconds > currentPosition.inSeconds) {
+    if ((maxPosition - Duration(seconds: 3)).inSeconds >
+        currentPosition.inSeconds) {
       position = currentPosition + Duration(seconds: 3);
     }
     videoController!.seekTo(position);
