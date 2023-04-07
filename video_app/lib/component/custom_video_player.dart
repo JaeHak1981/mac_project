@@ -16,7 +16,6 @@ class CustomVideoPlayer extends StatefulWidget {
 
 class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   VideoPlayerController? videoController;
-  Duration currentPosition = Duration();
 
   @override
   void initState() {
@@ -27,9 +26,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
 
   void initialController() async {
     videoController = VideoPlayerController.file(File(widget.video.path));
-
     await videoController!.initialize();
-    setState(() {});
   }
 
   @override
@@ -43,52 +40,20 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
         children: [
           VideoPlayer(videoController!),
           _Controls(
-            onReversePressed: onReversePressed,
+            onReversPressed: onReversPressed,
             onPlayPressed: onPlayPressed,
             onForwardPressed: onForwardPressed,
             isPlaying: videoController!.value.isPlaying,
           ),
-          _NewVideo(
-            onPressed: onNewVideoPressed,
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            left: 0,
-            child: Row(
-              children: [
-                Text(
-                  '${currentPosition.inMinutes}:${(currentPosition.inSeconds % 60).toString().padLeft(2, '0')}',
-                  style: TextStyle(color: Colors.white),
-                ),
-                Expanded(
-                  child: Slider(
-                      min: 0,
-                      max: videoController!.value.duration.inSeconds.toDouble(),
-                      value: currentPosition.inSeconds.toDouble(),
-                      onChanged: (double val) {
-                        setState(() {
-                          currentPosition = Duration(seconds: val.toInt());
-                        });
-                      }),
-                ),
-                Text(
-                  '${videoController!.value.duration.inMinutes}:${(videoController!.value.duration.inSeconds % 60).toString().padLeft(2, '0')}',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
+          _NewVideo(),
         ],
       ),
     );
   }
 
-  void onNewVideoPressed() {}
-
-  void onReversePressed() {
+  void onReversPressed() {
     final currentPosition = videoController!.value.position;
-    Duration position = videoController!.value.duration;
+    Duration position = Duration();
     if (currentPosition.inSeconds > 3) {
       position = currentPosition - Duration(seconds: 3);
     }
@@ -99,31 +64,49 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     final maxPosition = videoController!.value.duration;
     final currentPosition = videoController!.value.position;
     Duration position = maxPosition;
-    if ((maxPosition - Duration(seconds: 3)).inSeconds >
-        currentPosition.inSeconds) {
+    if ((maxPosition-Duration(seconds: 3)).inSeconds > currentPosition.inSeconds) {
       position = currentPosition + Duration(seconds: 3);
     }
     videoController!.seekTo(position);
   }
 
   void onPlayPressed() {
-    if (videoController!.value.isPlaying) {
-      videoController!.pause();
-    } else {
-      videoController!.play();
-    }
-    setState(() {});
+    setState(() {
+      if (videoController!.value.isPlaying) {
+        videoController!.pause();
+      } else {
+        videoController!.play();
+      }
+    });
+  }
+}
+
+class _NewVideo extends StatelessWidget {
+  const _NewVideo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      right: 0,
+      child: IconButton(
+          color: Colors.white,
+          iconSize: 30,
+          onPressed: () {},
+          icon: Icon(
+            Icons.photo_camera_back,
+          )),
+    );
   }
 }
 
 class _Controls extends StatelessWidget {
-  final VoidCallback onReversePressed;
+  final VoidCallback onReversPressed;
   final VoidCallback onPlayPressed;
   final VoidCallback onForwardPressed;
   final bool isPlaying;
 
   const _Controls(
-      {required this.onReversePressed,
+      {required this.onReversPressed,
       required this.onPlayPressed,
       required this.onForwardPressed,
       required this.isPlaying,
@@ -139,7 +122,7 @@ class _Controls extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           renderIconButton(
-              onPressed: onReversePressed, iconData: Icons.rotate_left),
+              onPressed: onReversPressed, iconData: Icons.rotate_left),
           renderIconButton(
               onPressed: onPlayPressed,
               iconData: isPlaying ? Icons.pause : Icons.play_arrow),
@@ -150,35 +133,13 @@ class _Controls extends StatelessWidget {
     );
   }
 
-  Widget renderIconButton({
-    required VoidCallback onPressed,
-    required IconData iconData,
-  }) {
+  Widget renderIconButton(
+      {required VoidCallback onPressed, required IconData iconData}) {
     return IconButton(
       color: Colors.white,
       iconSize: 30,
       onPressed: onPressed,
       icon: Icon(iconData),
-    );
-  }
-}
-
-class _NewVideo extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  const _NewVideo({required this.onPressed, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      right: 0,
-      child: IconButton(
-          color: Colors.white,
-          iconSize: 30,
-          onPressed: onPressed,
-          icon: Icon(
-            Icons.photo_camera_back,
-          )),
     );
   }
 }

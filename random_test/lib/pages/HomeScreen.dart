@@ -23,14 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Container(
-            child: Column(
-              children: [
-                _Header(onSettingPressed: onSettingPressed,),
-                _Body(numberList: numberList,),
-                _Footer(onGeneratorPressed: onGeneratorPressed,),
-              ],
-            ),
+          child: Column(
+            children: [
+              _Header(maxNumberInt: maxNumberInt, onPressed: onSettingPressed,),
+              _Body(numberList: numberList,),
+              _Footer(onPressed: onGeneratorPressed,)
+            ],
           ),
         ),
       ),
@@ -47,38 +45,39 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
   void onSettingPressed() async {
-    final result = await Navigator.of(context)
-        .push<int>(MaterialPageRoute(builder: (BuildContext context) {
-      return SettingScreen(
-        maxNumberInt: maxNumberInt,
-      );
-    }));
+    final result = await Navigator.of(context).push<int>(
+        MaterialPageRoute(builder: (BuildContext context) {
+          return SettingScreen(
+            maxNumberInt: maxNumberInt,
+          );
+        }));
     if (result != null) {
       maxNumberInt = result;
     }
   }
 }
-
 class _Header extends StatelessWidget {
-  final VoidCallback onSettingPressed;
-  const _Header({required this.onSettingPressed, Key? key}) : super(key: key);
+  final int maxNumberInt;
+  final VoidCallback onPressed;
+  const _Header({required this.maxNumberInt,
+    required this.onPressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          'RandemNumbers',
+        const Text(
+          'RandomNumbers',
           style: TextStyle(color: Colors.white, fontSize: 35),
         ),
         IconButton(
             color: redColor,
-            iconSize: 40,
-            onPressed: onSettingPressed,
-            icon: Icon(
+            iconSize: 50,
+            onPressed: onPressed,
+            icon: const Icon(
               Icons.settings,
-            )),
+            ))
       ],
     );
   }
@@ -106,18 +105,22 @@ class _Body extends StatelessWidget {
   }
 }
 class _Footer extends StatelessWidget {
-  final VoidCallback onGeneratorPressed;
-  const _Footer({required this.onGeneratorPressed,Key? key}) : super(key: key);
+  final VoidCallback onPressed;
+
+  const _Footer({required this.onPressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-          style:
-          ElevatedButton.styleFrom(backgroundColor: redColor),
-          onPressed: onGeneratorPressed,
-          child: Text('생성하기', style: TextStyle(fontSize: 35))),
+        style: ElevatedButton.styleFrom(backgroundColor: redColor),
+        onPressed: onPressed,
+        child: const Text(
+          '생성하기',
+          style: TextStyle(fontSize: 35),
+        ),
+      ),
     );
   }
 }

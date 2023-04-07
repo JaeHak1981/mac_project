@@ -15,7 +15,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: video == null ? renderEmpty() : renderVideo(),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: getBoxDecoration(),
+        child: video == null ? renderEmpty() : renderVideo(),
+      ),
     );
   }
   Widget renderVideo(){
@@ -24,36 +28,29 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   Widget renderEmpty(){
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      decoration: getBoxDecoration(),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _Logo(onLogoTap: onLogoTap),
-          SizedBox(height: 30),
-          _AppName(),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _Logo(
+          onLogoTap: onLogoTap,
+        ),
+        SizedBox(height: 30),
+        _AppName(),
+      ],
     );
   }
 
   void onLogoTap() async {
-    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
-    setState(() {
-      this.video = video;
-    });
+    video = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    setState(() {});
   }
 
   BoxDecoration getBoxDecoration() {
-    return const BoxDecoration(
+    return BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-          Color(0xFF2A3A7C),
-          Color(0xFFF000118),
-        ]));
+            colors: [Color(0xFF2A3A7C), Color(0xFFF000118)]));
   }
 }
 
@@ -78,6 +75,7 @@ class _AppName extends StatelessWidget {
   Widget build(BuildContext context) {
     final textStyle = TextStyle(
         color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -88,7 +86,7 @@ class _AppName extends StatelessWidget {
         Text(
           'PLAYER',
           style: textStyle.copyWith(fontWeight: FontWeight.w700),
-        )
+        ),
       ],
     );
   }

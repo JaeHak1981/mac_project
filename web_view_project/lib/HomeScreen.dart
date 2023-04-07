@@ -16,18 +16,17 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () {
-              if (controller != null) {
-                controller.loadRequest(homeUrl);
-              }
-            },
-            icon: const Icon(Icons.home),
-          )
+              onPressed: () {
+                if (controller != null) {
+                  controller.loadRequest(homeUrl);
+                }
+              },
+              icon: Icon(
+                Icons.home,
+              ))
         ],
       ),
-      body: WebViewWidget(
-        controller: controller,
-      ),
+      body: WebViewWidget(controller: controller),
     );
   }
 }

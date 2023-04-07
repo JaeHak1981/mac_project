@@ -21,11 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              _TapPart(
-                selectedDate: selectedDate,
-                onPressed: onHartPressed,
-              ),
-              _BottomPart(),
+              _TapPart(selectedDate: selectedDate, onPressed: onHartPressed,),
+              _BottonPart()
             ],
           ),
         ),
@@ -57,53 +54,47 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 }
-
 class _TapPart extends StatelessWidget {
   final DateTime selectedDate;
   final VoidCallback onPressed;
-
-  const _TapPart(
-      {required this.selectedDate, required this.onPressed, Key? key})
-      : super(key: key);
+  const _TapPart({required this.selectedDate, required this.onPressed,  Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-
     ThemeData theme = Theme.of(context);
     TextTheme textTheme = theme.textTheme;
 
     return Expanded(
         child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Text('U&I', style: textTheme.headlineLarge),
-        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text('우리 처음 만난 날', style: textTheme.headlineMedium),
-            Text(
-              '${selectedDate.year},${selectedDate.month},${selectedDate.day}',
-              style: textTheme.headlineMedium,
+            Text('U&I', style: textTheme.headlineLarge),
+            Column(
+              children: [
+                Text('우리 처음 만난 날', style: textTheme.headlineMedium),
+                Text(
+                  '${selectedDate.year},${selectedDate.month},${selectedDate.day}',
+                  style: textTheme.headlineMedium,
+                ),
+              ],
             ),
+            IconButton(
+                color: Colors.red,
+                iconSize: 60,
+                onPressed:onPressed ,
+                icon: Icon(
+                  Icons.favorite,
+                )),
+            Text(
+              'D+${DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).difference(selectedDate).inDays+1}',
+              style: textTheme.headlineSmall,
+            )
           ],
-        ),
-        IconButton(
-            color: Colors.red,
-            iconSize: 60,
-            onPressed: onPressed,
-            icon: const Icon(
-              Icons.favorite,
-            )),
-        Text(
-            'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays + 1}',
-            style: textTheme.headlineSmall),
-      ],
-    ));
+        ));
   }
 }
-
-class _BottomPart extends StatelessWidget {
-  const _BottomPart({Key? key}) : super(key: key);
+class _BottonPart extends StatelessWidget {
+  const _BottonPart({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
