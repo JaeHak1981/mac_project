@@ -21,61 +21,61 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              _Header(maxNumberInt: maxNumberInt, onPressed: onSettingPressed,),
-              _Body(numberList: numberList,),
-              _Footer(onPressed: onGeneratorPressed,)
-            ],
-          ),
+          child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            _Header(maxNumberInt: maxNumberInt,
+            onSettingPressed: onSettingPressed,),
+            _Body(numberList: numberList,),
+            _Footer(maxNumberInt: maxNumberInt,
+            onSavePressed: onSavePressed,)
+          ],
         ),
-      ),
+      )),
     );
   }
-  void onGeneratorPressed() {
+  void onSavePressed() {
     final rand = Random();
     final Set<int> numberSet = {};
     while (numberSet.length != 3) {
       numberSet.add(rand.nextInt(maxNumberInt));
+      setState(() {
+        numberList = numberSet.toList();
+      });
     }
-    setState(() {
-      numberList = numberSet.toList();
-    });
   }
-  void onSettingPressed() async {
-    final result = await Navigator.of(context).push<int>(
-        MaterialPageRoute(builder: (BuildContext context) {
-          return SettingScreen(
-            maxNumberInt: maxNumberInt,
-          );
-        }));
-    if (result != null) {
+  void onSettingPressed() async{
+    final result = await Navigator.of(context).push<int>(MaterialPageRoute(builder:
+        (BuildContext context){
+      return SettingScreen(maxNumberInt: maxNumberInt,);
+    }));
+    if(result != null){
       maxNumberInt = result;
     }
   }
 }
 class _Header extends StatelessWidget {
   final int maxNumberInt;
-  final VoidCallback onPressed;
+  final VoidCallback onSettingPressed;
   const _Header({required this.maxNumberInt,
-    required this.onPressed, Key? key}) : super(key: key);
+    required this.onSettingPressed,
+    Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
+        Text(
           'RandomNumbers',
           style: TextStyle(color: Colors.white, fontSize: 35),
         ),
         IconButton(
-            color: redColor,
-            iconSize: 50,
-            onPressed: onPressed,
-            icon: const Icon(
+            color: Colors.red,
+            iconSize: 40,
+            onPressed: onSettingPressed,
+            icon: Icon(
               Icons.settings,
             ))
       ],
@@ -84,7 +84,7 @@ class _Header extends StatelessWidget {
 }
 class _Body extends StatelessWidget {
   final List<int> numberList;
-  const _Body({required this.numberList, Key? key}) : super(key: key);
+  const _Body({required this.numberList,Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +95,7 @@ class _Body extends StatelessWidget {
             .asMap()
             .entries
             .map((e) => Padding(
-          padding:
-          EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
+          padding: EdgeInsets.only(bottom: 16),
           child: NumberRow(numbers: e.value),
         ))
             .toList(),
@@ -105,9 +104,11 @@ class _Body extends StatelessWidget {
   }
 }
 class _Footer extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  const _Footer({required this.onPressed, Key? key}) : super(key: key);
+  final int maxNumberInt;
+  final VoidCallback onSavePressed;
+  const _Footer({required this.maxNumberInt,
+    required this.onSavePressed,
+    Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -115,10 +116,10 @@ class _Footer extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(backgroundColor: redColor),
-        onPressed: onPressed,
-        child: const Text(
+        onPressed: onSavePressed,
+        child: Text(
           '생성하기',
-          style: TextStyle(fontSize: 35),
+          style: TextStyle(fontSize: 30),
         ),
       ),
     );

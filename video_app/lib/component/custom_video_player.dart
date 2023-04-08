@@ -36,20 +36,19 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       return CircularProgressIndicator();
     }
     return AspectRatio(
-      aspectRatio: videoController!.value.aspectRatio,
-      child: Stack(
-        children: [
-          VideoPlayer(videoController!),
-          _Controls(
-            onReversPressed: onReversPressed,
-            onPlayPressed: onPlayPressed,
-            onForwardPressed: onForwardPressed,
-            isPlaying: videoController!.value.isPlaying,
-          ),
-          _NewVideo(),
-        ],
-      ),
-    );
+        aspectRatio: videoController!.value.aspectRatio,
+        child: Stack(
+          children: [
+            VideoPlayer(videoController!),
+            _Controls(
+              onReversPressed: onReversPressed,
+              onPlayPressed: onPlayPressed,
+              onForwardPressed: onForwardPressed,
+              isPlaying: videoController!.value.isPlaying,
+            ),
+            _NewVideo(),
+          ],
+        ));
   }
 
   void onReversPressed() {
@@ -83,24 +82,6 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   }
 }
 
-class _NewVideo extends StatelessWidget {
-  const _NewVideo({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      right: 0,
-      child: IconButton(
-          color: Colors.white,
-          iconSize: 30,
-          onPressed: () {},
-          icon: Icon(
-            Icons.photo_camera_back,
-          )),
-    );
-  }
-}
-
 class _Controls extends StatelessWidget {
   final VoidCallback onReversPressed;
   final VoidCallback onPlayPressed;
@@ -129,7 +110,7 @@ class _Controls extends StatelessWidget {
               onPressed: onPlayPressed,
               iconData: isPlaying ? Icons.pause : Icons.play_arrow),
           renderIconButton(
-              onPressed: onForwardPressed, iconData: Icons.rotate_right),
+              onPressed: onForwardPressed, iconData: Icons.rotate_right)
         ],
       ),
     );
@@ -142,6 +123,24 @@ class _Controls extends StatelessWidget {
       iconSize: 30,
       onPressed: onPressed,
       icon: Icon(iconData),
+    );
+  }
+}
+
+class _NewVideo extends StatelessWidget {
+  const _NewVideo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      right: 0,
+      child: IconButton(
+          color: Colors.white,
+          iconSize: 30,
+          onPressed: () {},
+          icon: Icon(
+            Icons.photo_camera_back,
+          )),
     );
   }
 }

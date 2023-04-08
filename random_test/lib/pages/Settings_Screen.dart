@@ -4,6 +4,7 @@ import 'package:random_test/constant/color.dart';
 
 class SettingScreen extends StatefulWidget {
   final int maxNumberInt;
+
   const SettingScreen({required this.maxNumberInt, Key? key}) : super(key: key);
 
   @override
@@ -12,11 +13,12 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   double numberDouble = 1000;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-     numberDouble = widget.maxNumberInt.toDouble();
+    numberDouble = widget.maxNumberInt.toDouble();
   }
 
   @override
@@ -28,23 +30,28 @@ class _SettingScreenState extends State<SettingScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              _Header(numberDouble: numberDouble,),
-              _Body(numberDouble: numberDouble,
-              onChangePressed: onSavePressed,)
+              _Header(numberDouble: numberDouble),
+              _Body(
+                numberDouble: numberDouble,
+                onNavigatorPressed: onNavigatorPressed,
+              ),
             ],
           ),
         ),
       ),
     );
   }
-  void onSavePressed(double val) {
+
+  void onNavigatorPressed(double val) {
     setState(() {
       numberDouble = val;
     });
   }
 }
+
 class _Header extends StatelessWidget {
   final double numberDouble;
+
   const _Header({required this.numberDouble, Key? key}) : super(key: key);
 
   @override
@@ -54,10 +61,14 @@ class _Header extends StatelessWidget {
     );
   }
 }
+
 class _Body extends StatelessWidget {
   final double numberDouble;
-  final ValueChanged<double>? onChangePressed;
-  const _Body({required this.numberDouble, required this.onChangePressed,  Key? key}) : super(key: key);
+  final ValueChanged<double>? onNavigatorPressed;
+
+  const _Body(
+      {required this.numberDouble, required this.onNavigatorPressed, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,21 +78,19 @@ class _Body extends StatelessWidget {
             value: numberDouble,
             min: 1000,
             max: 100000,
-            activeColor: redColor,
-            inactiveColor: Colors.yellow,
-            onChanged: onChangePressed),
+            onChanged: onNavigatorPressed),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: redColor
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(numberDouble.toInt());
-              },
-              child: Text(
-                'SAVE', style: TextStyle(fontSize: 40),
-              )),
+            style: ElevatedButton.styleFrom(backgroundColor: redColor),
+            onPressed: () {
+              Navigator.of(context).pop(numberDouble.toInt());
+            },
+            child: Text(
+              'SAVE',
+              style: TextStyle(fontSize: 40),
+            ),
+          ),
         )
       ],
     );
