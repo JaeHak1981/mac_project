@@ -11,17 +11,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   XFile? video;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: video == null ? renderEmpty() : renderVideo(),
     );
-
   }
   Widget renderVideo(){
     return Center(
-      child: CustomVideoPlayer(video: video!),
+      child: CustomVideoPlayer(video: video!,),
     );
   }
   Widget renderEmpty(){
@@ -32,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _Logo(onLogoTap: onLogoTap,),
-          SizedBox(height: 30),
+           SizedBox(height: 30),
           _AppName(),
         ],
       ),
@@ -43,42 +41,43 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       this.video = video;
     });
-
   }
 
   BoxDecoration getBoxDecoration(){
-    return BoxDecoration(
+    return const BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFf2A3A7C), Color(0xFFF000118)]));
+            colors: [
+              Color(0xFF2A3A7C),
+              Color(0xFFF000118),
+            ]));
   }
 }
+
 class _Logo extends StatelessWidget {
   final VoidCallback onLogoTap;
   const _Logo({required this.onLogoTap, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
         onTap: onLogoTap,
         child: Image.asset('asset/image/logo.png'));
   }
 }
+
 class _AppName extends StatelessWidget {
   const _AppName({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final textStyle =
-    TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
-
+    TextStyle textStyle =  const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('VIDEO',style: textStyle,),
-        Text('PLAYER', style: textStyle.copyWith(fontWeight: FontWeight.w700),),
+        Text('PLAYER',style: textStyle.copyWith(fontWeight: FontWeight.w700),),
       ],
     );
   }

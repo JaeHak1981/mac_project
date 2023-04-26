@@ -18,7 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
-
       int currentPage = controller.page!.toInt();
       int nextPage = currentPage + 1;
       if (nextPage > 4) {
@@ -26,15 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       controller.animateToPage(nextPage,
           duration: Duration(seconds: 1), curve: Curves.linear);
-
-
     });
   }
   @override
   void dispose() {
     // TODO: implement dispose
     controller.dispose();
-    if(timer !=null){
+    if(timer != null){
       timer!.cancel();
     }
     super.dispose();
@@ -44,14 +41,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
-        controller: controller,
-        children: [1, 2, 3, 4, 5]
-            .map((e) => Image.asset(
-                  'asset/img/image_$e.jpeg',
-                  fit: BoxFit.cover,
-                ))
-            .toList(),
-      ),
+          controller: controller,
+          children: [1, 2, 3, 4, 5]
+              .map((e) => Image.asset(
+                    'asset/img/image_$e.jpeg',
+                    fit: BoxFit.cover,
+                  ))
+              .toList()),
     );
   }
 }

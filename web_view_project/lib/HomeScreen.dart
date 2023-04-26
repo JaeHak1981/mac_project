@@ -17,17 +17,11 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            color: Colors.red,
-              iconSize: 30,
               onPressed: () {
-              if(controller == null){
-                return;
-              }
-              controller.loadRequest(homeUrl);
+
+                controller.loadRequest(homeUrl);
               },
-              icon: Icon(
-                Icons.home,
-              ))
+              icon: Icon(Icons.home))
         ],
       ),
       body: WebViewWidget(controller: controller),
