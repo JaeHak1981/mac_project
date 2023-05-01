@@ -3,9 +3,9 @@ import 'package:random_test/component/number_row.dart';
 import 'package:random_test/constant/color.dart';
 
 class SettingScreen extends StatefulWidget {
-  final int maxNumberInt;
+  final int numberInt;
 
-  const SettingScreen({required this.maxNumberInt, Key? key}) : super(key: key);
+  const SettingScreen({required this.numberInt, Key? key}) : super(key: key);
 
   @override
   State<SettingScreen> createState() => _SettingScreenState();
@@ -18,7 +18,7 @@ class _SettingScreenState extends State<SettingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    numberDouble = widget.maxNumberInt.toDouble();
+    numberDouble = widget.numberInt.toDouble();
   }
 
   @override
@@ -30,23 +30,29 @@ class _SettingScreenState extends State<SettingScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              _Header(numberDouble: numberDouble),
-           _Body(numberDouble: numberDouble, onSavePressed: onSavePressed)
+              _Body(numberDouble: numberDouble),
+              _Footer(
+                numberDouble: numberDouble,
+                onSliderPressed: onSliderPressed,
+              )
             ],
           ),
         ),
       ),
     );
   }
-  void onSavePressed(double val) {
+
+  void onSliderPressed(double val) {
     setState(() {
       numberDouble = val;
     });
   }
 }
-class _Header extends StatelessWidget {
+
+class _Body extends StatelessWidget {
   final double numberDouble;
-  const _Header({required this.numberDouble,Key? key}) : super(key: key);
+
+  const _Body({required this.numberDouble, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,34 +61,35 @@ class _Header extends StatelessWidget {
     );
   }
 }
-class _Body extends StatelessWidget {
+
+class _Footer extends StatelessWidget {
   final double numberDouble;
-  final ValueChanged<double> onSavePressed;
-  const _Body({required this.numberDouble,required this.onSavePressed,  Key? key}) : super(key: key);
+  final ValueChanged<double>? onSliderPressed;
+
+  const _Footer(
+      {required this.numberDouble, required this.onSliderPressed, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Slider(
-            activeColor: Colors.yellow,
-            inactiveColor: Colors.red,
             min: 1000,
             max: 100000,
             value: numberDouble,
-            onChanged: onSavePressed),
+            onChanged: onSliderPressed),
         SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: redColor),
-              onPressed: () {
-                Navigator.of(context).pop(numberDouble.toInt());
-              },
-              child: const Text(
-                'SAVE',
-                style: TextStyle(fontSize: 40),
-              )),
-        )
+            width: double.infinity,
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: redColor),
+                onPressed: () {
+                  Navigator.of(context).pop(numberDouble.toInt());
+                },
+                child: const Text(
+                  'SAVE',
+                  style: TextStyle(fontSize: 30),
+                )))
       ],
     );
   }

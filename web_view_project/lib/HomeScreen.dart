@@ -12,17 +12,11 @@ class HomeScreen extends StatelessWidget {
     WebViewController controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(homeUrl);
-
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-
-                controller.loadRequest(homeUrl);
-              },
-              icon: Icon(Icons.home))
-        ],
+        actions: [IconButton(onPressed: () {
+          controller.loadRequest(homeUrl);
+        }, icon: Icon(Icons.home))],
       ),
       body: WebViewWidget(controller: controller),
     );

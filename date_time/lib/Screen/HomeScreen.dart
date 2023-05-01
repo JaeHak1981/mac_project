@@ -15,28 +15,26 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.pink[100],
       body: SafeArea(
-          child: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            _TapPart(
-              onHartPressed: onHartPressed,
-              selectedDate: selectedDate,
-            ),
-            const _BottomPart(),
-          ],
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          color: Colors.pink[100],
+          child: Column(
+            children: [
+              _TapPart(selectedDate: selectedDate, onPressed: onHartPressed,),
+              _ButtomPart(),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
-
   void onHartPressed() {
     showCupertinoDialog(
         barrierDismissible: true,
         context: context,
-        builder: (BuildContext context) => Align(
+        builder: (BuildContext context) {
+          return Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               color: Colors.white,
@@ -51,23 +49,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   });
                 },
               ),
-            )));
+            ),
+          );
+        });
   }
 }
-
 class _TapPart extends StatelessWidget {
-  final VoidCallback onHartPressed;
   final DateTime selectedDate;
-
-  const _TapPart(
-      {required this.onHartPressed, required this.selectedDate, Key? key})
-      : super(key: key);
+  final VoidCallback onPressed;
+  const _TapPart({required this.selectedDate, required this.onPressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     TextTheme textTheme = theme.textTheme;
     DateTime now = DateTime.now();
+
+
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -78,7 +76,10 @@ class _TapPart extends StatelessWidget {
           ),
           Column(
             children: [
-              Text('우리 처음 만난 날', style: textTheme.headlineMedium),
+              Text(
+                '우리 처음 만난 날',
+                style: textTheme.headlineMedium,
+              ),
               Text(
                 '${selectedDate.year},${selectedDate.month},${selectedDate.day}',
                 style: textTheme.headlineMedium,
@@ -86,27 +87,29 @@ class _TapPart extends StatelessWidget {
             ],
           ),
           IconButton(
-              onPressed: onHartPressed,
+              onPressed: onPressed,
               color: Colors.red,
-              iconSize: 50,
+              iconSize: 40,
               icon: Icon(
                 Icons.favorite,
               )),
           Text(
-            'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays + 1}',
+            'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays+1}',
             style: textTheme.headlineSmall,
-          )
+          ),
         ],
       ),
     );
   }
 }
 
-class _BottomPart extends StatelessWidget {
-  const _BottomPart({Key? key}) : super(key: key);
+
+class _ButtomPart extends StatelessWidget {
+  const _ButtomPart({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    
     return Expanded(child: Image.asset('asset/img/middle_image.png'));
   }
 }
