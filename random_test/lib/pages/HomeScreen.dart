@@ -21,39 +21,31 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              _Header(
-                numberInt: numberInt,
-                onSettingPressed: onSettingPressed,
-              ),
-              _Body(numberList: numberList),
-              _Footer(onGeneratorPressed: onGeneratorPressed)
-            ],
-          ),
+          child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            _Header(numberInt: numberInt, onSettingPressed: onSettingPressed),
+            _Body(numberList: numberList),
+            _Footer(onGeneratorPressed: onGeneratorPressed)
+
+          ],
         ),
-      ),
+      )),
     );
   }
-
-  void onSettingPressed() async {
-    final result = await Navigator.of(context)
-        .push<int>(MaterialPageRoute(builder: (BuildContext context) {
-      return SettingScreen(
-        numberInt: numberInt,
-      );
+  void onSettingPressed() async{
+    final result = await Navigator.of(context).push<int>(MaterialPageRoute(builder: (BuildContext context){
+      return SettingScreen(numberInt: numberInt,);
     }));
-    if (result != null) {
+    if(result != null){
       numberInt = result;
     }
   }
-
   void onGeneratorPressed() {
-    final rand = Random();
+    final rand =  Random();
     final Set<int> numberSet = {};
-    while (numberSet.length != 3) {
+    while(numberSet.length != 3){
       numberSet.add(rand.nextInt(numberInt));
     }
     setState(() {
@@ -61,37 +53,33 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 }
-
 class _Header extends StatelessWidget {
   final int numberInt;
   final VoidCallback onSettingPressed;
-
-  const _Header(
-      {required this.numberInt, required this.onSettingPressed, Key? key})
-      : super(key: key);
+  const _Header({required this.numberInt,required this.onSettingPressed,  Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
+        Text(
           'RandomNumbers',
-          style: TextStyle(color: Colors.white, fontSize: 35),
+          style: TextStyle(color: Colors.white, fontSize: 30),
         ),
         IconButton(
-            onPressed: onSettingPressed,
             color: redColor,
-            iconSize: 40,
-            icon: const Icon(Icons.settings))
+            iconSize: 50,
+            onPressed: onSettingPressed,
+            icon: Icon(
+              Icons.settings,
+            ))
       ],
     );
   }
 }
-
 class _Body extends StatelessWidget {
   final List<int> numberList;
-
   const _Body({required this.numberList, Key? key}) : super(key: key);
 
   @override
@@ -99,34 +87,33 @@ class _Body extends StatelessWidget {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: numberList
-            .asMap()
-            .entries
+        children: numberList.asMap().entries
             .map((e) => Padding(
-                  padding: EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
-                  child: NumberRow(numbers: e.value),
-                ))
+          padding:  EdgeInsets.only(bottom:e.key == 2 ? 0 : 16),
+          child:NumberRow(numbers: e.value),
+        ))
             .toList(),
       ),
     );
   }
 }
-
 class _Footer extends StatelessWidget {
   final VoidCallback onGeneratorPressed;
-
   const _Footer({required this.onGeneratorPressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: redColor),
-            onPressed: onGeneratorPressed,
-            child: const Text(
-              'Generation',
-              style: TextStyle(fontSize: 30),
-            )));
+      width: double.infinity,
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: redColor
+          ),
+          onPressed: onGeneratorPressed,
+          child: Text(
+            'Generation',
+            style: TextStyle(fontSize: 30),
+          )),
+    );
   }
 }

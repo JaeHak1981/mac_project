@@ -30,18 +30,14 @@ class _SettingScreenState extends State<SettingScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              _Body(numberDouble: numberDouble),
-              _Footer(
-                numberDouble: numberDouble,
-                onSliderPressed: onSliderPressed,
-              )
+            _Header(numberDouble: numberDouble),
+           _Body(numberDouble: numberDouble, onSliderPressed: onSliderPressed)
             ],
           ),
         ),
       ),
     );
   }
-
   void onSliderPressed(double val) {
     setState(() {
       numberDouble = val;
@@ -49,10 +45,11 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Header extends StatelessWidget {
   final double numberDouble;
 
-  const _Body({required this.numberDouble, Key? key}) : super(key: key);
+  const _Header({
+    required this.numberDouble, Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,14 +58,10 @@ class _Body extends StatelessWidget {
     );
   }
 }
-
-class _Footer extends StatelessWidget {
+class _Body extends StatelessWidget {
   final double numberDouble;
   final ValueChanged<double>? onSliderPressed;
-
-  const _Footer(
-      {required this.numberDouble, required this.onSliderPressed, Key? key})
-      : super(key: key);
+  const _Body({required this.numberDouble, required this.onSliderPressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,16 +73,17 @@ class _Footer extends StatelessWidget {
             value: numberDouble,
             onChanged: onSliderPressed),
         SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: redColor),
-                onPressed: () {
-                  Navigator.of(context).pop(numberDouble.toInt());
-                },
-                child: const Text(
-                  'SAVE',
-                  style: TextStyle(fontSize: 30),
-                )))
+          width: double.infinity,
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: redColor),
+              onPressed: () {
+                Navigator.of(context).pop(numberDouble.toInt());
+              },
+              child: Text(
+                'SAVE',
+                style: TextStyle(fontSize: 30),
+              )),
+        )
       ],
     );
   }

@@ -15,14 +15,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.pink[100],
       body: SafeArea(
         child: Container(
           width: MediaQuery.of(context).size.width,
-          color: Colors.pink[100],
           child: Column(
             children: [
-              _TapPart(selectedDate: selectedDate, onPressed: onHartPressed,),
-              _ButtomPart(),
+              _TapPart(selectedDate: selectedDate  , onHartPressed: onHartPressed,),
+              _BottomPart(),
             ],
           ),
         ),
@@ -56,8 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 class _TapPart extends StatelessWidget {
   final DateTime selectedDate;
-  final VoidCallback onPressed;
-  const _TapPart({required this.selectedDate, required this.onPressed, Key? key}) : super(key: key);
+  final VoidCallback onHartPressed;
+  const _TapPart({required this.selectedDate,required this.onHartPressed,  Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class _TapPart extends StatelessWidget {
 
     return Expanded(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             'U&I',
@@ -87,15 +87,15 @@ class _TapPart extends StatelessWidget {
             ],
           ),
           IconButton(
-              onPressed: onPressed,
+              onPressed:onHartPressed ,
               color: Colors.red,
-              iconSize: 40,
+              iconSize: 50,
               icon: Icon(
                 Icons.favorite,
               )),
           Text(
             'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays+1}',
-            style: textTheme.headlineSmall,
+            style: textTheme.headlineMedium,
           ),
         ],
       ),
@@ -104,12 +104,11 @@ class _TapPart extends StatelessWidget {
 }
 
 
-class _ButtomPart extends StatelessWidget {
-  const _ButtomPart({Key? key}) : super(key: key);
+class _BottomPart extends StatelessWidget {
+  const _BottomPart({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    
     return Expanded(child: Image.asset('asset/img/middle_image.png'));
   }
 }

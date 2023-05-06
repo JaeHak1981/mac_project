@@ -8,11 +8,9 @@ class CustomVideoPlayer extends StatefulWidget {
   final XFile video;
   final VoidCallback onNewVideoPressed;
 
-  const CustomVideoPlayer({
-    required this.video,
-    required this.onNewVideoPressed,
-    Key? key,
-  }) : super(key: key);
+  const CustomVideoPlayer(
+      {required this.video, required this.onNewVideoPressed, Key? key})
+      : super(key: key);
 
   @override
   State<CustomVideoPlayer> createState() => _CustomVideoPlayerState();
@@ -48,6 +46,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
         this.currentPosition = currentPosition;
       });
     });
+
     setState(() {});
   }
 
@@ -74,38 +73,11 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                   onForwardPressed: onForwardPressed,
                   isPlaying: videoController!.value.isPlaying,
                 ),
-              if (showControls)
-                _NewVideo(
-                  onPressed: widget.onNewVideoPressed,
-                ),
-              Positioned(
-                right: 0,
-                left: 0,
-                bottom: 0,
-                child: Row(
-                  children: [
-                    Text(
-                      '${currentPosition.inMinutes}:${(currentPosition.inSeconds % 60).toString().padLeft(2, '0')}',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Expanded(
-                      child: Slider(
-                          min: 0,
-                          max: videoController!.value.duration.inSeconds
-                              .toDouble(),
-                          value: currentPosition.inSeconds.toDouble(),
-                          onChanged: (double val) {
-                            videoController!
-                                .seekTo(Duration(seconds: val.toInt()));
-                          }),
-                    ),
-                    Text(
-                      '${videoController!.value.duration.inMinutes}:${(videoController!.value.duration.inSeconds % 60).toString().padLeft(2, '0')}',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
+              if (showControls) _NewVideo(onPressed: widget.onNewVideoPressed),
+              _SliderBottom(
+                  currentPosition: currentPosition,
+                  maxPosition: videoController!.value.duration,
+                  onSliderPressed: onSliderPressed),
             ],
           ),
         ));
@@ -139,6 +111,10 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       position = currentPosition + Duration(seconds: 3);
     }
     videoController!.seekTo(position);
+  }
+
+  void onSliderPressed(double val) {
+    videoController!.seekTo(Duration(seconds: val.toInt()));
   }
 }
 
@@ -181,9 +157,9 @@ class _Controls extends StatelessWidget {
     required IconData iconData,
   }) {
     return IconButton(
+      onPressed: onPressed,
       color: Colors.white,
       iconSize: 30,
-      onPressed: onPressed,
       icon: Icon(iconData),
     );
   }
@@ -205,6 +181,50 @@ class _NewVideo extends StatelessWidget {
           icon: Icon(
             Icons.photo_camera_back,
           )),
+    );
+  }
+}
+
+class _SliderBottom extends StatelessWidget {
+  final Duration currentPosition;
+  final Duration maxPosition;
+  final ValueChanged<double> onSliderPressed;
+
+  const _SliderBottom(
+      {required this.currentPosition,
+      required this.maxPosition,
+      required this.onSliderPressed,
+      Key? key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      right: 0,
+      left: 0,
+      bottom: 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Row(
+          children: [
+            Text(
+              '${currentPosition.inMinutes}:${(currentPosition.inSeconds % 60).toString().padLeft(2, '0')}',
+              style: TextStyle(color: Colors.white),
+            ),
+            Expanded(
+              child: Slider(
+                  min: 0,
+                  max: maxPosition.inSeconds.toDouble(),
+                  value: currentPosition.inSeconds.toDouble(),
+                  onChanged: onSliderPressed),
+            ),
+            Text(
+              '${maxPosition.inMinutes}:${(maxPosition.inSeconds % 60).toString().padLeft(2, '0')}',
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

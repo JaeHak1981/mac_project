@@ -30,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget renderEmpty() {
     return Container(
-      width: MediaQuery.of(context).size.width,
       decoration: getBoxDecoration(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -46,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   BoxDecoration getBoxDecoration() {
-    return BoxDecoration(
+    return const BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -86,14 +85,8 @@ class _AppName extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          'VIDeO',
-          style: textStyle,
-        ),
-        Text(
-          'PLAYER',
-          style: textStyle.copyWith(fontWeight: FontWeight.w700),
-        )
+        Text('VIDEO', style: textStyle),
+        Text('PLAYER', style: textStyle.copyWith(fontWeight: FontWeight.w700)),
       ],
     );
   }
