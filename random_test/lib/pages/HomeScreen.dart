@@ -14,66 +14,72 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<int> numberList = [123, 456, 789];
-  int numberInt = 1000;
+  double numberDouble = 1000;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            _Header(numberInt: numberInt, onSettingPressed: onSettingPressed),
-            _Body(numberList: numberList),
-            _Footer(onGeneratorPressed: onGeneratorPressed)
-
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              _Header(numberDouble: numberDouble, onSettingPressed: onSettingPressed),
+              _Body(numberList: numberList),
+              _Footer(onGeneratorPressed: onGeneratorPressed,)
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
-  void onSettingPressed() async{
-    final result = await Navigator.of(context).push<int>(MaterialPageRoute(builder: (BuildContext context){
-      return SettingScreen(numberInt: numberInt,);
+  void onSettingPressed() async {
+    final result = await Navigator.of(context)
+        .push<int>(MaterialPageRoute(builder: (BuildContext context) {
+      return SettingScreen(
+        numberDouble: numberDouble,
+      );
     }));
-    if(result != null){
-      numberInt = result;
+    if (result != null) {
+      numberDouble = result.toDouble();
     }
   }
   void onGeneratorPressed() {
-    final rand =  Random();
+    final rand = Random();
     final Set<int> numberSet = {};
-    while(numberSet.length != 3){
-      numberSet.add(rand.nextInt(numberInt));
+    while (numberSet.length != 3) {
+      numberSet.add(rand.nextInt(numberDouble.toInt()));
     }
     setState(() {
       numberList = numberSet.toList();
     });
   }
 }
+
 class _Header extends StatelessWidget {
-  final int numberInt;
+  final double numberDouble;
   final VoidCallback onSettingPressed;
-  const _Header({required this.numberInt,required this.onSettingPressed,  Key? key}) : super(key: key);
+
+  const _Header({
+    required this.numberDouble,
+    required this.onSettingPressed,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          'RandomNumbers',
-          style: TextStyle(color: Colors.white, fontSize: 30),
-        ),
+        const Text('RandomNumbers',
+            style: TextStyle(color: Colors.white, fontSize: 35)),
         IconButton(
-            color: redColor,
-            iconSize: 50,
-            onPressed: onSettingPressed,
-            icon: Icon(
-              Icons.settings,
-            ))
+          onPressed: onSettingPressed,
+          icon: const Icon(Icons.settings),
+          color: redColor,
+          iconSize: 40,
+        )
       ],
     );
   }
@@ -87,10 +93,13 @@ class _Body extends StatelessWidget {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: numberList.asMap().entries
+        children: numberList
+            .asMap()
+            .entries
             .map((e) => Padding(
-          padding:  EdgeInsets.only(bottom:e.key == 2 ? 0 : 16),
-          child:NumberRow(numbers: e.value),
+          padding:
+          EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
+          child: NumberRow(numbers: e.value),
         ))
             .toList(),
       ),
@@ -99,21 +108,19 @@ class _Body extends StatelessWidget {
 }
 class _Footer extends StatelessWidget {
   final VoidCallback onGeneratorPressed;
-  const _Footer({required this.onGeneratorPressed, Key? key}) : super(key: key);
+  const _Footer({required this.onGeneratorPressed,Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: redColor
-          ),
-          onPressed: onGeneratorPressed,
-          child: Text(
-            'Generation',
-            style: TextStyle(fontSize: 30),
-          )),
-    );
+        width: double.infinity,
+        child: ElevatedButton(
+            style:
+            ElevatedButton.styleFrom(backgroundColor: redColor),
+            onPressed: onGeneratorPressed,
+            child: const Text(
+              'Generator',
+              style: TextStyle(fontSize: 35),
+            )));
   }
 }

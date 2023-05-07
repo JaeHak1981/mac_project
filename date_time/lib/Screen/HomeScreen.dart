@@ -21,8 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              _TapPart(selectedDate: selectedDate  , onHartPressed: onHartPressed,),
-              _BottomPart(),
+              _TapPart(selectedDate: selectedDate, onPressed: onHartPressed),
+              const _BottomPart(),
             ],
           ),
         ),
@@ -56,8 +56,11 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 class _TapPart extends StatelessWidget {
   final DateTime selectedDate;
-  final VoidCallback onHartPressed;
-  const _TapPart({required this.selectedDate,required this.onHartPressed,  Key? key}) : super(key: key);
+  final VoidCallback onPressed;
+  const _TapPart({
+    required this.selectedDate,
+    required this.onPressed,
+    Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,42 +71,32 @@ class _TapPart extends StatelessWidget {
 
     return Expanded(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
-            'U&I',
-            style: textTheme.headlineLarge,
-          ),
+          Text('U&I', style: textTheme.headlineLarge),
           Column(
             children: [
+              Text('우리 처음 만난 날', style: textTheme.headlineMedium),
               Text(
-                '우리 처음 만난 날',
-                style: textTheme.headlineMedium,
-              ),
-              Text(
-                '${selectedDate.year},${selectedDate.month},${selectedDate.day}',
-                style: textTheme.headlineMedium,
-              ),
+                  '${selectedDate.year},${selectedDate.month},${selectedDate.day}',
+                  style: textTheme.headlineMedium),
             ],
           ),
           IconButton(
-              onPressed:onHartPressed ,
-              color: Colors.red,
-              iconSize: 50,
-              icon: Icon(
-                Icons.favorite,
-              )),
+            onPressed: onPressed,
+            icon: Icon(Icons.favorite),
+            color: Colors.red,
+            iconSize: 60,
+          ),
           Text(
             'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays+1}',
-            style: textTheme.headlineMedium,
+            style: textTheme.headlineSmall,
           ),
         ],
       ),
     );
   }
 }
-
-
 class _BottomPart extends StatelessWidget {
   const _BottomPart({Key? key}) : super(key: key);
 

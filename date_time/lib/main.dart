@@ -8,10 +8,9 @@ void main(){
     theme: ThemeData(
       fontFamily: 'sunflower',
       textTheme: TextTheme(
-
-        headlineLarge: TextStyle(color: Colors.white,fontSize: 50, fontFamily: 'parisienne'),
-        headlineMedium: TextStyle(color: Colors.white,fontSize: 40, ),
-        headlineSmall: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.w700),
+        headlineLarge: TextStyle(color: Colors.white,fontSize: 60, fontFamily: 'parisienne'),
+        headlineMedium: TextStyle(color: Colors.white, fontSize: 40),
+        headlineSmall: TextStyle(color: Colors.white, fontSize: 60, fontWeight: FontWeight.w700)
       )
     ),
   ));

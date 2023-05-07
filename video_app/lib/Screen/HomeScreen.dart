@@ -15,7 +15,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: video == null ? renderEmpty() : renderVideo(),
+      body: Container(
+        decoration: getBoxDecoration(),
+        child: video == null ? renderVideoEmpty() : renderVideo(),
+      ),
     );
   }
 
@@ -28,20 +31,24 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget renderEmpty() {
-    return Container(
-      decoration: getBoxDecoration(),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _Logo(
-            onNewVideoPressed: onNewVideoPressed,
-          ),
-          SizedBox(height: 30),
-          _AppName(),
-        ],
-      ),
+  Widget renderVideoEmpty() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _Logo(
+          onPressed: onNewVideoPressed,
+        ),
+        const SizedBox(height: 30),
+        const _AppName(),
+      ],
     );
+  }
+
+  void onNewVideoPressed() async {
+    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    setState(() {
+      this.video = video;
+    });
   }
 
   BoxDecoration getBoxDecoration() {
@@ -54,24 +61,17 @@ class _HomeScreenState extends State<HomeScreen> {
           Color(0xFFF000118),
         ]));
   }
-
-  void onNewVideoPressed() async {
-    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
-    setState(() {
-      this.video = video;
-    });
-  }
 }
 
 class _Logo extends StatelessWidget {
-  final VoidCallback onNewVideoPressed;
+  final VoidCallback onPressed;
 
-  const _Logo({required this.onNewVideoPressed, Key? key}) : super(key: key);
+  const _Logo({required this.onPressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: onNewVideoPressed, child: Image.asset('asset/image/logo.png'));
+        onTap: onPressed, child: Image.asset('asset/image/logo.png'));
   }
 }
 
@@ -80,7 +80,7 @@ class _AppName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = TextStyle(
+    TextStyle textStyle = const TextStyle(
         color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
