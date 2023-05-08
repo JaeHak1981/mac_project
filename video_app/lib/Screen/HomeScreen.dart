@@ -15,44 +15,33 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: getBoxDecoration(),
-        child: video == null ? renderVideoEmpty() : renderVideo(),
-      ),
+      body: video == null ? renderVideoEmpty() : renderVideo(),
     );
   }
 
   Widget renderVideo() {
     return Center(
-      child: CustomVideoPlayer(
-        video: video!,
-        onNewVideoPressed: onNewVideoPressed,
-      ),
+      child: CustomVideoPlayer(video: video!,onNewVideoPressed: onNewVideoPressed,),
     );
   }
 
   Widget renderVideoEmpty() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _Logo(
-          onPressed: onNewVideoPressed,
-        ),
-        const SizedBox(height: 30),
-        const _AppName(),
-      ],
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: getBoxDecoration(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _Logo(onLogoTap: onNewVideoPressed),
+          SizedBox(height: 30),
+          _AppName()
+        ],
+      ),
     );
   }
 
-  void onNewVideoPressed() async {
-    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
-    setState(() {
-      this.video = video;
-    });
-  }
-
   BoxDecoration getBoxDecoration() {
-    return const BoxDecoration(
+    return BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -61,17 +50,24 @@ class _HomeScreenState extends State<HomeScreen> {
           Color(0xFFF000118),
         ]));
   }
+
+  void onNewVideoPressed() async {
+    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    setState(() {
+      this.video = video;
+    });
+  }
 }
 
 class _Logo extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback onLogoTap;
 
-  const _Logo({required this.onPressed, Key? key}) : super(key: key);
+  const _Logo({required this.onLogoTap, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: onPressed, child: Image.asset('asset/image/logo.png'));
+        onTap: onLogoTap, child: Image.asset('asset/image/logo.png'));
   }
 }
 
@@ -80,13 +76,16 @@ class _AppName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = const TextStyle(
+    final textStyle = TextStyle(
         color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('VIDEO', style: textStyle),
-        Text('PLAYER', style: textStyle.copyWith(fontWeight: FontWeight.w700)),
+        Text(
+          'PLAYER',
+          style: textStyle.copyWith(fontWeight: FontWeight.w700),
+        )
       ],
     );
   }
