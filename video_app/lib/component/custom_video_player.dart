@@ -25,20 +25,20 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    initializeController();
+    initialController();
   }
   @override
-  void didUpdateWidget(covariant CustomVideoPlayer oldWidget){
+  void didUpdateWidget(covariant CustomVideoPlayer oldWidget)async{
     super.didUpdateWidget(oldWidget);
-   if(oldWidget.video.path != widget.video.path){
-     initializeController();
-   }
+    if(oldWidget.video.path != widget.video.path){
+      initialController();
+    }
   }
 
-  void initializeController() async {
-    Duration currentPosition = Duration();
+  void initialController() async {
     videoController = VideoPlayerController.file(File(widget.video.path));
     await videoController!.initialize();
+
     videoController!.addListener(() {
       final currentPosition = videoController!.value.position;
       setState(() {
@@ -51,16 +51,16 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   @override
   Widget build(BuildContext context) {
     if (videoController == null) {
-      return const CircularProgressIndicator();
+      return CircularProgressIndicator();
     }
-    return AspectRatio(
-        aspectRatio: videoController!.value.aspectRatio,
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              showControls = !showControls;
-            });
-          },
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          showControls = !showControls;
+        });
+      },
+      child: AspectRatio(
+          aspectRatio: videoController!.value.aspectRatio,
           child: Stack(
             children: [
               VideoPlayer(videoController!),
@@ -71,10 +71,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                   onForwardPressed: onForwardPressed,
                   isPlaying: videoController!.value.isPlaying,
                 ),
-              if (showControls)
-                _NewVideo(
-                  onPressed: widget.onNewVideoPressed,
-                ),
+              if (showControls) _NewVideo(onNewVideoPressed: widget.onNewVideoPressed),
               Positioned(
                 right: 0,
                 left: 0,
@@ -84,7 +81,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                   child: Row(
                     children: [
                       Text(
-                        "${currentPosition.inMinutes}:${(currentPosition.inSeconds % 60).toString().padLeft(2, '0')}",
+                        '${currentPosition.inMinutes}:${(currentPosition.inSeconds % 60).toString().padLeft(2, '0')}',
                         style: TextStyle(color: Colors.white),
                       ),
                       Expanded(
@@ -99,7 +96,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                             }),
                       ),
                       Text(
-                        "${videoController!.value.duration.inMinutes}:${(videoController!.value.duration.inSeconds % 60).toString().padLeft(2, '0')}",
+                        '${videoController!.value.duration.inMinutes}:${(videoController!.value.duration.inSeconds % 60).toString().padLeft(2, '0')}',
                         style: TextStyle(color: Colors.white),
                       ),
                     ],
@@ -107,15 +104,27 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                 ),
               ),
             ],
-          ),
-        ));
+          )),
+    );
   }
+
 
   void onReversePressed() {
     final currentPosition = videoController!.value.position;
     Duration position = Duration();
     if (currentPosition.inSeconds > 3) {
       position = currentPosition - Duration(seconds: 3);
+    }
+    videoController!.seekTo(position);
+  }
+
+  void onForwardPressed() {
+    final maxPosition = videoController!.value.duration;
+    final currentPosition = videoController!.value.position;
+    Duration position = Duration();
+    if ((maxPosition - Duration(seconds: 3)).inSeconds >
+        currentPosition.inSeconds) {
+      position = currentPosition + Duration(seconds: 3);
     }
     videoController!.seekTo(position);
   }
@@ -129,17 +138,6 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       }
     });
   }
-
-  void onForwardPressed() {
-    final maxPosition = videoController!.value.duration;
-    final currentPosition = videoController!.value.position;
-    Duration position = Duration();
-    if ((maxPosition - Duration(seconds: 3)).inSeconds >
-        currentPosition.inSeconds) {
-      position = currentPosition + Duration(seconds: 3);
-    }
-    videoController!.seekTo(position);
-  }
 }
 
 class _Controls extends StatelessWidget {
@@ -148,19 +146,18 @@ class _Controls extends StatelessWidget {
   final VoidCallback onForwardPressed;
   final bool isPlaying;
 
-  const _Controls({
-    required this.onReversePressed,
-    required this.onPlayPressed,
-    required this.onForwardPressed,
-    required this.isPlaying,
-    Key? key,
-  }) : super(key: key);
+  const _Controls(
+      {required this.onReversePressed,
+      required this.onPlayPressed,
+      required this.onForwardPressed,
+      required this.isPlaying,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
-      color: Colors.black.withOpacity(0.5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -176,8 +173,10 @@ class _Controls extends StatelessWidget {
     );
   }
 
-  Widget renderIconButton(
-      {required VoidCallback onPressed, required IconData iconData}) {
+  Widget renderIconButton({
+    required VoidCallback onPressed,
+    required IconData iconData,
+  }) {
     return IconButton(
       onPressed: onPressed,
       icon: Icon(iconData),
@@ -188,20 +187,22 @@ class _Controls extends StatelessWidget {
 }
 
 class _NewVideo extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback onNewVideoPressed;
 
-  const _NewVideo({required this.onPressed, Key? key}) : super(key: key);
+  const _NewVideo({required this.onNewVideoPressed, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
       right: 0,
       child: IconButton(
-        onPressed: onPressed,
-        icon: Icon(Icons.photo_camera_back),
-        color: Colors.white,
-        iconSize: 30,
-      ),
+          onPressed: onNewVideoPressed,
+          icon: Icon(
+            Icons.photo_camera_back,
+            color: Colors.white,
+            size: 30,
+          )),
     );
   }
 }
