@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   static final LatLng company = LatLng(35.805566, 127.120111);
   static final CameraPosition initialPosition =
-      CameraPosition(target: company, zoom: 16);
+      CameraPosition(target: company, zoom: 15);
 
   @override
   Widget build(BuildContext context) {
@@ -19,47 +20,38 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: renderAppBar(),
       body: Column(
         children: [
-          _CustomGoogleMap(initialPosition: initialPosition),
-          _ChoolCheckButton(),
+          Expanded(
+            flex: 2,
+            child: GoogleMap(
+              initialCameraPosition: initialPosition,
+              mapType: MapType.normal,
+            ),
+          ),
+          Expanded(
+              child: Center(
+            child: Text(
+              'ChoolCheck',
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+            ),
+          )),
         ],
       ),
     );
   }
 
-  AppBar renderAppBar() {
+ Future<String> checkPermission()async{
+    final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+    if(!isLocationEnabled){
+
+    }
+
+    return '활성화 되었습니다';
+  }
+
+  AppBar renderAppBar(){
     return AppBar(
       backgroundColor: Colors.white,
-      title: Text(
-        '오늘도 출근',
-        style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w700),
-      ),
-    );
-  }
-}
-class _CustomGoogleMap extends StatelessWidget {
-  final CameraPosition initialPosition;
-  const _CustomGoogleMap({required this.initialPosition, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 2,
-      child: GoogleMap(
-        initialCameraPosition: initialPosition,
-        mapType: MapType.normal,
-      ),
-    );
-  }
-}
-class _ChoolCheckButton extends StatelessWidget {
-  const _ChoolCheckButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Text('Chool Check!!!', style: TextStyle(color: Colors.red, fontWeight: FontWeight.w700, fontSize: 40),),
-      ),
+      title: Text('오늘도 출근', style: TextStyle(color: Colors.blue, fontSize: 30),),
     );
   }
 }

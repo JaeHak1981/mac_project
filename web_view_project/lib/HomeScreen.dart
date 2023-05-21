@@ -13,15 +13,15 @@ class HomeScreen extends StatelessWidget {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(homeUrl);
     return Scaffold(
-      appBar: AppBar(
-        actions: [IconButton(onPressed: () {
-          if(controller != null){
-            controller.loadRequest(homeUrl);
-
-          }
-        }, icon: Icon(Icons.home))],
-      ),
-      body: WebViewWidget(controller: controller),
-    );
+        appBar: AppBar(
+          actions: [
+            IconButton(onPressed: (){
+              if(controller != null){
+                 controller.loadRequest(homeUrl);
+              }
+            }, icon: Icon(Icons.home))
+          ],
+        ),
+        body: WebViewWidget(controller: controller));
   }
 }
