@@ -19,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: renderAppBar(),
       body: FutureBuilder(
+        future: checkPermission(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -28,7 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
         if (snapshot.data == '활성화 되었습니다') {
           return Column(
             children: [
-              _CustomGoogleMap(initialPosition: initialPosition),
+              _CustomGoogleMap(
+                initialPosition: initialPosition,
+              ),
               _ChoolCheckButton(),
             ],
           );
@@ -85,6 +88,7 @@ class _CustomGoogleMap extends StatelessWidget {
       flex: 2,
       child: GoogleMap(
         initialCameraPosition: initialPosition,
+        mapType: MapType.normal,
       ),
     );
   }
