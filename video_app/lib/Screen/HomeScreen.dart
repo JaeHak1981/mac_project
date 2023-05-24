@@ -15,11 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        decoration: getBoxDecoration(),
-        child: video == null ? renderVideoEmpty() : renderVideo(),
-      ),
+      body: video == null ? renderVideoEmpty() : renderVideo(),
     );
   }
 
@@ -33,15 +29,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget renderVideoEmpty() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _Logo(
-          onLogoTap: onNewVideoPressed,
-        ),
-        const SizedBox(height: 30),
-        _AppName(),
-      ],
+    return Container(
+      decoration: getBoxDecoration(),
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _Logo(
+            onNewVideoPressed: onNewVideoPressed,
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          const _AppName(),
+        ],
+      ),
     );
   }
 
@@ -59,20 +61,20 @@ class _HomeScreenState extends State<HomeScreen> {
             end: Alignment.bottomCenter,
             colors: [
           Color(0xFF2A3A7C),
-          Color(0xFFF000118),
+          Color(0xfff000118),
         ]));
   }
 }
 
 class _Logo extends StatelessWidget {
-  final VoidCallback onLogoTap;
+  final VoidCallback onNewVideoPressed;
 
-  const _Logo({required this.onLogoTap, Key? key}) : super(key: key);
+  const _Logo({required this.onNewVideoPressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: onLogoTap, child: Image.asset('asset/image/logo.png'));
+        onTap: onNewVideoPressed, child: Image.asset('asset/image/logo.png'));
   }
 }
 
@@ -81,8 +83,9 @@ class _AppName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = const TextStyle(
-        color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
+    TextStyle textStyle = TextStyle(
+        color: Colors.white, fontWeight: FontWeight.w300, fontSize: 30);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -93,7 +96,7 @@ class _AppName extends StatelessWidget {
         Text(
           'PLAYER',
           style: textStyle.copyWith(fontWeight: FontWeight.w700),
-        ),
+        )
       ],
     );
   }
