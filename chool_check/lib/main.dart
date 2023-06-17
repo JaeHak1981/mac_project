@@ -2,7 +2,7 @@ import 'package:chool_check/HomeScreen/HomeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main(){
+void main() {
   runApp(MaterialApp(
     home: HomeScreen(),
   ));
