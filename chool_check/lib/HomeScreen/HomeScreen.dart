@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,6 +10,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool choolCheckDone = false;
   static final LatLng companyLatLng = LatLng(35.805566, 127.120111);
   static final CameraPosition initialPosition =
       CameraPosition(target: companyLatLng, zoom: 15);
@@ -75,21 +75,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         end.longitude,
                       );
 
-
-                      if(distance < okDistance){
+                      if (distance < okDistance) {
                         isWithinRange = true;
                       }
                     }
-
 
                     return Column(
                       children: [
                         _CustomGoogleMap(
                           initialPosition: initialPosition,
                           marker: marker,
-                          circle: isWithinRange ?  withinDistanceCircle : notWithinDistanceCircle,
+                          circle:choolCheckDone? checkDoneCircle : isWithinRange
+                              ? withinDistanceCircle
+                              : notWithinDistanceCircle,
                         ),
-                        _ChoolCheckButton(),
+                        _ChoolCheckButton(
+                          choolCheckDone :choolCheckDone,
+                          isWithinRange: isWithinRange,
+                          onPressed: onChoolCheckPressed,
+                        ),
                       ],
                     );
                   });
@@ -100,6 +104,34 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }),
     );
+  }
+
+  void onChoolCheckPressed() async {
+    final result = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('출근하가'),
+            content: Text('출근할럐?'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text('Cancel')),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text('Approval')),
+            ],
+          );
+        });
+    if (result) {
+      setState(() {
+        choolCheckDone = true;
+      });
+    }
   }
 
   Future<String> checkPermission() async {
@@ -161,16 +193,42 @@ class _CustomGoogleMap extends StatelessWidget {
 }
 
 class _ChoolCheckButton extends StatelessWidget {
-  const _ChoolCheckButton({Key? key}) : super(key: key);
+  final bool isWithinRange;
+  final VoidCallback onPressed;
+  final bool choolCheckDone;
+
+  const _ChoolCheckButton({
+    required this.isWithinRange,
+    required this.onPressed,
+    required this.choolCheckDone,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: Center(
-      child: Text(
-        'Chool Check',
-        style: TextStyle(fontSize: 30),
-      ),
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.timelapse_outlined,
+              color: choolCheckDone? Colors.green : isWithinRange ? Colors.blue : Colors.red,
+              size: 50,
+            )),
+        SizedBox(height: 30),
+        if (!choolCheckDone && isWithinRange)
+          TextButton(
+              onPressed: onPressed,
+              child: Text(
+                'Chool Check',
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w300),
+              )),
+      ],
     ));
   }
 }
