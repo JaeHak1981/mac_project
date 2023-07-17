@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -14,21 +15,18 @@ class CustomVideoPlayer extends StatefulWidget {
 }
 
 class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
+  Timer? timer;
   VideoPlayerController? videoController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     initializeController();
   }
 
   void initializeController() async {
-    videoController = VideoPlayerController.file(File(
-      widget.video.path,
-    ));
-
+    videoController = VideoPlayerController.file(File(widget.video.path));
     await videoController!.initialize();
     setState(() {});
   }
@@ -41,46 +39,61 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       );
     }
     return AspectRatio(
-      aspectRatio: videoController!.value.aspectRatio,
-      child: Stack(
-        children: [
-          VideoPlayer(
-            videoController!,
-          ),
-          _Controls(
-            onPlayPressed: onPlayPressed,
-            onReversePressed: onReversePressed,
-            onForwardPressed: onForwardPressed,
-            isPlaying: videoController!.value.isPlaying,
-          ),
-          Positioned(
-            right: 0,
-            child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.photo_camera_back,
-                  color: Colors.white,
-                  size: 30,
-                )),
-          )
-        ],
-      ),
-    );
+        aspectRatio: videoController!.value.aspectRatio,
+        child: Stack(
+          children: [
+            VideoPlayer(videoController!),
+            _Controls(
+              onPlayPressed: onPlayPressed,
+              onReversePressed: onReversePressed,
+              onForwardPressed: onForwardPressed,
+              isPlaying: videoController!.value.isPlaying,
+            ),
+            Positioned(
+              right: 0,
+              child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.photo_camera_back,
+                    color: Colors.white,
+                    size: 30,
+                  )),
+            )
+          ],
+        ));
   }
 
   void onPlayPressed() {
-  setState(() {
-    if (videoController!.value.isPlaying) {
-      videoController!.pause();
-    } else {
-      videoController!.play();
-    }
-  });
+    setState(() {
+      if (videoController!.value.isPlaying) {
+        videoController!.pause();
+      } else {
+        videoController!.play();
+      }
+    });
   }
 
-  void onReversePressed() {}
+  void onReversePressed() {
+    final currentPosition = videoController!.value.position;
+    Duration position = Duration();
+    if (currentPosition.inSeconds > 3) {
+      Duration position = currentPosition - Duration(seconds: 3);
+    }
 
-  void onForwardPressed() {}
+    videoController!.seekTo(position);
+  }
+
+  void onForwardPressed() {
+    final maxPosition = videoController!.value.duration;
+    final currentPosition = videoController!.value.position;
+    Duration position = maxPosition;
+    if ((maxPosition - Duration(seconds: 3)).inSeconds >
+        currentPosition.inSeconds) {
+      Duration position = currentPosition + Duration(seconds: 3);
+    }
+
+    videoController!.seekTo(position);
+  }
 }
 
 class _Controls extends StatelessWidget {
@@ -102,7 +115,7 @@ class _Controls extends StatelessWidget {
       color: Colors.black.withOpacity(0.5),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           renderIconButton(
               onPressed: onReversePressed, iconData: Icons.rotate_left),
@@ -116,8 +129,10 @@ class _Controls extends StatelessWidget {
     );
   }
 
-  Widget renderIconButton(
-      {required VoidCallback onPressed, required IconData iconData}) {
+  Widget renderIconButton({
+    required VoidCallback onPressed,
+    required IconData iconData,
+  }) {
     return IconButton(
       onPressed: onPressed,
       icon: Icon(iconData),

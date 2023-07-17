@@ -15,7 +15,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: video == null ? renderEmpty() : renderVideo(),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: getBoxDecoration(),
+        child: video == null ? renderVideoEmpty() : renderVideo(),
+      ),
     );
   }
 
@@ -27,36 +31,28 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget renderEmpty() {
-    return Container(
-      decoration: getBoxDecoration(),
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _Logo(
-            onTap: onNewVideo,
-          ),
-          const SizedBox(height: 30),
-          _AppName(),
-        ],
-      ),
+  Widget renderVideoEmpty() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _Logo(
+          onTap: onNewVideo,
+        ),
+        SizedBox(height: 30),
+        _AppName(),
+      ],
     );
   }
 
   void onNewVideo() async {
-    final video = await ImagePicker().pickVideo(
-      source: ImageSource.gallery,
-    );
-    if (video != null) {
-      setState(() {
-        this.video = video;
-      });
-    }
+    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    setState(() {
+      this.video = video;
+    });
   }
 
   BoxDecoration getBoxDecoration() {
-    return const BoxDecoration(
+    return BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -75,9 +71,7 @@ class _Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Image.asset('asset/img/logo.png'),
-    );
+        onTap: onTap, child: Image.asset('asset/img/logo.png'));
   }
 }
 
@@ -86,7 +80,7 @@ class _AppName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textStyle = TextStyle(
+    TextStyle textStyle = TextStyle(
       color: Colors.white,
       fontSize: 30,
       fontWeight: FontWeight.w300,
