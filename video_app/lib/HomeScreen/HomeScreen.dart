@@ -18,12 +18,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         decoration: getBoxDecoration(),
-        child: video == null ? renderVideoEmpty() : renderVideo(),
+        child: video == null ? renderVideoEmpty() : renderVide(),
       ),
     );
   }
 
-  Widget renderVideo() {
+  Widget renderVide() {
     return Center(
       child: CustomVideoPlayer(
         video: video!,
@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   BoxDecoration getBoxDecoration() {
-    return BoxDecoration(
+    return const BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -81,10 +81,8 @@ class _AppName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle textStyle = TextStyle(
-      color: Colors.white,
-      fontSize: 30,
-      fontWeight: FontWeight.w300,
-    );
+        color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -94,9 +92,7 @@ class _AppName extends StatelessWidget {
         ),
         Text(
           'PLAYER',
-          style: textStyle.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+          style: textStyle.copyWith(fontWeight: FontWeight.w700),
         ),
       ],
     );

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ class CustomVideoPlayer extends StatefulWidget {
 }
 
 class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
-  Timer? timer;
   VideoPlayerController? videoController;
 
   @override
@@ -34,7 +32,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   @override
   Widget build(BuildContext context) {
     if (videoController == null) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(),
       );
     }
@@ -49,16 +47,6 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
               onForwardPressed: onForwardPressed,
               isPlaying: videoController!.value.isPlaying,
             ),
-            Positioned(
-              right: 0,
-              child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.photo_camera_back,
-                    color: Colors.white,
-                    size: 30,
-                  )),
-            )
           ],
         ));
   }
@@ -75,23 +63,25 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
 
   void onReversePressed() {
     final currentPosition = videoController!.value.position;
-    Duration position = Duration();
-    if (currentPosition.inSeconds > 3) {
-      Duration position = currentPosition - Duration(seconds: 3);
-    }
 
+    Duration position = Duration();
+
+    if (currentPosition.inSeconds > 3) {
+      position = currentPosition - const Duration(seconds: 3);
+    }
     videoController!.seekTo(position);
   }
 
   void onForwardPressed() {
     final maxPosition = videoController!.value.duration;
     final currentPosition = videoController!.value.position;
-    Duration position = maxPosition;
-    if ((maxPosition - Duration(seconds: 3)).inSeconds >
-        currentPosition.inSeconds) {
-      Duration position = currentPosition + Duration(seconds: 3);
-    }
 
+    Duration position = maxPosition;
+
+    if ((maxPosition - const Duration(seconds: 3)).inSeconds >
+        currentPosition.inSeconds) {
+      position = currentPosition + const Duration(seconds: 3);
+    }
     videoController!.seekTo(position);
   }
 }
@@ -134,10 +124,11 @@ class _Controls extends StatelessWidget {
     required IconData iconData,
   }) {
     return IconButton(
-      onPressed: onPressed,
-      icon: Icon(iconData),
-      color: Colors.white,
-      iconSize: 30,
-    );
+        onPressed: onPressed,
+        icon: Icon(
+          iconData,
+          color: Colors.white,
+          size: 30,
+        ));
   }
 }
