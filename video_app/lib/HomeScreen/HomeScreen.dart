@@ -16,25 +16,18 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        width: MediaQuery.of(context).size.width,
         decoration: getBoxDecoration(),
+        width: MediaQuery.of(context).size.width,
         child: video == null ? renderVideoEmpty() : renderVideo(),
       ),
     );
-  }
-
-  void onNewVideo() async {
-    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
-    setState(() {
-      this.video = video;
-    });
   }
 
   Widget renderVideo() {
     return Center(
       child: CustomVideoPlayer(
         video: video!,
-        onNewVideo: onNewVideo,
+        newVideo: newVideo,
       ),
     );
   }
@@ -44,14 +37,23 @@ class _HomeScreenState extends State<HomeScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _Logo(
-          onPressed: onNewVideo,
+          onPressed: newVideo,
         ),
         SizedBox(
           height: 30,
         ),
-        _AppName(),
+        _AppName()
       ],
     );
+  }
+
+  void newVideo() async {
+    final video = await ImagePicker().pickVideo(
+      source: ImageSource.gallery,
+    );
+    setState(() {
+      this.video = video!;
+    });
   }
 
   BoxDecoration getBoxDecoration() {
@@ -85,20 +87,18 @@ class _AppName extends StatelessWidget {
   Widget build(BuildContext context) {
     TextStyle textStyle = TextStyle(
         color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'VIDEO',
-            style: textStyle,
-          ),
-          Text(
-            'PLAYER',
-            style: textStyle.copyWith(fontWeight: FontWeight.w700),
-          ),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'VIDEO',
+          style: textStyle,
+        ),
+        Text(
+          'PLAYER',
+          style: textStyle.copyWith(fontWeight: FontWeight.w700),
+        ),
+      ],
     );
   }
 }
