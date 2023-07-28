@@ -15,33 +15,33 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: getBoxDecoration(),
-        width: MediaQuery.of(context).size.width,
-        child: video == null ? renderVideoEmpty() : renderVideo(),
+      body: video == null ? renderVideoEmpty() : renderVideo(),
+    );
+  }
+
+  Widget renderVideo() {
+    return Center(
+      child: CustomVideoPlayer(
+        video:  video!,
+        onNewVideo: onNewVideo,
       ),
     );
   }
 
-  Widget renderVideo(){
-    return Center(
-      child: CustomVideoPlayer(
-        video: video!,
+  Widget renderVideoEmpty() {
+    return Container(
+      decoration: getBoxDecoration(),
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _Logo(
+            onNewVideoPressed: onNewVideo,
+          ),
+          const SizedBox(height: 30),
+          _AppName(),
+        ],
       ),
-    );
-  }
-  Widget renderVideoEmpty(){
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _Logo(
-          onNewVideoPressed: onNewVideo,
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        _AppName(),
-      ],
     );
   }
 
@@ -81,8 +81,9 @@ class _AppName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = TextStyle(
+    TextStyle textStyle = const TextStyle(
         color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -93,7 +94,7 @@ class _AppName extends StatelessWidget {
         Text(
           'PLAYER',
           style: textStyle.copyWith(fontWeight: FontWeight.w700),
-        ),
+        )
       ],
     );
   }
