@@ -23,41 +23,37 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget renderVideo() {
+  Widget renderVideo(){
     return Center(
       child: CustomVideoPlayer(
         video: video!,
-        newVideo: newVideo,
       ),
     );
   }
-
-  Widget renderVideoEmpty() {
+  Widget renderVideoEmpty(){
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _Logo(
-          onPressed: newVideo,
+          onNewVideoPressed: onNewVideo,
         ),
         SizedBox(
           height: 30,
         ),
-        _AppName()
+        _AppName(),
       ],
     );
   }
 
-  void newVideo() async {
-    final video = await ImagePicker().pickVideo(
-      source: ImageSource.gallery,
-    );
+  void onNewVideo() async {
+    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
     setState(() {
-      this.video = video!;
+      this.video = video;
     });
   }
 
   BoxDecoration getBoxDecoration() {
-    return BoxDecoration(
+    return const BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -69,14 +65,14 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _Logo extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback onNewVideoPressed;
 
-  const _Logo({required this.onPressed, super.key});
+  const _Logo({required this.onNewVideoPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: onPressed, child: Image.asset('asset/img/logo.png'));
+        onTap: onNewVideoPressed, child: Image.asset('asset/img/logo.png'));
   }
 }
 

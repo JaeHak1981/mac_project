@@ -9,13 +9,14 @@ void main() {
         fontFamily: 'sunflower',
         textTheme: const TextTheme(
           headlineLarge: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-              fontSize: 60,
-              fontFamily: 'parisienne'),
-          headlineMedium: TextStyle(color: Colors.white, fontSize: 50),
+              color: Colors.white, fontSize: 70, fontWeight: FontWeight.w700,
+          fontFamily: 'parisienne'),
+          headlineMedium: TextStyle(
+            color: Colors.white,
+            fontSize: 45,
+          ),
           headlineSmall: TextStyle(
-              color: Colors.white, fontSize: 50, fontWeight: FontWeight.w700),
+              color: Colors.white, fontSize: 60, fontWeight: FontWeight.w700),
         )),
   ));
 }

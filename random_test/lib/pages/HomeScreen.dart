@@ -6,7 +6,7 @@ import 'package:random_test/constant/color.dart';
 import 'package:random_test/pages/Settings_Screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -25,17 +25,20 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              _Header(numberInt: numberInt, onSettingPressed: onSettingPressed),
-              _Body(numberList: numberList),
-              _Footer(numberInt: numberInt, onSavePressed: onSavePressed)
-
+              _TopPart(
+                onSettingPressed: onSettingPressed,
+              ),
+              _Body(
+                numberList: numberList,
+              ),
+              _BottomPart(onGeneratorPressed: onGeneratorPressed),
             ],
           ),
         ),
       ),
     );
   }
-  void onSavePressed() {
+  void onGeneratorPressed() {
     final rand = Random();
     final Set<int> numberSet = {};
     while (numberSet.length != 3) {
@@ -48,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onSettingPressed() async {
     final result = await Navigator.of(context)
-        .push<int>(MaterialPageRoute(builder: (BuildContext context) {
+        .push(MaterialPageRoute(builder: (BuildContext context) {
       return SettingScreen(
         numberInt: numberInt,
       );
@@ -59,13 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class _Header extends StatelessWidget {
-  final int numberInt;
+class _TopPart extends StatelessWidget {
   final VoidCallback onSettingPressed;
 
-  const _Header(
-      {required this.numberInt, required this.onSettingPressed, Key? key})
-      : super(key: key);
+  const _TopPart({required this.onSettingPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,9 @@ class _Header extends StatelessWidget {
         const Text(
           'RandomNumbers',
           style: TextStyle(
-              color: Colors.white, fontSize: 30, fontWeight: FontWeight.w500),
+            color: Colors.white,
+            fontSize: 35,
+          ),
         ),
         IconButton(
             onPressed: onSettingPressed,
@@ -83,7 +85,7 @@ class _Header extends StatelessWidget {
               Icons.settings,
               color: redColor,
               size: 40,
-            ))
+            )),
       ],
     );
   }
@@ -92,7 +94,7 @@ class _Header extends StatelessWidget {
 class _Body extends StatelessWidget {
   final List<int> numberList;
 
-  const _Body({required this.numberList, Key? key}) : super(key: key);
+  const _Body({required this.numberList, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +105,7 @@ class _Body extends StatelessWidget {
             .asMap()
             .entries
             .map((e) => Padding(
-                  padding: EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
+                  padding: EdgeInsets.only(bottom: e.key == 2 ? 0 : 10),
                   child: NumberRow(numbers: e.value),
                 ))
             .toList(),
@@ -111,13 +113,9 @@ class _Body extends StatelessWidget {
     );
   }
 }
-class _Footer extends StatelessWidget {
-  final int numberInt;
-  final VoidCallback onSavePressed;
-  const _Footer({required this.numberInt,
-    required this.onSavePressed,
-
-    Key? key}) : super(key: key);
+class _BottomPart extends StatelessWidget {
+  final VoidCallback onGeneratorPressed;
+  const _BottomPart({required this.onGeneratorPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -125,11 +123,10 @@ class _Footer extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: redColor),
-          onPressed: onSavePressed,
+          onPressed: onGeneratorPressed,
           child: const Text(
-            'GENERATOR',
-            style:
-            TextStyle(fontSize: 40, fontWeight: FontWeight.w200),
+            'Generator',
+            style: TextStyle(color: Colors.white, fontSize: 35),
           )),
     );
   }

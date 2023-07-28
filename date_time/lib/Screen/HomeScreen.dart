@@ -2,15 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  DateTime selectedDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime selectedDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +24,18 @@ class _HomeScreenState extends State<HomeScreen> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-             _TapPart(selectedDate: selectedDate, onHartPressed: onHartPressed) ,
-              const _BottomPart()
+              _TopPart(
+                selectedDate: selectedDate,
+                onHartPressed: onHartPressed,
+              ),
+              _BottomPart(),
             ],
           ),
         ),
       ),
     );
   }
+
   void onHartPressed() {
     showCupertinoDialog(
         context: context,
@@ -37,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
           return Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              color: Colors.white,
               height: 300,
+              color: Colors.white,
               child: CupertinoDatePicker(
                 initialDateTime: selectedDate,
                 maximumDate: DateTime.now(),
@@ -54,33 +61,41 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 }
-class _TapPart extends StatelessWidget {
+
+class _TopPart extends StatelessWidget {
   final DateTime selectedDate;
   final VoidCallback onHartPressed;
-  const _TapPart({required this.selectedDate,
-    required this.onHartPressed,
 
-    Key? key}) : super(key: key);
+  const _TopPart({
+    required this.selectedDate,
+    required this.onHartPressed,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    TextTheme textTheme = theme.textTheme;
+    TextTheme themeData = theme.textTheme;
     DateTime now = DateTime.now();
-
 
     return Expanded(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('U*I', style: textTheme.headlineLarge),
+          Text(
+            'U&I',
+            style: themeData.headlineLarge,
+          ),
           Column(
             children: [
               Text(
                 '우리 처음 만난 날',
-                style: textTheme.headlineMedium,
+                style: themeData.headlineMedium,
               ),
-              Text('${selectedDate.year},${selectedDate.month},${selectedDate.day}', style: textTheme.headlineMedium),
+              Text(
+                '${selectedDate.year}, ${selectedDate.month}, ${selectedDate.day}',
+                style: themeData.headlineMedium,
+              ),
             ],
           ),
           IconButton(
@@ -88,11 +103,11 @@ class _TapPart extends StatelessWidget {
               icon: const Icon(
                 Icons.favorite,
                 color: Colors.red,
-                size: 60,
+                size: 50,
               )),
           Text(
-            'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays+1}',
-            style: textTheme.headlineSmall,
+            'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays + 1}',
+            style: themeData.headlineSmall,
           )
         ],
       ),
@@ -100,12 +115,13 @@ class _TapPart extends StatelessWidget {
   }
 }
 
-
 class _BottomPart extends StatelessWidget {
-  const _BottomPart({Key? key}) : super(key: key);
+  const _BottomPart({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: Image.asset('asset/img/middle_image.png'));
+    return Expanded(
+      child: Image.asset('asset/img/middle_image.png'),
+    );
   }
 }
