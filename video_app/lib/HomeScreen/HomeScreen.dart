@@ -15,33 +15,35 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: video == null ? renderVideoEmpty() : renderVideo(),
+      body: Container(
+        decoration: getBoxDecoration(),
+        width: MediaQuery.of(context).size.width,
+        child: video == null ? renderVideoEmpty() : renderVideo(),
+      ),
     );
   }
 
   Widget renderVideo() {
     return Center(
       child: CustomVideoPlayer(
-        video:  video!,
+        video: video!,
         onNewVideo: onNewVideo,
       ),
     );
   }
 
   Widget renderVideoEmpty() {
-    return Container(
-      decoration: getBoxDecoration(),
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _Logo(
-            onNewVideoPressed: onNewVideo,
-          ),
-          const SizedBox(height: 30),
-          _AppName(),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _Logo(
+          onNewVideoPressed: onNewVideo,
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        _AppName(),
+      ],
     );
   }
 
@@ -94,7 +96,7 @@ class _AppName extends StatelessWidget {
         Text(
           'PLAYER',
           style: textStyle.copyWith(fontWeight: FontWeight.w700),
-        )
+        ),
       ],
     );
   }

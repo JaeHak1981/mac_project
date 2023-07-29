@@ -20,8 +20,8 @@ class CustomVideoPlayer extends StatefulWidget {
 
 class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   VideoPlayerController? videoController;
-  Duration currentPosition = Duration();
   bool showControls = false;
+  Duration currentPosition = Duration();
 
   @override
   void initState() {
@@ -76,15 +76,11 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                   onForwardPressed: onForwardPressed,
                   isPlaying: videoController!.value.isPlaying,
                 ),
-              if (showControls)
-                _NewVideo(
-                  onNewVideoPressed: widget.onNewVideo,
-                ),
-              _SliderBottom(
-                currentPosition: currentPosition,
-                maxPosition: videoController!.value.duration,
-                onSliderChanged: onSliderChanged,
-              )
+              if (showControls) _NewVideo(onNewVideo: widget.onNewVideo),
+              _SliderButton(
+                  currentPosition: currentPosition,
+                  maxPosition: videoController!.value.duration,
+                  onSliderChanged: onSliderChanged)
             ],
           ),
         ));
@@ -117,7 +113,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     final maxPosition = videoController!.value.duration;
     final currentPosition = videoController!.value.position;
     Duration position = maxPosition;
-    if ((maxPosition - const Duration(seconds: 3)).inSeconds >
+    if ((maxPosition - Duration(seconds: 3)).inSeconds >
         currentPosition.inSeconds) {
       position = currentPosition + const Duration(seconds: 3);
     }
@@ -142,7 +138,6 @@ class _Controls extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
-      color: Colors.black.withOpacity(0.5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -171,23 +166,23 @@ class _Controls extends StatelessWidget {
         onPressed: onPressed,
         icon: Icon(
           iconData,
-          color: Colors.white,
           size: 30,
+          color: Colors.white,
         ));
   }
 }
 
 class _NewVideo extends StatelessWidget {
-  final VoidCallback onNewVideoPressed;
+  final VoidCallback onNewVideo;
 
-  const _NewVideo({required this.onNewVideoPressed, super.key});
+  const _NewVideo({required this.onNewVideo, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
       right: 0,
       child: IconButton(
-          onPressed: onNewVideoPressed,
+          onPressed: onNewVideo,
           icon: const Icon(
             Icons.photo_camera_back,
             color: Colors.white,
@@ -197,12 +192,14 @@ class _NewVideo extends StatelessWidget {
   }
 }
 
-class _SliderBottom extends StatelessWidget {
+class _SliderButton extends StatelessWidget {
   final Duration currentPosition;
+
   final Duration maxPosition;
+
   final ValueChanged<double> onSliderChanged;
 
-  const _SliderBottom(
+  const _SliderButton(
       {required this.currentPosition,
       required this.maxPosition,
       required this.onSliderChanged,
