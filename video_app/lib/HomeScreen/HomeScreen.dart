@@ -11,19 +11,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   XFile? video;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: getBoxDecoration(),
         width: MediaQuery.of(context).size.width,
-        child: video == null ? renderVideoEmpty() : renderVideo(),
+        child:video == null?  renderVideoEmpty() : renderVideo(),
       ),
     );
   }
 
-  Widget renderVideo() {
+
+  Widget renderVideo(){
     return Center(
       child: CustomVideoPlayer(
         video: video!,
@@ -31,23 +31,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  Widget renderVideoEmpty() {
+  Widget renderVideoEmpty(){
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _Logo(
-          onNewVideoPressed: onNewVideo,
+          onPressed: onNewVideo,
         ),
-        const SizedBox(
-          height: 30,
-        ),
+        SizedBox(height: 30),
         _AppName(),
       ],
     );
   }
-
-  void onNewVideo() async {
+  void onNewVideo()async{
     final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
     setState(() {
       this.video = video;
@@ -67,14 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _Logo extends StatelessWidget {
-  final VoidCallback onNewVideoPressed;
-
-  const _Logo({required this.onNewVideoPressed, super.key});
+  final VoidCallback onPressed;
+  const _Logo({required this.onPressed,super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: onNewVideoPressed, child: Image.asset('asset/img/logo.png'));
+        onTap: onPressed,
+        child: Image.asset('asset/img/logo.png'));
   }
 }
 
@@ -83,9 +79,8 @@ class _AppName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = const TextStyle(
+    TextStyle textStyle = TextStyle(
         color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

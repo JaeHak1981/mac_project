@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -16,8 +15,8 @@ class _HomeScreenState extends State<HomeScreen> {
   static final LatLng companyLatLng = LatLng(35.805720, 127.1201237);
   static final CameraPosition initialPosition =
       CameraPosition(target: companyLatLng, zoom: 15);
-  bool isWithinRange = false;
-  bool checkDone = false;
+
+  bool choolCheckDone = false;
 
   static final double okDistance = 100;
   static final Circle withinCircle = Circle(
@@ -57,14 +56,15 @@ class _HomeScreenState extends State<HomeScreen> {
           future: checkPermission(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-            if (snapshot.data == '위치 권한이 허가되었습니다') {
+            if (snapshot.data == '위치 서비스가 허가되었습니다') {
               return StreamBuilder<Position>(
                   stream: Geolocator.getPositionStream(),
                   builder: (context, snapshot) {
+                    bool isWithinRange = false;
                     if (snapshot.hasData) {
                       final start = snapshot.data!;
                       final end = companyLatLng;
@@ -74,27 +74,23 @@ class _HomeScreenState extends State<HomeScreen> {
                         end.latitude,
                         end.longitude,
                       );
-
                       if (distance < okDistance) {
                         isWithinRange = true;
                       }
                     }
+
                     return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _CustomGoogleMap(
                           initialPosition: initialPosition,
                           marker: marker,
-                          circle: checkDone
-                              ? checkDoneCircle
-                              : isWithinRange
-                                  ? withinCircle
-                                  : notWithinCircle,
+                          circle:choolCheckDone ? checkDoneCircle :
+                              isWithinRange ? withinCircle : notWithinCircle,
                         ),
                         _ChoolCheckButton(
                           isWithinRange: isWithinRange,
-                          onPressed: onchoolCheckPressed,
-                          checkDone: checkDone,
+                          onPressed: onChoolCheckPressed,
+                          choolCheckDone: choolCheckDone,
                         ),
                       ],
                     );
@@ -106,61 +102,54 @@ class _HomeScreenState extends State<HomeScreen> {
           }),
     );
   }
-
-  void onchoolCheckPressed() async {
-    final result = await showCupertinoDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('출근하기'),
-            content: Text('출근하실래요?'),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  child: Text('Cancel')),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: Text('Approval'))
-            ],
-          );
-        });
-    if (result) {
-      setState(() {
-        checkDone = true;
-      });
-    }
+  void onChoolCheckPressed()async{
+   final result = await showDialog(context: context, builder: (BuildContext context){
+      return AlertDialog(
+        title: Text('출근하기'),
+        content: Text('출근할래?'),
+        actions: [
+          TextButton(onPressed: (){Navigator.of(context).pop(false);}, child: Text('Cancel')),
+          TextButton(onPressed: (){Navigator.of(context).pop(true);}, child: Text('Approval')),
+        ],
+      );
+    });
+   if(result){
+     setState(() {
+       choolCheckDone = true;
+     });
+   }
   }
+}
 
-  Future<String> checkPermission() async {
-    final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!isLocationEnabled) {
-      return '위치 권한을 허가해주세요';
-    }
-    LocationPermission checkPermission = await Geolocator.checkPermission();
-    if (checkPermission == LocationPermission.denied) {
-      checkPermission = await Geolocator.requestPermission();
-    }
-    if (checkPermission == LocationPermission.denied) {
-      return '위치 권한을 허가해주세요';
-    }
-    if (checkPermission == LocationPermission.deniedForever) {
-      return '설정에서 위치 권한을 허가해주세요';
-    }
-    return '위치 권한이 허가되었습니다';
+
+Future<String> checkPermission() async {
+  final isLocationPermission = await Geolocator.isLocationServiceEnabled();
+  if (!isLocationPermission) {
+    return '위치 서비스를 허가해주세요';
   }
+  LocationPermission checkPermission = await Geolocator.checkPermission();
+  if (checkPermission == LocationPermission.denied) {
+    checkPermission = await Geolocator.requestPermission();
+  }
+  if (checkPermission == LocationPermission.denied) {
+    return '위치 권한을 허가해주세요';
+  }
+  if (checkPermission == LocationPermission.deniedForever) {
+    return '설정에서 위치 권한을 허가해주세요';
+  }
+  return '위치 서비스가 허가되었습니다';
 }
 
 AppBar renderAppBar() {
   return AppBar(
     backgroundColor: Colors.white,
-    title: Text(
+    title: const Text(
       '오늘도 출근',
       style: TextStyle(
-          color: Colors.blue, fontSize: 30, fontWeight: FontWeight.w700),
+        color: Colors.blue,
+        fontSize: 30,
+        fontWeight: FontWeight.w700,
+      ),
     ),
   );
 }
@@ -183,8 +172,8 @@ class _CustomGoogleMap extends StatelessWidget {
       child: GoogleMap(
         initialCameraPosition: initialPosition,
         mapType: MapType.normal,
-        myLocationEnabled: true,
         myLocationButtonEnabled: false,
+        myLocationEnabled: true,
         circles: Set.from([circle]),
         markers: Set.from([marker]),
       ),
@@ -195,42 +184,42 @@ class _CustomGoogleMap extends StatelessWidget {
 class _ChoolCheckButton extends StatelessWidget {
   final bool isWithinRange;
   final VoidCallback onPressed;
-  final bool checkDone;
+  final bool choolCheckDone;
 
   const _ChoolCheckButton({
     required this.isWithinRange,
     required this.onPressed,
-    required this.checkDone,
+    required this.choolCheckDone,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.timelapse,
-                color:checkDone ? Colors.green : isWithinRange ? Colors.blue : Colors.red,
-                size: 50,
-              )),
-          const SizedBox(height: 20),
-          if (!checkDone && isWithinRange)
-            TextButton(
-                onPressed: onPressed,
-                child: Text(
-                  'Chool Check',
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 40,
-                      fontWeight: FontWeight.w700),
-                ))
-        ],
-      ),
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.timelapse,
+              color:choolCheckDone ? Colors.green : isWithinRange ?  Colors.blue : Colors.red,
+              size: 40,
+            )),
+        const SizedBox(
+          height: 30,
+        ),
+        if(!choolCheckDone && isWithinRange)
+        TextButton(
+            onPressed: onPressed,
+            child: const Text(
+              'Chool Check',
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 40,
+                  fontWeight: FontWeight.w700),
+            ))
+      ],
     ));
   }
 }
