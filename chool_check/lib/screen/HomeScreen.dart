@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -19,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool choolCheckDone = false;
 
   static final double okDistance = 100;
+
   static final Circle withinCircle = Circle(
     circleId: CircleId('withinCircle'),
     center: companyLatLng,
@@ -35,8 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
     strokeColor: Colors.red,
     strokeWidth: 1,
   );
-  static final Circle checkDoneCircle = Circle(
-    circleId: CircleId('checkDoneCircle'),
+  static final Circle doneCircle = Circle(
+    circleId: CircleId('doneCircle'),
     center: companyLatLng,
     radius: okDistance,
     fillColor: Colors.green.withOpacity(0.5),
@@ -83,75 +82,81 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         _CustomGoogleMap(
                           initialPosition: initialPosition,
-                          marker: marker,
-                          circle:choolCheckDone ? checkDoneCircle :
+                          circle:choolCheckDone ? doneCircle :
                               isWithinRange ? withinCircle : notWithinCircle,
+                          marker: marker,
                         ),
                         _ChoolCheckButton(
                           isWithinRange: isWithinRange,
-                          onPressed: onChoolCheckPressed,
-                          choolCheckDone: choolCheckDone,
-                        ),
+                          onPressed: onChoolCheckPressed, choolCheckDone: choolCheckDone,
+
+                        )
                       ],
                     );
                   });
             }
-            return Center(
-              child: Text(snapshot.data),
-            );
+
+            return Text(snapshot.data);
           }),
     );
   }
-  void onChoolCheckPressed()async{
-   final result = await showDialog(context: context, builder: (BuildContext context){
-      return AlertDialog(
-        title: Text('출근하기'),
-        content: Text('출근할래?'),
-        actions: [
-          TextButton(onPressed: (){Navigator.of(context).pop(false);}, child: Text('Cancel')),
-          TextButton(onPressed: (){Navigator.of(context).pop(true);}, child: Text('Approval')),
-        ],
-      );
-    });
+
+  void onChoolCheckPressed() async {
+   final result= await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('출근하기'),
+            content: Text('출근을 누리시겠습니까?'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text('Cancel')),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text('Approval'))
+            ],
+          );
+        });
    if(result){
      setState(() {
        choolCheckDone = true;
      });
    }
   }
-}
 
+  Future<String> checkPermission() async {
+    final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!isLocationEnabled) {
+      return '위치 서비스를 허가해주세요';
+    }
+    LocationPermission checkPermission = await Geolocator.checkPermission();
+    if (checkPermission == LocationPermission.denied) {
+      checkPermission = await Geolocator.requestPermission();
+    }
+    if (checkPermission == LocationPermission.denied) {
+      return '위치 서비스를 허가해주세요';
+    }
+    if (checkPermission == LocationPermission.deniedForever) {
+      return '설정에서 위치 서비스를 허가해주세요';
+    }
+    return '위치 서비스가 허가되었습니다';
+  }
 
-Future<String> checkPermission() async {
-  final isLocationPermission = await Geolocator.isLocationServiceEnabled();
-  if (!isLocationPermission) {
-    return '위치 서비스를 허가해주세요';
-  }
-  LocationPermission checkPermission = await Geolocator.checkPermission();
-  if (checkPermission == LocationPermission.denied) {
-    checkPermission = await Geolocator.requestPermission();
-  }
-  if (checkPermission == LocationPermission.denied) {
-    return '위치 권한을 허가해주세요';
-  }
-  if (checkPermission == LocationPermission.deniedForever) {
-    return '설정에서 위치 권한을 허가해주세요';
-  }
-  return '위치 서비스가 허가되었습니다';
-}
-
-AppBar renderAppBar() {
-  return AppBar(
-    backgroundColor: Colors.white,
-    title: const Text(
-      '오늘도 출근',
-      style: TextStyle(
-        color: Colors.blue,
-        fontSize: 30,
-        fontWeight: FontWeight.w700,
+  AppBar renderAppBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      title: const Text(
+        '오늘도 출근',
+        style: TextStyle(
+            color: Colors.blue, fontSize: 40, fontWeight: FontWeight.w700),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _CustomGoogleMap extends StatelessWidget {
@@ -159,11 +164,12 @@ class _CustomGoogleMap extends StatelessWidget {
   final Circle circle;
   final Marker marker;
 
-  const _CustomGoogleMap(
-      {required this.initialPosition,
-      required this.marker,
-      required this.circle,
-      super.key});
+  const _CustomGoogleMap({
+    required this.initialPosition,
+    required this.circle,
+    required this.marker,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -172,8 +178,8 @@ class _CustomGoogleMap extends StatelessWidget {
       child: GoogleMap(
         initialCameraPosition: initialPosition,
         mapType: MapType.normal,
-        myLocationButtonEnabled: false,
         myLocationEnabled: true,
+        myLocationButtonEnabled: false,
         circles: Set.from([circle]),
         markers: Set.from([marker]),
       ),
@@ -203,22 +209,21 @@ class _ChoolCheckButton extends StatelessWidget {
             onPressed: () {},
             icon: Icon(
               Icons.timelapse,
-              color:choolCheckDone ? Colors.green : isWithinRange ?  Colors.blue : Colors.red,
-              size: 40,
+              color:choolCheckDone? Colors.green : isWithinRange ? Colors.blue : Colors.red,
+              size: 50,
             )),
-        const SizedBox(
-          height: 30,
-        ),
-        if(!choolCheckDone && isWithinRange)
-        TextButton(
-            onPressed: onPressed,
-            child: const Text(
-              'Chool Check',
-              style: TextStyle(
+        const SizedBox(height: 30),
+        if (!choolCheckDone  && isWithinRange)
+          TextButton(
+              onPressed: onPressed,
+              child: const Text(
+                'Chool Check',
+                style: TextStyle(
                   color: Colors.blue,
                   fontSize: 40,
-                  fontWeight: FontWeight.w700),
-            ))
+                  fontWeight: FontWeight.w700,
+                ),
+              ))
       ],
     ));
   }

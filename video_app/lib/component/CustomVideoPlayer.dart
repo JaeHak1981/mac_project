@@ -8,8 +8,11 @@ class CustomVideoPlayer extends StatefulWidget {
   final XFile video;
   final VoidCallback onNewVideo;
 
-  const CustomVideoPlayer(
-      {required this.video, required this.onNewVideo, super.key});
+  const CustomVideoPlayer({
+    required this.video,
+    required this.onNewVideo,
+    super.key,
+  });
 
   @override
   State<CustomVideoPlayer> createState() => _CustomVideoPlayerState();
@@ -31,23 +34,20 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   void didUpdateWidget(covariant CustomVideoPlayer oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.video.path != widget.video.path) {
+    if(oldWidget.video.path != widget.video.path){
       initialController();
     }
   }
 
   void initialController() async {
-    currentPosition = Duration();
     videoController = VideoPlayerController.file(File(widget.video.path));
     await videoController!.initialize();
-
     videoController!.addListener(() {
       final currentPosition = videoController!.value.position;
       setState(() {
         this.currentPosition = currentPosition;
       });
     });
-
     setState(() {});
   }
 
@@ -61,7 +61,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     return Scaffold(
       body: Center(
         child: GestureDetector(
-          onTap: () {
+          onTap: (){
             setState(() {
               showControls = !showControls;
             });
@@ -78,12 +78,14 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                       onForwardPressed: onForwardPressed,
                       isPlaying: videoController!.value.isPlaying,
                     ),
-                  if (showControls) _NewVideo(onPressed: widget.onNewVideo),
-                  _SliderChanged(
-                    currentPosition: currentPosition,
-                    maxPosition: videoController!.value.duration,
-                    onSliderChanged: onSliderChanged,
-                  ),
+                  if (showControls)
+                    _NewVideo(
+                      onPressed: widget.onNewVideo,
+                    ),
+                  _SlideChanged(
+                      currentPosition: currentPosition,
+                      maxPosition: videoController!.value.duration,
+                      onSliderChanged: onSliderChanged)
                 ],
               )),
         ),
@@ -94,6 +96,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   void onSliderChanged(double val) {
     videoController!.seekTo(Duration(seconds: val.toInt()));
   }
+
 
   void onPlayPressed() {
     setState(() {
@@ -198,12 +201,12 @@ class _NewVideo extends StatelessWidget {
   }
 }
 
-class _SliderChanged extends StatelessWidget {
+class _SlideChanged extends StatelessWidget {
   final Duration currentPosition;
   final Duration maxPosition;
   final ValueChanged<double> onSliderChanged;
 
-  const _SliderChanged(
+  const _SlideChanged(
       {required this.currentPosition,
       required this.maxPosition,
       required this.onSliderChanged,
@@ -215,27 +218,24 @@ class _SliderChanged extends StatelessWidget {
       right: 0,
       left: 0,
       bottom: 0,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Row(
-          children: [
-            Text(
-              '${currentPosition.inMinutes}:${(currentPosition.inSeconds % 60).toString().padLeft(2, '0')}',
-              style: TextStyle(color: Colors.white, fontSize: 25),
-            ),
-            Expanded(
-              child: Slider(
-                  min: 0,
-                  max: maxPosition.inSeconds.toDouble(),
-                  value: currentPosition.inSeconds.toDouble(),
-                  onChanged: onSliderChanged),
-            ),
-            Text(
-              '${maxPosition.inMinutes}:${(maxPosition.inSeconds % 60).toString().padLeft(2, '0')}',
-              style: TextStyle(color: Colors.white, fontSize: 25),
-            ),
-          ],
-        ),
+      child: Row(
+        children: [
+          Text(
+            '${currentPosition.inMinutes}:${(currentPosition.inSeconds % 60).toString().padLeft(2, '0')}',
+            style: TextStyle(color: Colors.white, fontSize: 30),
+          ),
+          Expanded(
+            child: Slider(
+                min: 0,
+                max: maxPosition.inSeconds.toDouble(),
+                value: currentPosition.inSeconds.toDouble(),
+                onChanged: onSliderChanged),
+          ),
+          Text(
+            '${maxPosition.inMinutes}:${(maxPosition.inSeconds % 60).toString().padLeft(2, '0')}',
+            style: TextStyle(color: Colors.white, fontSize: 30),
+          ),
+        ],
       ),
     );
   }

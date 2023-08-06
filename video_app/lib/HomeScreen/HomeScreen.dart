@@ -11,39 +11,41 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   XFile? video;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: getBoxDecoration(),
-        width: MediaQuery.of(context).size.width,
-        child:video == null?  renderVideoEmpty() : renderVideo(),
-      ),
+      body: video == null ? renderVideoEmpty() : renderVideo(),
     );
   }
 
-
-  Widget renderVideo(){
+  Widget renderVideo() {
     return Center(
-      child: CustomVideoPlayer(
-        video: video!,
-        onNewVideo: onNewVideo,
+      child: CustomVideoPlayer(video: video!, onNewVideo: onNewVideo ,),
+    );
+  }
+
+  Widget renderVideoEmpty() {
+    return Container(
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
+      decoration: getBoxDecoration(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _Logo(onPressed: onNewVideo,),
+          SizedBox(
+            height: 30,
+          ),
+          _AppName(),
+        ],
       ),
     );
   }
-  Widget renderVideoEmpty(){
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _Logo(
-          onPressed: onNewVideo,
-        ),
-        SizedBox(height: 30),
-        _AppName(),
-      ],
-    );
-  }
-  void onNewVideo()async{
+
+  void onNewVideo() async {
     final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
     setState(() {
       this.video = video;
@@ -56,15 +58,16 @@ class _HomeScreenState extends State<HomeScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-          Color(0xFF2A3A7C),
-          Color(0xFF000118),
-        ]));
+              Color(0xFF2A3A7C),
+              Color(0xFF000118),
+            ]));
   }
 }
 
 class _Logo extends StatelessWidget {
   final VoidCallback onPressed;
-  const _Logo({required this.onPressed,super.key});
+
+  const _Logo({required this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
