@@ -14,34 +14,34 @@ class _HomeScreenState extends State<HomeScreen> {
   static final CameraPosition initialPosition =
       CameraPosition(target: companyLatLng, zoom: 15);
 
-  bool choolCheckDone = false;
+  bool checkDone = false;
 
   static final double okDistance = 100;
-
   static final Circle withinCircle = Circle(
     circleId: CircleId('withinCircle'),
-    center: companyLatLng,
     radius: okDistance,
+    center: companyLatLng,
     fillColor: Colors.blue.withOpacity(0.5),
     strokeColor: Colors.red,
     strokeWidth: 1,
   );
   static final Circle notWithinCircle = Circle(
     circleId: CircleId('notWithinCircle'),
-    center: companyLatLng,
     radius: okDistance,
+    center: companyLatLng,
     fillColor: Colors.red.withOpacity(0.5),
     strokeColor: Colors.red,
     strokeWidth: 1,
   );
   static final Circle doneCircle = Circle(
     circleId: CircleId('doneCircle'),
-    center: companyLatLng,
     radius: okDistance,
+    center: companyLatLng,
     fillColor: Colors.green.withOpacity(0.5),
     strokeColor: Colors.red,
     strokeWidth: 1,
   );
+
   static final Marker marker = Marker(
     markerId: MarkerId('marker'),
     position: companyLatLng,
@@ -55,10 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
           future: checkPermission(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
+              return Center(
                 child: CircularProgressIndicator(),
               );
             }
+
             if (snapshot.data == '위치 서비스가 허가되었습니다') {
               return StreamBuilder<Position>(
                   stream: Geolocator.getPositionStream(),
@@ -82,32 +83,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         _CustomGoogleMap(
                           initialPosition: initialPosition,
-                          circle:choolCheckDone ? doneCircle :
-                              isWithinRange ? withinCircle : notWithinCircle,
+                          circle: checkDone
+                              ? doneCircle
+                              : isWithinRange
+                                  ? withinCircle
+                                  : notWithinCircle,
                           marker: marker,
                         ),
                         _ChoolCheckButton(
                           isWithinRange: isWithinRange,
-                          onPressed: onChoolCheckPressed, choolCheckDone: choolCheckDone,
-
-                        )
+                          onPressed: onChoolCheckPressed,
+                          checkDone: checkDone,
+                        ),
                       ],
                     );
                   });
             }
-
             return Text(snapshot.data);
           }),
     );
   }
 
   void onChoolCheckPressed() async {
-   final result= await showDialog(
+    final result = await showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('출근하기'),
-            content: Text('출근을 누리시겠습니까?'),
+            title: Text('Chool Check'),
+            content: Text('출근하기?'),
             actions: [
               TextButton(
                   onPressed: () {
@@ -118,15 +121,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     Navigator.of(context).pop(true);
                   },
-                  child: Text('Approval'))
+                  child: Text('Approval')),
             ],
           );
         });
-   if(result){
-     setState(() {
-       choolCheckDone = true;
-     });
-   }
+    if (result) {
+      setState(() {
+        checkDone = true;
+      });
+    }
   }
 
   Future<String> checkPermission() async {
@@ -142,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return '위치 서비스를 허가해주세요';
     }
     if (checkPermission == LocationPermission.deniedForever) {
-      return '설정에서 위치 서비스를 허가해주세요';
+      return '설정에서 위치 서비스를 허가해 주세요';
     }
     return '위치 서비스가 허가되었습니다';
   }
@@ -190,12 +193,12 @@ class _CustomGoogleMap extends StatelessWidget {
 class _ChoolCheckButton extends StatelessWidget {
   final bool isWithinRange;
   final VoidCallback onPressed;
-  final bool choolCheckDone;
+  final bool checkDone;
 
   const _ChoolCheckButton({
     required this.isWithinRange,
     required this.onPressed,
-    required this.choolCheckDone,
+    required this.checkDone,
     super.key,
   });
 
@@ -209,20 +212,23 @@ class _ChoolCheckButton extends StatelessWidget {
             onPressed: () {},
             icon: Icon(
               Icons.timelapse,
-              color:choolCheckDone? Colors.green : isWithinRange ? Colors.blue : Colors.red,
-              size: 50,
+              color: checkDone
+                  ? Colors.green
+                  : isWithinRange
+                      ? Colors.blue
+                      : Colors.red,
+              size: 60,
             )),
         const SizedBox(height: 30),
-        if (!choolCheckDone  && isWithinRange)
+        if (!checkDone && isWithinRange)
           TextButton(
               onPressed: onPressed,
               child: const Text(
                 'Chool Check',
                 style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 40,
-                  fontWeight: FontWeight.w700,
-                ),
+                    color: Colors.blue,
+                    fontSize: 50,
+                    fontWeight: FontWeight.w700),
               ))
       ],
     ));
