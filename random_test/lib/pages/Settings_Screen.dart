@@ -1,12 +1,14 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:random_test/component/number_row.dart';
 import 'package:random_test/constant/color.dart';
 
 class SettingScreen extends StatefulWidget {
-  final int numberInt;
+  final int numbers;
 
-  const SettingScreen({required this.numberInt, super.key});
+  const SettingScreen({
+    required this.numbers,
+    super.key,
+  });
 
   @override
   State<SettingScreen> createState() => _SettingScreenState();
@@ -19,7 +21,7 @@ class _SettingScreenState extends State<SettingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    numbers = widget.numberInt;
+    numbers = widget.numbers;
   }
 
   @override
@@ -31,8 +33,8 @@ class _SettingScreenState extends State<SettingScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              _TopPart(numbers: numbers),
-              _Body(numbers: numbers, onSliderChanged: onSliderChanged)
+              _Header(numbers: numbers),
+              _Body(numbers: numbers, onSliderPressed: onSliderPressed)
             ],
           ),
         ),
@@ -40,17 +42,17 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  void onSliderChanged(double val) {
+  void onSliderPressed(double val) {
     setState(() {
       numbers = val.toInt();
     });
   }
 }
 
-class _TopPart extends StatelessWidget {
+class _Header extends StatelessWidget {
   final int numbers;
 
-  const _TopPart({required this.numbers, super.key});
+  const _Header({required this.numbers, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +64,10 @@ class _TopPart extends StatelessWidget {
 
 class _Body extends StatelessWidget {
   final int numbers;
-  final ValueChanged<double> onSliderChanged;
+  final ValueChanged<double>? onSliderPressed;
 
   const _Body(
-      {required this.numbers, required this.onSliderChanged, super.key});
+      {required this.numbers, required this.onSliderPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,17 +77,17 @@ class _Body extends StatelessWidget {
             min: 1000,
             max: 100000,
             value: numbers.toDouble(),
-            onChanged: onSliderChanged),
+            onChanged: onSliderPressed),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: redColor),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               onPressed: () {
                 Navigator.of(context).pop<int>(numbers);
               },
-              child: Text(
+              child: const Text(
                 'SAVE',
-                style: TextStyle(color: Colors.white, fontSize: 40),
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
               )),
         )
       ],

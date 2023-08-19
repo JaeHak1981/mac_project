@@ -14,76 +14,69 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<int> numberList = [123, 456, 789];
-  int numberInt = 1000;
+  int numbers = 1000;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: SafeArea(
           child: Column(
             children: [
-              _TopPart(
-                onSettingPressed: onSettingPressed,
-              ),
-              _Body(
-                numberList: numberList,
-              ),
-              _BottomPart(onGeneratorPressed: onGeneratorPressed),
+              _Header(onPressed: onSettingPressed),
+              _Body(numberList: numberList),
+              _Bottom(onPressed: onGeneratorPressed)
             ],
           ),
         ),
       ),
     );
   }
-  void onGeneratorPressed() {
-    final rand = Random();
-    final Set<int> numberSet = {};
-    while (numberSet.length != 3) {
-      numberSet.add(rand.nextInt(numberInt));
-    }
-    setState(() {
-      numberList = numberSet.toList();
-    });
-  }
 
   void onSettingPressed() async {
     final result = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (BuildContext context) {
       return SettingScreen(
-        numberInt: numberInt,
+        numbers: numbers,
       );
     }));
+
     if (result != null) {
-      numberInt = result;
+      numbers = result;
     }
+  }
+
+  void onGeneratorPressed() {
+    final rand = Random();
+    final Set<int> numberSet = {};
+    while (numberSet.length != 3) {
+      numberSet.add(rand.nextInt(numbers));
+    }
+    setState(() {
+      numberList = numberSet.toList();
+    });
   }
 }
 
-class _TopPart extends StatelessWidget {
-  final VoidCallback onSettingPressed;
+class _Header extends StatelessWidget {
+  final VoidCallback onPressed;
 
-  const _TopPart({required this.onSettingPressed, super.key});
+  const _Header({required this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
-          'RandomNumbers',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 35,
-          ),
-        ),
+        const Text('RandomNumber',
+            style: TextStyle(color: Colors.white, fontSize: 30)),
         IconButton(
-            onPressed: onSettingPressed,
+            onPressed: onPressed,
             icon: const Icon(
               Icons.settings,
-              color: redColor,
+              color: Colors.red,
               size: 40,
             )),
       ],
@@ -99,23 +92,24 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: numberList
-            .asMap()
-            .entries
-            .map((e) => Padding(
-                  padding: EdgeInsets.only(bottom: e.key == 2 ? 0 : 10),
-                  child: NumberRow(numbers: e.value),
-                ))
-            .toList(),
-      ),
-    );
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: numberList
+          .asMap()
+          .entries
+          .map((e) => Padding(
+                padding: EdgeInsets.only(bottom: e.key == 2 ? 0 : 16),
+                child: NumberRow(numbers: e.value),
+              ))
+          .toList(),
+    ));
   }
 }
-class _BottomPart extends StatelessWidget {
-  final VoidCallback onGeneratorPressed;
-  const _BottomPart({required this.onGeneratorPressed, super.key});
+
+class _Bottom extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const _Bottom({required this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -123,10 +117,10 @@ class _BottomPart extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: redColor),
-          onPressed: onGeneratorPressed,
+          onPressed: onPressed,
           child: const Text(
             'Generator',
-            style: TextStyle(color: Colors.white, fontSize: 35),
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
           )),
     );
   }

@@ -9,11 +9,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  DateTime selectedDate = DateTime(
-    DateTime.now().year,
-    DateTime.now().month,
-    DateTime.now().day,
-  );
+  DateTime selectedDate = DateTime.now();
+  DateTime now =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              _TopPart(
-                selectedDate: selectedDate,
-                onHartPressed: onHartPressed,
-              ),
+              _TapPart(
+                  selectedDate: selectedDate, onHartPressed: onHartPressed),
               _BottomPart(),
             ],
           ),
@@ -38,35 +34,34 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onHartPressed() {
     showCupertinoDialog(
-        context: context,
         barrierDismissible: true,
+        context: context,
         builder: (BuildContext context) {
           return Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 300,
-              color: Colors.white,
-              child: CupertinoDatePicker(
-                initialDateTime: selectedDate,
-                maximumDate: DateTime.now(),
-                mode: CupertinoDatePickerMode.date,
-                onDateTimeChanged: (DateTime date) {
-                  setState(() {
-                    selectedDate = date;
-                  });
-                },
-              ),
-            ),
-          );
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                color: Colors.white,
+                height: 300,
+                child: CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.date,
+                  initialDateTime: selectedDate,
+                  maximumDate: DateTime.now(),
+                  onDateTimeChanged: (DateTime date) {
+                    setState(() {
+                      selectedDate = date;
+                    });
+                  },
+                ),
+              ));
         });
   }
 }
 
-class _TopPart extends StatelessWidget {
+class _TapPart extends StatelessWidget {
   final DateTime selectedDate;
   final VoidCallback onHartPressed;
 
-  const _TopPart({
+  const _TapPart({
     required this.selectedDate,
     required this.onHartPressed,
     super.key,
@@ -75,26 +70,25 @@ class _TopPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    TextTheme themeData = theme.textTheme;
-    DateTime now = DateTime.now();
+    TextTheme textTheme = theme.textTheme;
 
     return Expanded(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
             'U&I',
-            style: themeData.headlineLarge,
+            style: textTheme.headlineLarge,
           ),
           Column(
             children: [
               Text(
                 '우리 처음 만난 날',
-                style: themeData.headlineMedium,
+                style: textTheme.headlineMedium,
               ),
               Text(
                 '${selectedDate.year}, ${selectedDate.month}, ${selectedDate.day}',
-                style: themeData.headlineMedium,
+                style: textTheme.headlineMedium,
               ),
             ],
           ),
@@ -103,11 +97,11 @@ class _TopPart extends StatelessWidget {
               icon: const Icon(
                 Icons.favorite,
                 color: Colors.red,
-                size: 50,
+                size: 60,
               )),
           Text(
-            'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays + 1}',
-            style: themeData.headlineSmall,
+            'D+ ${DateTime.now().difference(selectedDate).inDays + 1} ',
+            style: textTheme.headlineSmall,
           )
         ],
       ),
@@ -120,8 +114,6 @@ class _BottomPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Image.asset('asset/img/middle_image.png'),
-    );
+    return Expanded(child: Image.asset('asset/img/middle_image.png'));
   }
 }

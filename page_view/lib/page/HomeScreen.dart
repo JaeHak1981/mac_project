@@ -10,39 +10,47 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  PageController controller = PageController(initialPage: 0);
   Timer? timer;
-
+  PageController controller = PageController(initialPage: 0);
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      int currentPosition = controller.page!.toInt();
-      int nextPage = currentPosition + 1;
+      int currentPage = controller.page!.toInt();
+      int nextPage = currentPage + 1;
+
       if(nextPage > 4){
-        nextPage = 0;
+       nextPage = 0;
       }
+
       controller.animateToPage(nextPage, duration: Duration(seconds: 1), curve: Curves.linear);
+
     });
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     controller!.dispose();
-    if(timer !=null){
+    if(timer != null){
       timer!.cancel();
     }
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.white,
-        title: Text('PAGE VIEW TEST',style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w700),),
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: const Text('Page View Test',
+        style: TextStyle(
+          color: Colors.white, fontSize: 30, fontWeight: FontWeight.w700
+        ),),
       ),
       body: PageView(
         controller: controller,

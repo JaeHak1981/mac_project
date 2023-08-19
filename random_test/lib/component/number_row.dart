@@ -7,14 +7,15 @@ class NumberRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-        children: numbers
-            .toString()
-            .split('')
-            .map((e) => Image.asset(
-          'asset/img/$e.png',
-          width: 50,
-          height: 70,
-        ))
-            .toList());
+      children: numbers
+          .toString()
+          .split('')
+          .map((e) => Image.asset(
+        'asset/img/$e.png',
+        width: 50,
+        height: 70,
+      ))
+          .toList(),
+    );
   }
 }
