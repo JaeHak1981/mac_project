@@ -11,13 +11,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   XFile? video;
-  TextStyle textStyle = const TextStyle(
-      color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: video == null ? renderVideoEmpty() : renderVideo(),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: getBoxDecoration(),
+        child: video == null ? renderVideoEmpty() : renderVideo(),
+      ),
     );
   }
 
@@ -31,32 +33,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget renderVideoEmpty() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      decoration: getBoxDecoration(),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GestureDetector(
-              onTap: onNewVideo, child: Image.asset('asset/img/logo.png')),
-          const SizedBox(
-            height: 30,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'VIDEO',
-                style: textStyle,
-              ),
-              Text(
-                'PLAYER',
-                style: textStyle.copyWith(fontWeight: FontWeight.w700),
-              )
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _Logo(onNewVideo: onNewVideo),
+        const SizedBox(
+          height: 30,
+        ),
+        const _AppName(),
+      ],
     );
   }
 
@@ -76,5 +61,41 @@ class _HomeScreenState extends State<HomeScreen> {
           Color(0xFF2A3A7C),
           Color(0xFF000118),
         ]));
+  }
+}
+
+class _Logo extends StatelessWidget {
+  final VoidCallback onNewVideo;
+
+  const _Logo({required this.onNewVideo, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: onNewVideo, child: Image.asset('asset/img/logo.png'));
+  }
+}
+
+class _AppName extends StatelessWidget {
+  const _AppName({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    TextStyle textStyle = const TextStyle(
+        color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'VIDEO',
+          style: textStyle,
+        ),
+        Text(
+          'PLAYER',
+          style: textStyle.copyWith(fontWeight: FontWeight.w700),
+        )
+      ],
+    );
   }
 }
