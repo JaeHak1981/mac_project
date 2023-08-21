@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,13 +12,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool checkDone = false;
+  bool choolCheckDone = false;
   GoogleMapController? mapController;
   static final LatLng companyLatLng = LatLng(35.805720, 127.1201237);
   static final CameraPosition initialPosition =
       CameraPosition(target: companyLatLng, zoom: 15);
 
   static final double okDistance = 100;
+
   static final Circle withinCircle = Circle(
     circleId: CircleId('withinCircle'),
     center: companyLatLng,
@@ -38,14 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
     center: companyLatLng,
     radius: okDistance,
     fillColor: Colors.green.withOpacity(0.5),
-    strokeColor: Colors.red,
+    strokeColor: Colors.green,
     strokeWidth: 1,
   );
 
-  static final Marker marker = Marker(
-    markerId: MarkerId('marker'),
-    position: companyLatLng,
-  );
+  static final Marker marker =
+      Marker(markerId: MarkerId('marker'), position: companyLatLng);
 
   @override
   Widget build(BuildContext context) {
@@ -55,68 +56,72 @@ class _HomeScreenState extends State<HomeScreen> {
           future: checkPermission(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
+              return Center(
                 child: CircularProgressIndicator(),
               );
             }
+
             if (snapshot.data == '위치 서비스가 허가되었습니다') {
               return StreamBuilder<Position>(
                   stream: Geolocator.getPositionStream(),
                   builder: (context, snapshot) {
-                    bool isWithinRange = false;
+                    bool withinRange = false;
+
                     if (snapshot.hasData) {
                       final start = snapshot.data!;
                       final end = companyLatLng;
+
                       final distance = Geolocator.distanceBetween(
                         start.latitude,
                         start.longitude,
                         end.latitude,
                         end.longitude,
                       );
+
                       if (distance < okDistance) {
-                        isWithinRange = true;
+                        withinRange = true;
                       }
                     }
 
                     return Column(
                       children: [
-                        _CustomGoogleMap(
-                          initialPosition: initialPosition,
-                          circle: checkDone
-                              ? checkDoneCircle
-                              : isWithinRange
-                                  ? withinCircle
-                                  : notWithinCircle,
-                          marker: marker,
-                          onMapCreated: onMapCreated,
-                        ),
+                        _GoogleMap(
+                            initialPosition: initialPosition,
+                            circle: choolCheckDone
+                                ? checkDoneCircle
+                                : withinRange
+                                    ? withinCircle
+                                    : notWithinCircle,
+                            marker: marker,
+                            onMapCreated: onMapCreated),
                         _ChoolCheckButton(
-                          isWithinRange: isWithinRange,
-                          onPressed: onChoolCheckButton,
-                          checkDone: checkDone,
+                          withinCircle: withinRange,
+                          onPressed: onChoolCheckPressed,
+                          choolCheckDone: choolCheckDone,
                         ),
                       ],
                     );
                   });
             }
+
             return Text(snapshot.data);
           }),
     );
   }
 
-  onChoolCheckButton() async {
+  void onChoolCheckPressed() async {
     final result = await showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('출근하기'),
-            content: Text('출근하시겠습니까?'),
+            title: Text('Go to work'),
+            content: Text('Do you go to work'),
             actions: [
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
-                  child: Text('Cance')),
+                  child: Text('Cancel')),
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(true);
@@ -125,11 +130,45 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           );
         });
+
     if (result) {
       setState(() {
-        checkDone = true;
+        choolCheckDone = true;
       });
     }
+  }
+
+  void onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  AppBar renderAppBar() {
+    return AppBar(
+      centerTitle: true,
+      title: Text(
+        'Go to Work',
+        style: TextStyle(
+            color: Colors.white, fontSize: 30, fontWeight: FontWeight.w700),
+      ),
+      actions: [
+        IconButton(
+            onPressed: () async {
+              if (mapController == null) {
+                return;
+              }
+
+              final location = await Geolocator.getCurrentPosition();
+
+              mapController!.animateCamera(CameraUpdate.newLatLng(
+                  LatLng(location.latitude, location.longitude)));
+            },
+            icon: Icon(
+              Icons.my_location,
+              color: Colors.white,
+              size: 40,
+            ))
+      ],
+    );
   }
 
   Future<String> checkPermission() async {
@@ -137,56 +176,32 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!isLocationEnabled) {
       return '위치 서비스를 허가해주세요';
     }
+
     LocationPermission checkPermission = await Geolocator.checkPermission();
     if (checkPermission == LocationPermission.denied) {
       checkPermission = await Geolocator.requestPermission();
     }
+
     if (checkPermission == LocationPermission.denied) {
       return '위치 서비스를 허가해주세요';
     }
+
     if (checkPermission == LocationPermission.deniedForever) {
       return '설정에서 위치 서비스를 허가해주세요';
     }
+
     return '위치 서비스가 허가되었습니다';
-  }
-
-  onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
-  AppBar renderAppBar() {
-    return AppBar(
-      title: const Text('오늘도 출근',
-          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w700)),
-      centerTitle: true,
-      backgroundColor: Colors.white,
-      actions: [
-        IconButton(
-            onPressed: () async {
-              if (mapController == null) {
-                return;
-              }
-              final location = await Geolocator.getCurrentPosition();
-              mapController!.animateCamera(CameraUpdate.newLatLng(
-                  LatLng(location.latitude, location.longitude)));
-            },
-            icon: const Icon(
-              Icons.my_location,
-              color: Colors.blue,
-            ))
-      ],
-    );
   }
 }
 
-class _CustomGoogleMap extends StatelessWidget {
+class _GoogleMap extends StatelessWidget {
   final CameraPosition initialPosition;
-  final Circle circle;
 
   final Marker marker;
+  final Circle circle;
   final MapCreatedCallback onMapCreated;
 
-  const _CustomGoogleMap(
+  const _GoogleMap(
       {required this.initialPosition,
       required this.circle,
       required this.marker,
@@ -203,22 +218,22 @@ class _CustomGoogleMap extends StatelessWidget {
         myLocationButtonEnabled: false,
         myLocationEnabled: true,
         onMapCreated: onMapCreated,
-        circles: Set.from([circle]),
         markers: Set.from([marker]),
+        circles: Set.from([circle]),
       ),
     );
   }
 }
 
 class _ChoolCheckButton extends StatelessWidget {
-  final bool isWithinRange;
+  final bool withinCircle;
   final VoidCallback onPressed;
-  final bool checkDone;
+  final bool choolCheckDone;
 
   const _ChoolCheckButton({
-    required this.isWithinRange,
+    required this.withinCircle,
     required this.onPressed,
-    required this.checkDone,
+    required this.choolCheckDone,
     super.key,
   });
 
@@ -230,21 +245,21 @@ class _ChoolCheckButton extends StatelessWidget {
       children: [
         Icon(
           Icons.timelapse,
-          color: checkDone
+          color: choolCheckDone
               ? Colors.green
-              : isWithinRange
+              : withinCircle
                   ? Colors.blue
                   : Colors.red,
-          size: 40,
+          size: 50,
         ),
-        const SizedBox(
+        SizedBox(
           height: 30,
         ),
-        if (!checkDone && isWithinRange)
+        if (!choolCheckDone && withinCircle)
           TextButton(
               onPressed: onPressed,
-              child: const Text(
-                'Chool Check',
+              child: Text(
+                'Go to work',
                 style: TextStyle(
                     color: Colors.blue,
                     fontSize: 40,
