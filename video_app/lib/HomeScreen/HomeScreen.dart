@@ -16,7 +16,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        width: MediaQuery.of(context).size.width,
         decoration: getBoxDecoration(),
         child: video == null ? renderVideoEmpty() : renderVideo(),
       ),
@@ -36,7 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _Logo(onNewVideo: onNewVideo),
+        _Logo(
+          onPressed: onNewVideo,
+        ),
         const SizedBox(
           height: 30,
         ),
@@ -65,14 +66,17 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _Logo extends StatelessWidget {
-  final VoidCallback onNewVideo;
+  final VoidCallback onPressed;
 
-  const _Logo({required this.onNewVideo, super.key});
+  const _Logo({
+    required this.onPressed,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: onNewVideo, child: Image.asset('asset/img/logo.png'));
+        onTap: onPressed, child: Image.asset('asset/img/logo.png'));
   }
 }
 
@@ -83,7 +87,6 @@ class _AppName extends StatelessWidget {
   Widget build(BuildContext context) {
     TextStyle textStyle = const TextStyle(
         color: Colors.white, fontSize: 30, fontWeight: FontWeight.w300);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

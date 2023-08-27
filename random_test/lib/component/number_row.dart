@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class NumberRow extends StatelessWidget {
   final int numbers;
-  const NumberRow({required this.numbers, super.key});
+  const NumberRow({
+    required this.numbers,
+    super.key});
 
   @override
   Widget build(BuildContext context) {

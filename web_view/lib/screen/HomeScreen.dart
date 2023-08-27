@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-final homeUrl = Uri.parse(
+Uri homeUrl = Uri.parse(
     'https://bubbly-cause-fb4.notion.site/Class-c3284153a2074e9fa8423c193cba40bf?pvs=4');
 
 class HomeScreen extends StatelessWidget {
@@ -12,28 +12,21 @@ class HomeScreen extends StatelessWidget {
     WebViewController controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(homeUrl);
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Test Page',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-          ),
+        title: Text(
+          'HomePage',
+          style: TextStyle(fontSize: 30),
         ),
+        centerTitle: true,
         actions: [
           IconButton(
               onPressed: () {
                 controller.loadRequest(homeUrl);
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.home,
-                size: 30,
-                color: Colors.red
-
-                ,
+                size: 40,
               ))
         ],
       ),
