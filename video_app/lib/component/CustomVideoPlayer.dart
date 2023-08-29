@@ -62,7 +62,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     return AspectRatio(
         aspectRatio: videoController!.value.aspectRatio,
         child: GestureDetector(
-          onTap: (){
+          onTap: () {
             setState(() {
               showControls = !showControls;
             });
@@ -79,20 +79,46 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                 ),
               if (showControls)
                 _NewVideo(
-                  onNewVideo: widget.onNewVideo,
+                  onNewVideoPressed: widget.onNewVideo,
                 ),
-              _SliderButton(
-                currentPosition: currentPosition,
-                maxPosition: videoController!.value.duration,
-                onPressed: onSliderPressed,
-              ),
+              Positioned(
+                right: 0,
+                left: 0,
+                bottom: 0,
+                child: Row(
+                  children: [
+                    Text(
+                      '${videoController!.value.position.inMinutes}:${(videoController!.value.position.inSeconds % 60).toString().padLeft(2, '0')}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
+                    ),
+                    Expanded(
+                      child: Slider(
+                          min: 0,
+                          max: videoController!.value.duration.inSeconds
+                              .toDouble(),
+                          value: videoController!.value.position.inSeconds
+                              .toDouble(),
+                          onChanged: (double val) {
+                            videoController!
+                                .seekTo(Duration(seconds: val.toInt()));
+                          }),
+                    ),
+                    Text(
+                      '${videoController!.value.duration.inMinutes}:${(videoController!.value.duration.inSeconds % 60).toString().padLeft(2, '0')}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ));
-  }
-
-  void onSliderPressed(double val) {
-    videoController!.seekTo(Duration(seconds: val.toInt()));
   }
 
   void onPlayPressed() {
@@ -142,94 +168,56 @@ class _Controls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.black.withOpacity(0.5),
       height: MediaQuery.of(context).size.height,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           renderIconButton(
-              onPressed: onReversePressed, iconData: Icons.rotate_left),
+            onPressed: onReversePressed,
+            iconData: Icons.rotate_left,
+          ),
           renderIconButton(
-              onPressed: onPlayPressed,
-              iconData: isPlaying ? Icons.pause : Icons.play_arrow),
+            onPressed: onPlayPressed,
+            iconData: isPlaying ? Icons.pause : Icons.play_arrow,
+          ),
           renderIconButton(
-              onPressed: onForwardPressed, iconData: Icons.rotate_right),
+            onPressed: onForwardPressed,
+            iconData: Icons.rotate_right,
+          ),
         ],
       ),
     );
   }
 
-  Widget renderIconButton({
-    required VoidCallback onPressed,
-    required IconData iconData,
-  }) {
+  Widget renderIconButton(
+      {required VoidCallback onPressed, required IconData iconData}) {
     return IconButton(
         onPressed: onPressed,
         icon: Icon(
           iconData,
           color: Colors.white,
-          size: 30,
+          size: 35,
         ));
   }
 }
 
 class _NewVideo extends StatelessWidget {
-  final VoidCallback onNewVideo;
+  final VoidCallback onNewVideoPressed;
 
-  const _NewVideo({required this.onNewVideo, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-        right: 0,
-        child: IconButton(
-            onPressed: onNewVideo,
-            icon: const Icon(
-              Icons.photo_camera_back,
-              color: Colors.white,
-              size: 30,
-            )));
-  }
-}
-
-class _SliderButton extends StatelessWidget {
-  final Duration currentPosition;
-  final Duration maxPosition;
-  final ValueChanged<double> onPressed;
-
-  const _SliderButton(
-      {required this.currentPosition,
-      required this.maxPosition,
-      required this.onPressed,
-      super.key});
+  const _NewVideo({required this.onNewVideoPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
       right: 0,
-      left: 0,
-      bottom: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Text(
-              '${currentPosition.inMinutes}:${(currentPosition.inSeconds % 60).toString().padLeft(2, '0')}',
-              style: const TextStyle(color: Colors.white, fontSize: 30),
-            ),
-            Expanded(
-              child: Slider(
-                  min: 0,
-                  max: maxPosition.inSeconds.toDouble(),
-                  value: currentPosition.inSeconds.toDouble(),
-                  onChanged: onPressed),
-            ),
-            Text(
-              '${maxPosition.inMinutes}:${(maxPosition.inSeconds % 60).toString().padLeft(2, '0')}',
-              style: const TextStyle(color: Colors.white, fontSize: 30),
-            ),
-          ],
-        ),
-      ),
+      child: IconButton(
+          onPressed: onNewVideoPressed,
+          icon: const Icon(
+            Icons.photo_camera_back,
+            color: Colors.white,
+            size: 30,
+          )),
     );
   }
 }

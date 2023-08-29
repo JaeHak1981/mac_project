@@ -16,7 +16,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: getBoxDecoration(),
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+              Color(0xFF2A3A7C),
+              Color(0xFF000118),
+            ])),
         child: video == null ? renderVideoEmpty() : renderVideo(),
       ),
     );
@@ -52,26 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
       this.video = video;
     });
   }
-
-  BoxDecoration getBoxDecoration() {
-    return const BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-          Color(0xFF2A3A7C),
-          Color(0xFF000118),
-        ]));
-  }
 }
 
 class _Logo extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const _Logo({
-    required this.onPressed,
-    super.key,
-  });
+  const _Logo({required this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
