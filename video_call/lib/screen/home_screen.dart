@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blue[100],
       body: SafeArea(
+        child: Container(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(12.0),
             child: Column(
-        children: [
-            Expanded(child: _Logo()),
-            Expanded(child: _Image()),
-            Expanded(child: _Button()),
-        ],
+              children: [
+                Expanded(child: _Logo()),
+                Expanded(child: _Image()),
+                Expanded(child: _Button()),
+              ],
+            ),
+          ),
+        ),
       ),
-          )),
     );
   }
 }
@@ -31,31 +39,28 @@ class _Logo extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.blue,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.blue[300]!,
-                blurRadius: 12,
-                spreadRadius: 5,
-              )
-            ]),
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [BoxShadow(blurRadius: 12, spreadRadius: 15, color: Colors.blue[300])]),
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(12.0),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 Icons.videocam,
-                size: 40,
                 color: Colors.white,
+                size: 50,
               ),
               SizedBox(
-                width: 20,
+                width: 30,
               ),
               Text(
                 'LIVE',
                 style: TextStyle(
-                    color: Colors.white, fontSize: 30, letterSpacing: 10),
+                    color: Colors.white,
+                    fontSize: 30,
+                    letterSpacing: 10,
+                    fontWeight: FontWeight.w700),
               )
             ],
           ),
@@ -70,9 +75,7 @@ class _Image extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Image.asset('asset/img/home_img.png'),
-    );
+    return Image.asset('asset/img/home_img.png');
   }
 }
 
@@ -82,12 +85,16 @@ class _Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          ElevatedButton(onPressed: (){}, child: Text('Enter', style: TextStyle(fontSize: 30),),),
+          ElevatedButton(
+              onPressed: () {},
+              child: Text(
+                'ENTER',
+                style: TextStyle(fontSize: 40),
+              )),
         ],
       ),
     );
