@@ -12,13 +12,13 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  int startNumbers = 1000;
+  int numbers = 1000;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    startNumbers = widget.numbers;
+    numbers = widget.numbers;
   }
 
   @override
@@ -29,43 +29,52 @@ class _SettingScreenState extends State<SettingScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            _Header(startNumbers: startNumbers),
-            _Body(startNumbers: startNumbers, onSliderPressed: onSliderPressed)
+            _TapPart(numbers: numbers),
+            _Body(
+              numbers: numbers,
+              onChangedPressed: onChangedPressed,
+              onPressed: onSavePressed,
+            )
           ],
         ),
       ),
     );
   }
 
-  void onSliderPressed(double val) {
+  void onChangedPressed(double val) {
     setState(() {
-      startNumbers = val.toInt();
+      numbers = val.toInt();
     });
+  }
+
+  void onSavePressed() {
+    Navigator.of(context).pop<int>(numbers);
   }
 }
 
-class _Header extends StatelessWidget {
-  final int startNumbers;
+class _TapPart extends StatelessWidget {
+  final int numbers;
 
-  const _Header({required this.startNumbers, super.key});
+  const _TapPart({required this.numbers, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: NumberRow(numbers: startNumbers),
+      child: NumberRow(numbers: numbers),
     );
   }
 }
 
 class _Body extends StatelessWidget {
-  final int startNumbers;
-  final ValueChanged<double>? onSliderPressed;
+  final int numbers;
+  final ValueChanged<double>? onChangedPressed;
+  final VoidCallback onPressed;
 
-  const _Body({
-    required this.startNumbers,
-    required this.onSliderPressed,
-    super.key,
-  });
+  const _Body(
+      {required this.numbers,
+      required this.onChangedPressed,
+      required this.onPressed,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -73,19 +82,20 @@ class _Body extends StatelessWidget {
       children: [
         Slider(
             min: 1000,
-            max: 10000,
-            value: startNumbers.toDouble(),
-            onChanged: onSliderPressed),
+            max: 100000,
+            value: numbers.toDouble(),
+            onChanged: onChangedPressed),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: redColor),
-              onPressed: () {
-                Navigator.of(context).pop<int>(startNumbers);
-              },
+              onPressed: onPressed,
               child: const Text(
                 'SAVE',
-                style: TextStyle(color: Colors.white, fontSize: 35),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 40,
+                ),
               )),
         )
       ],

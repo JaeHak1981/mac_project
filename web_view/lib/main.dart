@@ -5,8 +5,6 @@ import 'package:web_view_project/screen/HomeScreen.dart';
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    MaterialApp(
-      home: HomeScreen(),
-    )
+    MaterialApp(home: HomeScreen(),)
   );
 }
