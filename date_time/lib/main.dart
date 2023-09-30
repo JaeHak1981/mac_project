@@ -6,18 +6,12 @@ void main() {
   runApp(MaterialApp(
     home: HomeScreen(),
     theme: ThemeData(
-        fontFamily: 'sunflower',
-        textTheme: const TextTheme(
-            headlineLarge: TextStyle(
-                color: Colors.white,
-                fontSize: 60,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'parisienne'),
-            headlineMedium: TextStyle(
-                color: Colors.white, fontSize: 40, fontWeight: FontWeight.w400),
-            headlineSmall: TextStyle(
-                color: Colors.white,
-                fontSize: 40,
-                fontWeight: FontWeight.w400))),
+      fontFamily: 'sunflower',
+      textTheme: const TextTheme(
+        headlineLarge: TextStyle(color: Colors.white, fontSize: 60, fontWeight: FontWeight.w700, fontFamily: 'parisienne'),
+        headlineMedium: TextStyle(color: Colors.white, fontSize: 45),
+        headlineSmall: TextStyle(color: Colors.white, fontSize: 45),
+      ),
+    ),
   ));
 }
