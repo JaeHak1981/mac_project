@@ -22,18 +22,18 @@ class ScheduleCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(color: PRIMARY_COLOR, width: 1)),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          padding: const EdgeInsets.all(16),
           child: IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _Time(startTime: startTime, endTime: endTime),
-                SizedBox(width: 10),
+                SizedBox(width: 16),
                 _Content(content: content),
-                SizedBox(width: 10),
+                SizedBox(width: 16),
                 _Category(color: color),
               ],
             ),
@@ -59,14 +59,15 @@ class _Time extends StatelessWidget {
     final textStyle = TextStyle(
         color: PRIMARY_COLOR, fontWeight: FontWeight.w600, fontSize: 16);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '${startTime.toString().padLeft(2, '0')}:00',
-          style: textStyle.copyWith(fontWeight: FontWeight.w700),
+          style: textStyle,
         ),
         Text(
           '${endTime.toString().padLeft(2, '0')}:00',
-          style: textStyle,
+          style: textStyle.copyWith(fontSize: 10),
         )
       ],
     );
@@ -83,11 +84,7 @@ class _Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Text(
-      '$content',
-      style: TextStyle(fontSize: 20),
-    ));
+    return Expanded(child: Text(content));
   }
 }
 
