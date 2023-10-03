@@ -14,15 +14,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   DateTime selectedDay = DateTime(
-    DateTime
-        .now()
-        .year,
-    DateTime
-        .now()
-        .month,
-    DateTime
-        .now()
-        .day,
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
   );
   DateTime focusedDay = DateTime.now();
 
@@ -34,16 +28,14 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Calendar(
-              onDaySelected: onDaySelected,
               selectedDay: selectedDay,
               focusedDay: focusedDay,
+              onDaySelected: onDaySelected,
             ),
-            SizedBox(height: 8),
-            TodayBanner(
-              selectedDay: selectedDay,
-              scheduleCount: 3,
+            TodayBanner(selectedDay: selectedDay, scheduleCount: 3),
+            SizedBox(
+              height: 8,
             ),
-            SizedBox(height: 8),
             _ScheduleList(),
           ],
         ),
@@ -55,12 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return FloatingActionButton(
       onPressed: () {
         showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          builder: (_) {
-            return ScheduleBottomSheet();
-          },
-        );
+            context: context,
+            isScrollControlled: true,
+            builder: (_) {
+              return ScheduleBottomSheet();
+            });
       },
       backgroundColor: PRIMARY_COLOR,
       child: Icon(
@@ -83,25 +74,21 @@ class _ScheduleList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: ListView.separated(
-          itemBuilder: (context, index) {
-            return ScheduleCard(
-              startTime: 9,
-              endTime: 11,
-              content: 'Program Study',
-              scheduleCount: 3,
-              color: Colors.red,
-            );
-          },
-          separatorBuilder: (context, index) {
-            return SizedBox(
-              height: 8,
-            );
-          },
-          itemCount: 10,
-        ),
+      child: ListView.separated(
+        itemBuilder: (context, index) {
+          return ScheduleCard(
+            startTime: 8,
+            endTime: 9,
+            content: 'Program Study $index',
+            color: Colors.red,
+          );
+        },
+        separatorBuilder: (context, index) {
+          return SizedBox(
+            height: 2,
+          );
+        },
+        itemCount: 20,
       ),
     );
   }

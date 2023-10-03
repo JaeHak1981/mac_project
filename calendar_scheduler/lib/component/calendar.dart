@@ -14,6 +14,7 @@ class Calendar extends StatelessWidget {
     super.key,
   });
 
+
   @override
   Widget build(BuildContext context) {
     final defaultBoxDeco = BoxDecoration(
@@ -23,26 +24,32 @@ class Calendar extends StatelessWidget {
     final defaultTextStyle =
         TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w600);
     return TableCalendar(
-      locale: 'KO_KR',
+      locale: 'ko_KR',
       focusedDay: focusedDay,
       firstDay: DateTime(1800),
       lastDay: DateTime(3000),
-      headerStyle: const HeaderStyle(
-          formatButtonVisible: false,
-          titleCentered: true,
-          titleTextStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 25)),
+      headerStyle: HeaderStyle(
+        formatButtonVisible: false,
+        titleCentered: true,
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 20,
+        ),
+      ),
       calendarStyle: CalendarStyle(
-          isTodayHighlighted: false,
-          defaultDecoration: defaultBoxDeco,
-          weekendDecoration: defaultBoxDeco,
-          outsideDecoration: BoxDecoration(shape: BoxShape.rectangle),
-          selectedDecoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: PRIMARY_COLOR, width: 2)),
-          disabledTextStyle: defaultTextStyle,
-          weekendTextStyle: defaultTextStyle,
-          selectedTextStyle: defaultTextStyle.copyWith(color: PRIMARY_COLOR)),
+        isTodayHighlighted: false,
+        defaultDecoration: defaultBoxDeco,
+        weekendDecoration: defaultBoxDeco,
+        outsideDecoration: BoxDecoration(shape: BoxShape.rectangle),
+        selectedDecoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: PRIMARY_COLOR, width: 1),
+        ),
+        defaultTextStyle: defaultTextStyle,
+        weekendTextStyle: defaultTextStyle,
+        selectedTextStyle: defaultTextStyle.copyWith(color: PRIMARY_COLOR),
+      ),
       onDaySelected: onDaySelected,
       selectedDayPredicate: (DateTime date) {
         if (selectedDay == null) {

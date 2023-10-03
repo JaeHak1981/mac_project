@@ -3,13 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-void main() async {
+void main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting();
-  runApp(MaterialApp(
-    home: HomeScreen(),
-    theme: ThemeData(
-      fontFamily: 'NotoSans'
-    ),
-  ));
+  runApp(
+    MaterialApp(
+      home: HomeScreen(),
+      theme: ThemeData(
+        fontFamily: 'NotoScan'
+      ),
+    )
+  );
 }

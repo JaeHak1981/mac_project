@@ -5,35 +5,35 @@ class ScheduleCard extends StatelessWidget {
   final int startTime;
   final int endTime;
   final String content;
-  final int scheduleCount;
   final Color color;
 
   const ScheduleCard(
       {required this.startTime,
       required this.endTime,
       required this.content,
-      required this.scheduleCount,
       required this.color,
       super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: PRIMARY_COLOR, width: 1)),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: IntrinsicHeight(
+          border: Border.all(color: PRIMARY_COLOR),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: IntrinsicHeight(
+          child: Padding(
+            padding:  EdgeInsets.all(8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _Time(startTime: startTime, endTime: endTime),
-                SizedBox(width: 16),
+                SizedBox(
+                  width: 10,
+                ),
                 _Content(content: content),
-                SizedBox(width: 16),
                 _Category(color: color),
               ],
             ),
@@ -57,9 +57,10 @@ class _Time extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = TextStyle(
-        color: PRIMARY_COLOR, fontWeight: FontWeight.w600, fontSize: 16);
+      color: PRIMARY_COLOR,
+      fontWeight: FontWeight.w700,
+    );
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '${startTime.toString().padLeft(2, '0')}:00',
@@ -67,8 +68,8 @@ class _Time extends StatelessWidget {
         ),
         Text(
           '${endTime.toString().padLeft(2, '0')}:00',
-          style: textStyle.copyWith(fontSize: 10),
-        )
+          style: textStyle.copyWith(fontWeight: FontWeight.w500),
+        ),
       ],
     );
   }
@@ -101,7 +102,10 @@ class _Category extends StatelessWidget {
     return Container(
       width: 16,
       height: 16,
-      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+      ),
     );
   }
 }

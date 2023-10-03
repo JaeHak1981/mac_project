@@ -6,8 +6,8 @@ class TodayBanner extends StatelessWidget {
   final int scheduleCount;
 
   const TodayBanner({
-    required this.scheduleCount,
     required this.selectedDay,
+    required this.scheduleCount,
     super.key,
   });
 
@@ -15,22 +15,29 @@ class TodayBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final textStyle = TextStyle(
       color: Colors.white,
-      fontSize: 20,
+      fontWeight: FontWeight.w700,
+      fontSize: 18
     );
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(horizontal: 8),
       child: Container(
         decoration: BoxDecoration(
-          color: PRIMARY_COLOR
+          color: PRIMARY_COLOR,
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          padding:  EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('${selectedDay.year}년 ${selectedDay.month}월 ${selectedDay.day}일', style: textStyle,),
-
-              Text('$scheduleCount개', style: textStyle,),
+              Text(
+                '${selectedDay.year}년 ${selectedDay.month}월 ${selectedDay.day}일',
+                style: textStyle,
+              ),
+              Text(
+                '$scheduleCount개',
+                style: textStyle.copyWith(fontWeight: FontWeight.w500),
+              )
             ],
           ),
         ),
