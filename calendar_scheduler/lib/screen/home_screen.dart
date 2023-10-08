@@ -25,21 +25,19 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButton: renderFloatingActionButton(),
       body: SafeArea(
-        child: Column(
-          children: [
-            Calendar(
-              selectedDay: selectedDay,
-              focusedDay: focusedDay,
-              onDaySelected: onDaySelected,
-            ),
-            TodayBanner(selectedDay: selectedDay, scheduleCount: 3),
-            SizedBox(
-              height: 8,
-            ),
-            _ScheduleList(),
-          ],
-        ),
-      ),
+          child: Column(
+        children: [
+          Calendar(
+            selectedDay: selectedDay,
+            focusedDay: focusedDay,
+            onDaySelected: onDaySelected,
+          ),
+          const SizedBox(height: 6),
+          TodayBanner(selectedDay: selectedDay, scheduleCount: 3),
+          const SizedBox(height: 8),
+          _ScheduleList(),
+        ],
+      )),
     );
   }
 
@@ -54,9 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
             });
       },
       backgroundColor: PRIMARY_COLOR,
-      child: Icon(
-        Icons.add,
-      ),
+      child: Icon(Icons.add),
     );
   }
 
@@ -84,9 +80,7 @@ class _ScheduleList extends StatelessWidget {
           );
         },
         separatorBuilder: (context, index) {
-          return SizedBox(
-            height: 2,
-          );
+          return const SizedBox(height: 8);
         },
         itemCount: 20,
       ),

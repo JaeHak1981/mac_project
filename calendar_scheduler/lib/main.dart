@@ -10,7 +10,7 @@ void main()async{
     MaterialApp(
       home: HomeScreen(),
       theme: ThemeData(
-        fontFamily: 'NotoScan'
+        fontFamily: 'NotoSans'
       ),
     )
   );

@@ -10,20 +10,19 @@ class ScheduleBottomSheet extends StatelessWidget {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     return Container(
       height: MediaQuery.of(context).size.height / 2 + bottomInset,
-      color: Colors.white,
       child: Padding(
         padding: EdgeInsets.only(bottom: bottomInset),
         child: Padding(
-          padding: EdgeInsets.only(left: 8, right: 8, top: 16),
+          padding: EdgeInsets.only(left: 8, right: 8, top: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _Time(),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               _Content(),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               _ColorPicker(),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               _SaveButton(),
             ],
           ),
@@ -40,15 +39,9 @@ class _Time extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-            child: CustomTextField(
-          label: 'start Time',
-        )),
-        SizedBox(width: 16),
-        Expanded(
-            child: CustomTextField(
-          label: 'end Time',
-        )),
+        Expanded(child: CustomTextField(label: 'Start Time')),
+        const SizedBox(width: 16),
+        Expanded(child: CustomTextField(label: 'End Time')),
       ],
     );
   }
@@ -59,9 +52,7 @@ class _Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomTextField(
-      label: 'Content',
-    );
+    return CustomTextField(label: 'Content');
   }
 }
 
@@ -79,16 +70,14 @@ class _ColorPicker extends StatelessWidget {
         renderColor(Colors.green),
         renderColor(Colors.indigo),
         renderColor(Colors.purple),
-        renderColor(Colors.grey),
-        renderColor(Colors.blue),
       ],
     );
   }
 
   Widget renderColor(Color color) {
     return Container(
-      width: 32,
       height: 32,
+      width: 32,
       decoration: BoxDecoration(shape: BoxShape.circle, color: color),
     );
   }
@@ -102,13 +91,14 @@ class _SaveButton extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-            child: ElevatedButton(
-          onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: PRIMARY_COLOR,
-              ),
-          child: Text("SAVE"),
-        )),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: PRIMARY_COLOR
+            ),
+            onPressed: () {},
+            child: Text('SAVE'),
+          ),
+        ),
       ],
     );
   }

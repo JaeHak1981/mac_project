@@ -16,30 +16,23 @@ class TodayBanner extends StatelessWidget {
     final textStyle = TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.w700,
-      fontSize: 18
     );
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8),
-      child: Container(
-        decoration: BoxDecoration(
-          color: PRIMARY_COLOR,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '${selectedDay.year}년 ${selectedDay.month}월 ${selectedDay.day}일',
-                style: textStyle,
-              ),
-              Text(
-                '$scheduleCount개',
-                style: textStyle.copyWith(fontWeight: FontWeight.w500),
-              )
-            ],
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        color: PRIMARY_COLOR,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding:  EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '${selectedDay.year}년 ${selectedDay.month}월 ${selectedDay.day}일',
+              style: textStyle,
+            ),
+            Text('$scheduleCount개',style: textStyle,)
+          ],
         ),
       ),
     );

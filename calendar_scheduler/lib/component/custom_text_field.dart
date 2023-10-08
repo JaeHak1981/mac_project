@@ -14,11 +14,11 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style:
-          TextStyle(
-            color: PRIMARY_COLOR,
-            fontWeight: FontWeight.w600
-          ),),
+        Text(label,
+        style: TextStyle(
+          color: PRIMARY_COLOR,
+          fontWeight: FontWeight.w700,
+        ),),
         TextField(
           cursorColor: Colors.grey,
           decoration: InputDecoration(
