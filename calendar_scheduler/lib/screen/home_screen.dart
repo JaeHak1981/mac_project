@@ -23,25 +23,28 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: renderFloatingActionButton(),
+      floatingActionButton: floatingActionButton(),
       body: SafeArea(
-          child: Column(
-        children: [
-          Calendar(
-            selectedDay: selectedDay,
-            focusedDay: focusedDay,
-            onDaySelected: onDaySelected,
-          ),
-          const SizedBox(height: 6),
-          TodayBanner(selectedDay: selectedDay, scheduleCount: 3),
-          const SizedBox(height: 8),
-          _ScheduleList(),
-        ],
-      )),
+        child: Column(
+          children: [
+            Calendar(
+              selectedDay: selectedDay,
+              focusedDay: focusedDay,
+              onDaySelected: onDaySelected,
+            ),
+            TodayBanner(
+              selectedDay: selectedDay,
+              scheduleCount: 3,
+            ),
+            const SizedBox(height: 8),
+            ScheduleList(),
+          ],
+        ),
+      ),
     );
   }
 
-  FloatingActionButton renderFloatingActionButton() {
+  Widget floatingActionButton() {
     return FloatingActionButton(
       onPressed: () {
         showModalBottomSheet(
@@ -52,7 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
             });
       },
       backgroundColor: PRIMARY_COLOR,
-      child: Icon(Icons.add),
+      child: Icon(
+        Icons.add,
+      ),
     );
   }
 
@@ -64,8 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class _ScheduleList extends StatelessWidget {
-  const _ScheduleList({super.key});
+class ScheduleList extends StatelessWidget {
+  const ScheduleList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,14 +80,14 @@ class _ScheduleList extends StatelessWidget {
           return ScheduleCard(
             startTime: 8,
             endTime: 9,
-            content: 'Program Study $index',
+            content: 'Program study $index',
             color: Colors.red,
           );
         },
         separatorBuilder: (context, index) {
-          return const SizedBox(height: 8);
+          return SizedBox(height: 8);
         },
-        itemCount: 20,
+        itemCount: 30,
       ),
     );
   }

@@ -13,9 +13,10 @@ class TodayBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = TextStyle(
+    TextStyle textStyle = const TextStyle(
       color: Colors.white,
-      fontWeight: FontWeight.w700,
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
     );
     return Container(
       decoration: BoxDecoration(
@@ -23,7 +24,7 @@ class TodayBanner extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -31,7 +32,10 @@ class TodayBanner extends StatelessWidget {
               '${selectedDay.year}년 ${selectedDay.month}월 ${selectedDay.day}일',
               style: textStyle,
             ),
-            Text('$scheduleCount개',style: textStyle,)
+            Text(
+              '${scheduleCount}개',
+              style: textStyle,
+            ),
           ],
         ),
       ),

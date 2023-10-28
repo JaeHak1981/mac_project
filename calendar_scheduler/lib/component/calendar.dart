@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Calendar extends StatelessWidget {
-  final DateTime selectedDay;
+  final DateTime? selectedDay;
   final DateTime focusedDay;
-  final OnDaySelected? onDaySelected;
+  final OnDaySelected onDaySelected;
 
   const Calendar(
       {required this.selectedDay,
@@ -15,33 +15,41 @@ class Calendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultBoxDeco = BoxDecoration(
-      color: Colors.grey[200],
+    final defaultBoxDeo = BoxDecoration(
+      color: Colors.grey[300],
       borderRadius: BorderRadius.circular(8),
     );
-    final defaultTextStyle = TextStyle(fontWeight: FontWeight.w700);
+    final defaultTextStyle = TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+    );
     return TableCalendar(
       locale: 'ko_KR',
       focusedDay: focusedDay,
       firstDay: DateTime(1800),
       lastDay: DateTime(3000),
       headerStyle: const HeaderStyle(
-          formatButtonVisible: false,
-          titleCentered: true,
-          titleTextStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 20)),
+        formatButtonVisible: false,
+        titleCentered: true,
+        titleTextStyle: TextStyle(
+          fontSize: 25,
+        ),
+      ),
       calendarStyle: CalendarStyle(
         isTodayHighlighted: false,
-        outsideDecoration: BoxDecoration(shape: BoxShape.rectangle),
-        defaultDecoration: defaultBoxDeco,
-        weekendDecoration: defaultBoxDeco,
-        selectedDecoration: BoxDecoration(
+        defaultDecoration: defaultBoxDeo,
+        weekendDecoration: defaultBoxDeo,
+        selectedDecoration: defaultBoxDeo.copyWith(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: PRIMARY_COLOR, width: 1),
+          border: Border.all(
+            width: 1,
+            color: PRIMARY_COLOR,
+          ),
         ),
-        selectedTextStyle: defaultTextStyle.copyWith(color: PRIMARY_COLOR),
+        outsideDecoration: BoxDecoration(shape: BoxShape.rectangle),
         defaultTextStyle: defaultTextStyle,
         weekendTextStyle: defaultTextStyle,
+        selectedTextStyle: defaultTextStyle.copyWith(color: PRIMARY_COLOR,),
       ),
       onDaySelected: onDaySelected,
       selectedDayPredicate: (DateTime date) {
