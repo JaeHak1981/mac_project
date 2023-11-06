@@ -4,6 +4,7 @@ import 'package:calendar_scheduler/component/schedule_bottom_sheet.dart';
 import 'package:calendar_scheduler/component/today_banner.dart';
 import 'package:calendar_scheduler/const/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,11 +14,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  DateTime selectedDay = DateTime(
-    DateTime.now().year,
-    DateTime.now().month,
-    DateTime.now().day,
-  );
+  DateTime selectedDay =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   DateTime focusedDay = DateTime.now();
 
   @override
@@ -32,11 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
               focusedDay: focusedDay,
               onDaySelected: onDaySelected,
             ),
-            TodayBanner(
-              selectedDay: selectedDay,
-              scheduleCount: 3,
-            ),
-            const SizedBox(height: 8),
+            TodayBanner(selectedDay: selectedDay, scheduleCount: 3),
             ScheduleList(),
           ],
         ),
@@ -44,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget floatingActionButton() {
+  FloatingActionButton floatingActionButton() {
     return FloatingActionButton(
       onPressed: () {
         showModalBottomSheet(
@@ -80,14 +74,14 @@ class ScheduleList extends StatelessWidget {
           return ScheduleCard(
             startTime: 8,
             endTime: 9,
-            content: 'Program study $index',
+            content: '프로그램 공부하기 $index',
             color: Colors.red,
           );
         },
         separatorBuilder: (context, index) {
           return SizedBox(height: 8);
         },
-        itemCount: 30,
+        itemCount: 60,
       ),
     );
   }

@@ -10,8 +10,8 @@ class ScheduleCard extends StatelessWidget {
   const ScheduleCard({
     required this.startTime,
     required this.endTime,
-    required this.color,
     required this.content,
+    required this.color,
     super.key,
   });
 
@@ -19,19 +19,23 @@ class ScheduleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: PRIMARY_COLOR),
+        border: Border.all(
+          color: PRIMARY_COLOR,
+          width: 1,
+        ),
       ),
-      child: IntrinsicHeight(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _Time(startTime: startTime, endTime: endTime),
-              const SizedBox(width: 10),
+              const SizedBox(
+                width: 20,
+              ),
               _Content(content: content),
-              _Category(color: color),
+              _CategoryColor(color: color),
             ],
           ),
         ),
@@ -52,9 +56,10 @@ class _Time extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = TextStyle(
+    TextStyle textStyle = const TextStyle(
       color: PRIMARY_COLOR,
-      fontSize: 20,
+      fontWeight: FontWeight.w700,
+      fontSize: 18,
     );
     return Column(
       children: [
@@ -64,7 +69,9 @@ class _Time extends StatelessWidget {
         ),
         Text(
           '${endTime.toString().padLeft(2, '0')}:00',
-          style: textStyle.copyWith(fontSize: 15),
+          style: textStyle.copyWith(
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );
@@ -84,25 +91,28 @@ class _Content extends StatelessWidget {
     return Expanded(
       child: Text(
         content,
-        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
       ),
     );
   }
 }
 
-class _Category extends StatelessWidget {
+class _CategoryColor extends StatelessWidget {
   final Color color;
 
-  const _Category({required this.color, super.key,});
+  const _CategoryColor({
+    required this.color,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 24,
-      height: 24,
+      width: 18,
+      height: 18,
       decoration: BoxDecoration(
+        color: color,
         shape: BoxShape.circle,
-          color:color
       ),
     );
   }

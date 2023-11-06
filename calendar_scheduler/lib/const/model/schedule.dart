@@ -1,9 +1,6 @@
 import 'package:drift/drift.dart';
 
-class Schedule extends Table {
-  //PRIMARY KEY
-  // id, content, date, statTime, endTime, colorId, createdAt,
-
+class Schedules extends Table {
   IntColumn get id => integer().autoIncrement()();
 
   TextColumn get content => text()();

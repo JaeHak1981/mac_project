@@ -19,27 +19,25 @@ class CustomTextField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            color: PRIMARY_COLOR,
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-          ),
+          style: const TextStyle(
+              color: PRIMARY_COLOR, fontWeight: FontWeight.w700, fontSize: 18),
         ),
-        if(isTime)renderTextField(),
-        if(!isTime)Expanded(child: renderTextField()),
+        if (isTime) renderTextField(),
+        if (!isTime) Expanded(child: renderTextField()),
       ],
     );
   }
 
   Widget renderTextField() {
-    return TextField(
+    return TextFormField(
+      validator: (String? val){
+        return null;
+
+      },
       expands: !isTime,
       maxLines: isTime ? 1 : null,
-
       keyboardType: isTime ? TextInputType.number : TextInputType.multiline,
-      inputFormatters: isTime ? [
-        FilteringTextInputFormatter.digitsOnly
-      ] : [],
+      inputFormatters: isTime ? [FilteringTextInputFormatter.digitsOnly] : [],
       cursorColor: Colors.grey,
       decoration: InputDecoration(
         filled: true,
@@ -48,6 +46,4 @@ class CustomTextField extends StatelessWidget {
       ),
     );
   }
-
 }
-
