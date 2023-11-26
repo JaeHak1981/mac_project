@@ -2,8 +2,15 @@ import 'package:calendar_scheduler/component/custom_text_field.dart';
 import 'package:calendar_scheduler/const/colors.dart';
 import 'package:flutter/material.dart';
 
-class ScheduleBottomSheet extends StatelessWidget {
+class ScheduleBottomSheet extends StatefulWidget {
   const ScheduleBottomSheet({super.key});
+
+  @override
+  State<ScheduleBottomSheet> createState() => _ScheduleBottomSheetState();
+}
+
+class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
+  final GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +25,34 @@ class ScheduleBottomSheet extends StatelessWidget {
           padding: EdgeInsets.only(
             bottom: bottomInset,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _Time(),
-              _Content(),
-              _ColorPicker(),
-              _SaveButton(),
-            ],
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _Time(),
+                _Content(),
+                _ColorPicker(),
+                _SaveButton(
+                  onPressed: onSavePressed,
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  void onSavePressed() {
+    if (formKey.currentState == null) {
+      return null;
+    }
+    if (formKey.currentState!.validate()) {
+      print('에러가 있습니다');
+    } else {
+      print('에러가 없습니다');
+    }
   }
 }
 
@@ -105,7 +128,12 @@ class _ColorPicker extends StatelessWidget {
 }
 
 class _SaveButton extends StatelessWidget {
-  const _SaveButton({super.key});
+  final VoidCallback onPressed;
+
+  const _SaveButton({
+    required this.onPressed,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +141,8 @@ class _SaveButton extends StatelessWidget {
       children: [
         Expanded(
           child: ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
-              onPressed: () {},
+              style: ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
+              onPressed: onPressed,
               child: Text(
                 'SAVE',
                 style: TextStyle(

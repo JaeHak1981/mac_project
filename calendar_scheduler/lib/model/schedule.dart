@@ -5,11 +5,9 @@ class Schedules extends Table {
 
   TextColumn get content => text()();
 
-  DateTimeColumn get date => dateTime()();
+  DateTimeColumn get startTime => dateTime()();
 
-  IntColumn get startTime => integer()();
-
-  IntColumn get endTime => integer()();
+  DateTimeColumn get endTime => dateTime()();
 
   IntColumn get colorId => integer()();
 

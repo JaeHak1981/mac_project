@@ -14,16 +14,18 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle textStyle = const TextStyle(
+      color: PRIMARY_COLOR,
+      fontWeight: FontWeight.w600,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
-              color: PRIMARY_COLOR, fontWeight: FontWeight.w700, fontSize: 18),
+          style: textStyle,
         ),
-        if (isTime) renderTextField(),
-        if (!isTime) Expanded(child: renderTextField()),
+        isTime ? renderTextField() : Expanded(child: renderTextField()),
       ],
     );
   }
@@ -31,8 +33,10 @@ class CustomTextField extends StatelessWidget {
   Widget renderTextField() {
     return TextFormField(
       validator: (String? val){
+        if(val== null || val.isEmpty){
+          return '값을 입력해주세요';
+        }
         return null;
-
       },
       expands: !isTime,
       maxLines: isTime ? 1 : null,

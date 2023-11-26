@@ -31,10 +31,7 @@ class Calendar extends StatelessWidget {
       headerStyle: const HeaderStyle(
         formatButtonVisible: false,
         titleCentered: true,
-        titleTextStyle: TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 20,
-        ),
+        titleTextStyle: TextStyle(fontWeight: FontWeight.w700),
       ),
       calendarStyle: CalendarStyle(
         isTodayHighlighted: false,
@@ -44,12 +41,14 @@ class Calendar extends StatelessWidget {
         selectedDecoration: defaultBoxDeco.copyWith(
             color: Colors.white,
             border: Border.all(
-              color: PRIMARY_COLOR,
               width: 1,
+              color: PRIMARY_COLOR,
             )),
         defaultTextStyle: defaultTextStyle,
         weekendTextStyle: defaultTextStyle,
-        selectedTextStyle: defaultTextStyle.copyWith(color: PRIMARY_COLOR),
+        selectedTextStyle: defaultTextStyle.copyWith(
+          color: PRIMARY_COLOR,
+        ),
       ),
       onDaySelected: onDaySelected,
       selectedDayPredicate: (DateTime date) {

@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:calendar_scheduler/const/model/category_color.dart';
-import 'package:calendar_scheduler/const/model/schedule.dart';
+import 'package:calendar_scheduler/model/category_color.dart';
+import 'package:calendar_scheduler/model/schedule.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 part 'drift_database.g.dart';
 
@@ -16,11 +16,14 @@ part 'drift_database.g.dart';
 class LocalDatabase extends _$LocalDatabase {
   LocalDatabase() : super(_openConnection());
 
-  Future<int> createSchedule(SchedulesCompanion data)=> into(schedules).insert(data);
+  Future<int> createSchedule(SchedulesCompanion data) =>
+      into(schedules).insert(data);
 
-  Future<int> createCategoryColor(CategoryColorsCompanion data) => into(categoryColors).insert(data);
+  Future<int> createCategoryColor(CategoryColorsCompanion data) =>
+      into(categoryColors).insert(data);
 
-  Future<List<CategoryColor>> getCategoryColors()=>select(categoryColors).get();
+  Future<List<CategoryColor>> getCategoryColors() =>
+      select(categoryColors).get();
 
   @override
   // TODO: implement schemaVersion
@@ -29,8 +32,8 @@ class LocalDatabase extends _$LocalDatabase {
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    final dbDatabase = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbDatabase.path, 'sq.lite'));
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path, 'db.sqlite'));
     return NativeDatabase(file);
   });
 }

@@ -1,10 +1,9 @@
 import 'package:calendar_scheduler/component/calendar.dart';
-import 'package:calendar_scheduler/component/scheduleCard.dart';
 import 'package:calendar_scheduler/component/schedule_bottom_sheet.dart';
+import 'package:calendar_scheduler/component/schedule_card.dart';
 import 'package:calendar_scheduler/component/today_banner.dart';
 import 'package:calendar_scheduler/const/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,14 +13,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  DateTime selectedDay =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime selectedDay = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
   DateTime focusedDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: floatingActionButton(),
+      floatingActionButton: renderFloatingActionButton(),
       body: SafeArea(
         child: Column(
           children: [
@@ -30,15 +32,20 @@ class _HomeScreenState extends State<HomeScreen> {
               focusedDay: focusedDay,
               onDaySelected: onDaySelected,
             ),
-            TodayBanner(selectedDay: selectedDay, scheduleCount: 3),
-            ScheduleList(),
+            SizedBox(height: 8),
+            TodayBanner(
+              selectedDay: selectedDay,
+              scheduleCount: 3,
+            ),
+            SizedBox(height: 8),
+            _ScheduleList(),
           ],
         ),
       ),
     );
   }
 
-  FloatingActionButton floatingActionButton() {
+  FloatingActionButton renderFloatingActionButton() {
     return FloatingActionButton(
       onPressed: () {
         showModalBottomSheet(
@@ -63,25 +70,30 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class ScheduleList extends StatelessWidget {
-  const ScheduleList({super.key});
+class _ScheduleList extends StatelessWidget {
+  const _ScheduleList({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView.separated(
-        itemBuilder: (context, index) {
-          return ScheduleCard(
-            startTime: 8,
-            endTime: 9,
-            content: '프로그램 공부하기 $index',
-            color: Colors.red,
-          );
-        },
-        separatorBuilder: (context, index) {
-          return SizedBox(height: 8);
-        },
-        itemCount: 60,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        child: ListView.separated(
+          itemBuilder: (context, index) {
+            return ScheduleCard(
+              startTime: 9,
+              endTime: 10,
+              content: '프로그램 공부하기 $index',
+              color: Colors.red,
+            );
+          },
+          separatorBuilder: (context, index) {
+            return SizedBox(
+              height: 8,
+            );
+          },
+          itemCount: 60,
+        ),
       ),
     );
   }
